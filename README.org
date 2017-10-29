@@ -9,7 +9,7 @@ locations, each with it's own rrwc options.
 It's currently under developement.
 
 * Goals
-  - Cross Platform
+  - Cross Platform (linux + windows)
   - Lightning Fast
   - Multithreading
   - Ability to work with smb/sshfs 
@@ -19,3 +19,24 @@ It's currently under developement.
   - [[https://www.qt.io/][Qt5]] for the Gui
   - Qt5 for the data
   - [[https://opencv.org/][OpenCV]] for the rrwc
+
+* Test - contribute - notes
+
+Anyone is welcome to contribute every way the can.
+I don't yet know how to create a full scale cross platform application
+so this currently only works on linux. The libraries are cross platform though,
+so when I have a working prototype I'll look on the windows side of things.
+
+Apple users, I don't care and I never will. Go buy photoshop or something.
+
+I've only tested it on Arch linux, but the process is as follows:
+- clone the repo
+- cd /path/to/repo
+- cmake .
+- make
+- ./rrwc
+
+Obviously you need to have QT5 and OpenCV installed correctly so
+cmake can find them. 
+
+I only tested it with CMake 3.9.4
