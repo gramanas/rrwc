@@ -2,7 +2,9 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <QVector>
 #include <QLineEdit>
+#include "outputtab.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -16,10 +18,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 private slots:
+    void slotAddOutput();
+    void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
-    void slotBrowseWatermark(QLineEdit *line);
 private:
+    QVector<OutputTab *> m_outputs;
     void connectButtons();
+    void finalizeTabs();
     Ui::MainWindow *ui;
 };
 
