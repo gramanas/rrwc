@@ -1,4 +1,6 @@
 *rrwc*
+!rrwc.cpp
+!rrwc.hpp
 CMake*
 !CMakeLists.txt
 Makefile

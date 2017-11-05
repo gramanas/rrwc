@@ -19,12 +19,14 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/mainwindow.cpp
   ${PROJECT_SOURCE_DIR}/outputtab.cpp
   ${PROJECT_SOURCE_DIR}/outputmanager.cpp
+  ${PROJECT_SOURCE_DIR}/rrwc.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
   ${PROJECT_SOURCE_DIR}/mainwindow.hpp
   ${PROJECT_SOURCE_DIR}/outputtab.hpp
   ${PROJECT_SOURCE_DIR}/outputmanager.hpp
+  ${PROJECT_SOURCE_DIR}/rrwc.hpp
 )
 
 # Include directories

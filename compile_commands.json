@@ -21,6 +21,11 @@
 },
 {
   "directory": "/home/gramanas/Code/rrwc",
+  "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DrrwcLib_EXPORTS -I/home/gramanas/Code/rrwc/rrwcLib_autogen/include -I/usr/include/opencv -I/home/gramanas/Code/rrwc/./src -I/home/gramanas/Code/rrwc -I/home/gramanas/Code/rrwc/./gui -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++  -fPIC   -fPIC -std=gnu++11 -o CMakeFiles/rrwcLib.dir/src/rrwc.cpp.o -c /home/gramanas/Code/rrwc/src/rrwc.cpp",
+  "file": "/home/gramanas/Code/rrwc/src/rrwc.cpp"
+},
+{
+  "directory": "/home/gramanas/Code/rrwc",
   "command": "/usr/bin/c++  -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DrrwcLib_EXPORTS -I/home/gramanas/Code/rrwc/rrwcLib_autogen/include -I/usr/include/opencv -I/home/gramanas/Code/rrwc/./src -I/home/gramanas/Code/rrwc -I/home/gramanas/Code/rrwc/./gui -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++  -fPIC   -fPIC -std=gnu++11 -o CMakeFiles/rrwcLib.dir/rrwcLib_autogen/mocs_compilation.cpp.o -c /home/gramanas/Code/rrwc/rrwcLib_autogen/mocs_compilation.cpp",
   "file": "/home/gramanas/Code/rrwc/rrwcLib_autogen/mocs_compilation.cpp"
 },
