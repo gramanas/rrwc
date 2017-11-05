@@ -2,6 +2,7 @@
 #define OUTPUTTAB_HPP
 
 #include <QWidget>
+#include <QLineEdit>
 
 namespace Ui {
 class OutputTab;
@@ -14,6 +15,9 @@ class OutputTab : public QWidget
   public:
     explicit OutputTab(QWidget *parent = 0);
     ~OutputTab();
+    Ui::OutputTab *getUi() const {
+        return ui;
+    }
   private slots:
     void slotBrowse(QLineEdit *line);
     void slotBrowseWatermark(QLineEdit *line);

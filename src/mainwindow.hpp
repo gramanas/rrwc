@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QLineEdit>
 #include "outputtab.hpp"
+#include "outputmanager.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -19,10 +20,12 @@ public:
     ~MainWindow();
 private slots:
     void slotAddOutput();
+    void slotGo();
     void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
 private:
-    QVector<OutputTab *> m_outputs;
+    QVector<OutputTab *> m_outputTabs;
+    OutputManager m_outputManager;
     void connectButtons();
     void finalizeTabs();
     Ui::MainWindow *ui;

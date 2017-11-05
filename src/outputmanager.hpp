@@ -7,7 +7,6 @@
 
 struct Output {
     QString folder;
-    bool active;
     bool resize;
     bool rename;
     bool watermark;
@@ -21,8 +20,13 @@ struct Output {
 class OutputManager {
   public:
     OutputManager();
-    void generateOutputs(QVector<OutputTab *> outputTabs);
-    QVector<Output *> outputs() const;
+    ~OutputManager();
+    void generateOutputsFromTabs(QVector<OutputTab *> outputTabs);
+    void print() const;
+
+    QVector<Output *> outputs() const {
+        return m_outputs;
+    }
 
   private:
     QVector<Output *> m_outputs;

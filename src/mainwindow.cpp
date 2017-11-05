@@ -2,6 +2,7 @@
 #include <QLineEdit>
 #include <QDebug>
 #include "mainwindow.hpp"
+#include "outputmanager.hpp"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,16 +18,17 @@ void MainWindow::connectButtons() {
     connect(ui->butBrowse, &QPushButton::clicked, [=](){ slotBrowse(ui->inputInputFolder); });
     connect(ui->butAddOutput, &QPushButton::clicked, [=](){ slotAddOutput(); });
     connect(ui->tabWidget, SIGNAL (tabCloseRequested(int)), this, SLOT (slotRemoveOutput(int)));
+    connect(ui->butGo, SIGNAL (clicked()), this, SLOT (slotGo()));
 }
 
 void MainWindow::finalizeTabs() {
     // rename them according to their index
-    for (int i = 0; i < m_outputs.size(); i++) {
+    for (int i = 0; i < m_outputTabs.size(); i++) {
         ui->tabWidget->setTabText(i, "Output " + QString::number(i + 1));
     }
 
     // disable tab deletion it there is only one left
-    if (m_outputs.size() == 1) {
+    if (m_outputTabs.size() == 1) {
         ui->tabWidget->setTabsClosable(false);
     } else {
         ui->tabWidget->setTabsClosable(true);
@@ -35,16 +37,16 @@ void MainWindow::finalizeTabs() {
 
 void MainWindow::slotRemoveOutput(int index) {
     ui->tabWidget->removeTab(index);
-    m_outputs.remove(index);
-    qDebug() << "(-) # tabs: " << m_outputs.size();
+    m_outputTabs.remove(index);
+    qDebug() << "(-) # tabs: " << m_outputTabs.size();
     finalizeTabs();
 }
 
 void MainWindow::slotAddOutput() {
     OutputTab *output = new OutputTab;
     ui->tabWidget->addTab(output, "Output");
-    m_outputs.append(output);
-    qDebug() << "(+) # tabs: " << m_outputs.size();
+    m_outputTabs.append(output);
+    qDebug() << "(+) # tabs: " << m_outputTabs.size();
     finalizeTabs();
 }
 
@@ -55,6 +57,11 @@ void MainWindow::slotBrowse(QLineEdit *line) {
                                                    | QFileDialog::DontResolveSymlinks);
 
     line->setText(dir);
+}
+
+void MainWindow::slotGo() {
+    m_outputManager.generateOutputsFromTabs(m_outputTabs);
+    m_outputManager.print();
 }
 
 MainWindow::~MainWindow()
