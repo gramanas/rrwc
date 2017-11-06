@@ -12,14 +12,14 @@
 
 class Rrwc {
   public:
-    Rrwc(int argc, char *argv[]);
+    Rrwc();
     ~Rrwc();
 
-    int exec();
+    OutputManager * outputManager() {
+        return &m_outputManager;
+    }
 
   private:
-    QApplication m_app;
-    MainWindow m_window;
     OutputManager m_outputManager;
 };
 

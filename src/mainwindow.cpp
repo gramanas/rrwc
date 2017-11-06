@@ -52,7 +52,7 @@ void MainWindow::slotAddOutput() {
 
 void MainWindow::slotBrowse(QLineEdit *line) {
      // QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
-     //                                               "",
+     //                                                 "",
      //                                               QFileDialog::ShowDirsOnly
      //                                               | QFileDialog::DontResolveSymlinks);
 
