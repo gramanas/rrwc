@@ -16,7 +16,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow(QWidget *parent = 0,
+               OutputManager *outputManager = nullptr);
     ~MainWindow();
 private slots:
     void slotAddOutput();
@@ -25,7 +26,7 @@ private slots:
     void slotBrowse(QLineEdit *line);
 private:
     QVector<OutputTab *> m_outputTabs;
-    OutputManager m_outputManager;
+    OutputManager *p_outputManager;
     void connectButtons();
     void finalizeTabs();
     Ui::MainWindow *ui;

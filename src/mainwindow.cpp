@@ -5,10 +5,10 @@
 #include "outputmanager.hpp"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QWidget *parent, OutputManager *outputManager)
+    : QMainWindow(parent),
+      ui(new Ui::MainWindow) {
+    p_outputManager = outputManager;
     ui->setupUi(this);
     connectButtons();
     slotAddOutput();
@@ -51,17 +51,17 @@ void MainWindow::slotAddOutput() {
 }
 
 void MainWindow::slotBrowse(QLineEdit *line) {
-     QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
-                                                   "",
-                                                   QFileDialog::ShowDirsOnly
-                                                   | QFileDialog::DontResolveSymlinks);
+     // QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
+     //                                               "",
+     //                                               QFileDialog::ShowDirsOnly
+     //                                               | QFileDialog::DontResolveSymlinks);
 
-    line->setText(dir);
+    line->setText("lalala");
 }
 
 void MainWindow::slotGo() {
-    m_outputManager.generateOutputsFromTabs(m_outputTabs);
-    m_outputManager.print();
+    p_outputManager->generateOutputsFromTabs(m_outputTabs);
+    p_outputManager->print();
 }
 
 MainWindow::~MainWindow()
