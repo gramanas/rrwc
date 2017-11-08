@@ -20,6 +20,10 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
         p_output->renameText = tab->getUi()->inputRename->text();
         p_output->watermarkText = tab->getUi()->inputWatermark->text();
         p_output->commentText = tab->getUi()->inputComment->text();
+        p_output->opacity = tab->getUi()->inputOpacity->value();
+        p_output->counterStart = tab->getUi()->inputCounterStart->value();
+        p_output->counterStep = tab->getUi()->inputCounterStep->value();
+        p_output->counterDigit = tab->getUi()->inputCounterDigits->value();
 
         m_outputs.append(p_output);
     }
@@ -38,6 +42,10 @@ void OutputManager::print() const {
         qDebug() << "rename: " << output->renameText;
         qDebug() << "watermark: " << output->watermarkText;
         qDebug() << "comment: " << output->commentText;
+        qDebug() << "opacity: " << output->opacity;
+        qDebug() << "start: " << output->counterStart;
+        qDebug() << "step: " << output->counterStep;
+        qDebug() << "digit: " << output->counterDigit;
         qDebug() << "\n";
     }
 }

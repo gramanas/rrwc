@@ -15,6 +15,10 @@ struct Output {
     QString renameText;
     QString watermarkText;
     QString commentText;
+    int opacity;
+    int counterStart;
+    int counterStep;
+    int counterDigit;
 };
 
 class OutputManager {

@@ -7,8 +7,8 @@
 
 MainWindow::MainWindow(QWidget *parent, OutputManager *outputManager)
     : QMainWindow(parent),
-      ui(new Ui::MainWindow) {
-    p_outputManager = outputManager;
+      ui(new Ui::MainWindow),
+      p_outputManager(outputManager) {
     ui->setupUi(this);
     connectButtons();
     slotAddOutput();
@@ -51,12 +51,10 @@ void MainWindow::slotAddOutput() {
 }
 
 void MainWindow::slotBrowse(QLineEdit *line) {
-     // QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
-     //                                                 "",
-     //                                               QFileDialog::ShowDirsOnly
-     //                                               | QFileDialog::DontResolveSymlinks);
-
-    line->setText("lalala");
+    QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
+                                                    "",
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
 }
 
 void MainWindow::slotGo() {
@@ -64,7 +62,6 @@ void MainWindow::slotGo() {
     p_outputManager->print();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
