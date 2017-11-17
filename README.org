@@ -15,14 +15,16 @@ It's currently under developement.
   - Ability to work with smb/sshfs 
   - cli
 
-* Libraries
+* Dependencies
   - [[https://www.qt.io/][Qt5]] for the Gui
   - Qt5 for the data
   - [[https://opencv.org/][OpenCV]] for the rrwc
 
+You also need [[https://www.hdfgroup.org/solutions/hdf5/][Hdf5]] for reasons I have yet to discover. (Maybe an OpenCV dependency)
+
 * Test - contribute - notes
 
-Anyone is welcome to contribute every way the can.
+Anyone is welcome to contribute whatever they want.
 I don't yet know how to create a full scale cross platform application
 so this currently only works on linux. The libraries are cross platform though,
 so when I have a working prototype I'll look on the windows side of things.
@@ -37,6 +39,7 @@ I've only tested it on Arch linux, but the process is as follows:
 - ./rrwc
 
 Obviously you need to have QT5 and OpenCV installed correctly so
-cmake can find them. 
+cmake can find them. Don't forget to also install Hdf5 so you won't get
+compiler errors.
 
 I only tested it with CMake 3.9.4
