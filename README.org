@@ -18,7 +18,7 @@ It's currently under developement.
 * Dependencies
   - [[https://www.qt.io/][Qt5]] for the Gui
   - Qt5 for the data
-  - [[https://opencv.org/][OpenCV]] for the rrwc
+  - [[https://opencv.org/][OpenCV]] for the rest
 
 You also need [[https://www.hdfgroup.org/solutions/hdf5/][Hdf5]] for reasons I have yet to discover. (Maybe an OpenCV dependency)
 
