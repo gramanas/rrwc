@@ -33,13 +33,13 @@ Apple users, I don't care and I never will. Go buy photoshop or something.
 
 I've only tested it on Arch linux, but the process is as follows:
 - clone the repo
-- cd /path/to/repo
-- cmake .
-- make
-- ./rrwc
+- ~cd /path/to/repo~
+- ~cmake .~
+- ~make~
+- ~./rrwc~
 
 Obviously you need to have QT5 and OpenCV installed correctly so
 cmake can find them. Don't forget to also install Hdf5 so you won't get
 compiler errors.
 
-I only tested it with CMake 3.9.4
+Make sure to use CMake >= 3.9.4
