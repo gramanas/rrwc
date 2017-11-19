@@ -5,3 +5,5 @@ CMake*
 !CMakeLists.txt
 Makefile
 cmake_install.cmake
+tests/*
+compile_commands.json

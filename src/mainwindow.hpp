@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QLineEdit>
 #include "outputtab.hpp"
-#include "outputmanager.hpp"
+#include "rrwc.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -15,18 +15,20 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
+  public:
     MainWindow(QWidget *parent = 0,
-               OutputManager *outputManager = nullptr);
+               Rrwc *rrwc = nullptr);
     ~MainWindow();
-private slots:
+
+  private slots:
     void slotAddOutput();
     void slotGo();
     void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
-private:
+
+  private:
     QVector<OutputTab *> m_outputTabs;
-    OutputManager *p_outputManager;
+    Rrwc *p_rrwc;
     void connectButtons();
     void finalizeTabs();
     Ui::MainWindow *ui;

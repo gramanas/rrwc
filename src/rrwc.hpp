@@ -4,13 +4,14 @@
 #include <QString>
 #include <QApplication>
 
-#include "mainwindow.hpp"
 #include "outputmanager.hpp"
+#include "enginemanager.hpp"
 
 // TODO: Add cli support, initializing the same stuff
 // but without the GUI compartments
 
-class Rrwc {
+class Rrwc : public QObject {
+    Q_OBJECT
   public:
     Rrwc();
     ~Rrwc();
@@ -19,8 +20,10 @@ class Rrwc {
         return &m_outputManager;
     }
 
+    void go(QString inputPath);
+
   private:
     OutputManager m_outputManager;
 };
 
-#endif
+#endif // RRWC_HPP

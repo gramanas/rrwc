@@ -5,13 +5,14 @@
 #include "outputmanager.hpp"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, OutputManager *outputManager)
+MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      p_outputManager(outputManager) {
+      p_rrwc(rrwc) {
     ui->setupUi(this);
     connectButtons();
     slotAddOutput();
+
 }
 
 void MainWindow::connectButtons() {
@@ -44,10 +45,11 @@ void MainWindow::slotRemoveOutput(int index) {
 
 void MainWindow::slotAddOutput() {
     OutputTab *output = new OutputTab;
-    ui->tabWidget->addTab(output, "Output");
+    int index = ui->tabWidget->addTab(output, "Output");
     m_outputTabs.append(output);
     qDebug() << "(+) # tabs: " << m_outputTabs.size();
     finalizeTabs();
+    ui->tabWidget->setCurrentIndex(index);
 }
 
 void MainWindow::slotBrowse(QLineEdit *line) {
@@ -55,11 +57,17 @@ void MainWindow::slotBrowse(QLineEdit *line) {
                                                     "",
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
+    line->setText(dir);
 }
 
 void MainWindow::slotGo() {
-    p_outputManager->generateOutputsFromTabs(m_outputTabs);
-    p_outputManager->print();
+    p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
+    p_rrwc->outputManager()->print();
+    p_rrwc->go(ui->inputInputFolder->text());
+}
+
+void MainWindow::slotProgressChanged(int average) {
+    ui->progressBar->valueChanged(average);
 }
 
 MainWindow::~MainWindow() {

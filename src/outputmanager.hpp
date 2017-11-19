@@ -1,5 +1,5 @@
-#ifndef OUTPUT_HPP
-#define OUTPUT_HPP
+#ifndef OUTPUTMANAGER_HPP
+#define OUTPUTMANAGER_HPP
 
 #include <QVector>
 #include <QString>
@@ -36,4 +36,4 @@ class OutputManager {
     QVector<Output *> m_outputs;
 };
 
-#endif // OUTPUT_HPP
+#endif // OUTPUTMANAGER_HPP

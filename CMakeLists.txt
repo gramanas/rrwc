@@ -20,6 +20,8 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/outputtab.cpp
   ${PROJECT_SOURCE_DIR}/outputmanager.cpp
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
+  ${PROJECT_SOURCE_DIR}/outputengine.cpp
+  ${PROJECT_SOURCE_DIR}/enginemanager.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
@@ -27,6 +29,8 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/outputtab.hpp
   ${PROJECT_SOURCE_DIR}/outputmanager.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
+  ${PROJECT_SOURCE_DIR}/outputengine.hpp
+  ${PROJECT_SOURCE_DIR}/enginemanager.hpp
 )
 
 # Include directories
