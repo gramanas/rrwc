@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QObject>
 #include "outputengine.hpp"
+#include "resizer.hpp"
+#include "marker.hpp"
 
 void OutputEngine::init(Output const * output,
                         const QString &inputPath,
@@ -19,15 +21,28 @@ void OutputEngine::run() {
     int total = dir.count();
     int current = 0;
     QDirIterator it(dir);
-    cv::Mat im;
+    cv::Mat source;
+    cv::Mat resized;
+    cv::Mat watermark;
+    cv::Mat out;
 
     while(it.hasNext()) {
         QString path = it.next();
         QString type = path.split(".").back();
 
-        im = cv::imread(path.toStdString(), CV_LOAD_IMAGE_GRAYSCALE);
-        cv::Rect roi(0,0,600,600);
-        cv::Mat out(im,roi);
+        source = cv::imread(path.toStdString());
+        if (p_output->watermark) {
+            if (p_output->resize) {
+                Resizer resizer(source, p_output->length, p_output->height);
+                resizer.exec(resized);
+                source = resized;
+            }
+            watermark = cv::imread(p_output->watermarkText.toStdString(), cv::IMREAD_UNCHANGED);
+            Marker marker(source, watermark, p_output->opacity);
+            marker.exec(out);
+        }
+        // cv::Rect roi(0,0,600,600);
+        // cv::Mat out(source,roi);
         QString filename = p_output->folder + "/" + path.split("/").back();
         cv::imwrite(filename.toStdString(), out);
         int progress = int((float(current) / float(total)) * 100);
