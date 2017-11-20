@@ -1,4 +1,5 @@
 #include <QFileDialog>
+#include <QDesktopServices>
 #include <QLineEdit>
 #include <QDebug>
 #include "mainwindow.hpp"
@@ -17,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     connect(rrwc, SIGNAL(done(int)), ui->progressBar, SLOT(setValue(int)));
     connect(rrwc, SIGNAL(done(int)), this, SLOT(onDone()));
     connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
+
+    connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
+    
     ui->inputInputFolder->setText("/home/gramanas/Code/rrwc/tests/new");
 }
 
@@ -44,7 +48,6 @@ void MainWindow::finalizeTabs() {
 void MainWindow::slotRemoveOutput(int index) {
     ui->tabWidget->removeTab(index);
     m_outputTabs.remove(index);
-    qDebug() << "(-) # tabs: " << m_outputTabs.size();
     finalizeTabs();
 }
 
@@ -52,7 +55,6 @@ void MainWindow::slotAddOutput() {
     OutputTab *output = new OutputTab;
     int index = ui->tabWidget->addTab(output, "Output");
     m_outputTabs.append(output);
-    qDebug() << "(+) # tabs: " << m_outputTabs.size();
     finalizeTabs();
     ui->tabWidget->setCurrentIndex(index);
 }
@@ -73,10 +75,7 @@ void MainWindow::slotGo() {
 
 void MainWindow::enableLayout(bool t) {
     for (auto &it : m_outputTabs) {
-        QList<QWidget *> list = it->findChildren<QWidget *>();
-        for (auto &widget : list) {
-            widget->setEnabled(t);
-        }
+        it->setEnabled(t);
     }
 
     ui->butGo->setEnabled(t);
@@ -91,6 +90,10 @@ void MainWindow::onStarted() {
 
 void MainWindow::onDone() {
     enableLayout(true);
+}
+
+void MainWindow::actionHelp() {
+    QDesktopServices::openUrl(QUrl("https://github.com/gramanas/rrwc/wiki"));
 }
 
 MainWindow::~MainWindow() {

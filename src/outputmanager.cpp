@@ -16,7 +16,8 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
         p_output->rename = tab->getUi()->rename->isChecked();
         p_output->watermark = tab->getUi()->watermark->isChecked();
         p_output->comment = tab->getUi()->comment->isChecked();
-        p_output->resizeText = tab->getUi()->inputResize->text();
+        p_output->length = tab->getUi()->inputLength->value();
+        p_output->height = tab->getUi()->inputHeight->value();
         p_output->renameText = tab->getUi()->inputRename->text();
         p_output->watermarkText = tab->getUi()->inputWatermark->text();
         p_output->commentText = tab->getUi()->inputComment->text();
@@ -38,7 +39,8 @@ void OutputManager::print() const {
         qDebug() << "rename: " << output->rename;
         qDebug() << "watermark: " << output->watermark;
         qDebug() << "comment: " << output->comment;
-        qDebug() << "resize: " << output->resizeText;
+        qDebug() << "length: " << output->length;
+        qDebug() << "height: " << output->height;
         qDebug() << "rename: " << output->renameText;
         qDebug() << "watermark: " << output->watermarkText;
         qDebug() << "comment: " << output->commentText;

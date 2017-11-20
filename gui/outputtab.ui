@@ -14,20 +14,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QPushButton" name="butBrowseOutput">
-     <property name="text">
-      <string>Browse...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLineEdit" name="inputOutputFolder">
-     <property name="placeholderText">
-      <string>Output folder</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0" colspan="2">
     <widget class="QFrame" name="frameOutput">
      <property name="frameShape">
@@ -48,16 +34,65 @@
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="resize">
-           <property name="text">
-            <string>Resize</string>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QFrame" name="frameResizeValues">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QCheckBox" name="resize">
+              <property name="text">
+               <string>Resize</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignRight">
+             <widget class="QLabel" name="labelLength">
+              <property name="text">
+               <string>Length:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="inputLength">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>99999</number>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignRight">
+             <widget class="QLabel" name="labelHeight">
+              <property name="text">
+               <string>Height:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="inputHeight">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>99999</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="inputResize"/>
          </item>
         </layout>
        </widget>
@@ -99,7 +134,10 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="inputCounterStep">
+             <widget class="QSpinBox" name="inputCounterStart">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="buttonSymbols">
                <enum>QAbstractSpinBox::PlusMinus</enum>
               </property>
@@ -128,7 +166,10 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="inputCounterStart">
+             <widget class="QSpinBox" name="inputCounterStep">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="layoutDirection">
                <enum>Qt::LeftToRight</enum>
               </property>
@@ -170,6 +211,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="inputCounterDigits">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="buttonSymbols">
                <enum>QAbstractSpinBox::PlusMinus</enum>
               </property>
@@ -222,7 +266,11 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="inputRename"/>
+          <widget class="QLineEdit" name="inputRename">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -251,7 +299,11 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="inputWatermark"/>
+          <widget class="QLineEdit" name="inputWatermark">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item row="0" column="2">
           <widget class="QPushButton" name="butBrowseWatermark">
@@ -269,6 +321,9 @@
          </item>
          <item row="1" column="1">
           <widget class="QSlider" name="sliderOpacity">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -332,12 +387,30 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="inputComment"/>
+          <widget class="QLineEdit" name="inputComment">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLineEdit" name="inputOutputFolder">
+     <property name="placeholderText">
+      <string>Output folder</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="butBrowseOutput">
+     <property name="text">
+      <string>Browse...</string>
+     </property>
     </widget>
    </item>
   </layout>
@@ -373,6 +446,150 @@
     <hint type="destinationlabel">
      <x>527</x>
      <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>resize</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputLength</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>64</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>resize</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputHeight</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rename</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputRename</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>133</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rename</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputCounterStart</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>144</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rename</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputCounterStep</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>78</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>345</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rename</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputCounterDigits</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>184</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>521</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>watermark</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputWatermark</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>336</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>watermark</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>sliderOpacity</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>100</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>379</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comment</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputComment</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>158</x>
+     <y>482</y>
     </hint>
    </hints>
   </connection>

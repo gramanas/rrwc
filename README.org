@@ -29,7 +29,7 @@ I don't yet know how to create a full scale cross platform application
 so this currently only works on linux. The libraries are cross platform though,
 so when I have a working prototype I'll look on the windows side of things.
 
-Apple users, I don't care and I never will. Go buy photoshop or something.
+Apple users... don't know, don't care.
 
 I've only tested it on Arch linux, but the process is as follows:
 - clone the repo

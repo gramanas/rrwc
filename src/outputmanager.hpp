@@ -11,10 +11,11 @@ struct Output {
     bool rename;
     bool watermark;
     bool comment;
-    QString resizeText;
     QString renameText;
     QString watermarkText;
     QString commentText;
+    int length;
+    int height;
     int opacity;
     int counterStart;
     int counterStep;
