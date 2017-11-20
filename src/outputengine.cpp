@@ -5,34 +5,34 @@
 #include <QObject>
 #include "outputengine.hpp"
 
-OutputEngine::OutputEngine(Output const *const output,
-                           const QString &inputPath,
-                           int index)
-    : p_output(output),
-      m_inputPath(inputPath),
-      m_index(index) {
+void OutputEngine::init(Output const * output,
+                        const QString &inputPath,
+                        int index) {
+    m_index = index;
+    m_inputPath = inputPath;
+    p_output = output;
 }
 
 void OutputEngine::run() {
     QDir dir(m_inputPath);
     dir.setFilter(QDir::Files);
     int total = dir.count();
+    int current = 0;
     QDirIterator it(dir);
+    cv::Mat im;
 
     while(it.hasNext()) {
         QString path = it.next();
         QString type = path.split(".").back();
 
-        cv::Mat im = cv::imread(path.toStdString(), CV_LOAD_IMAGE_GRAYSCALE);
+        im = cv::imread(path.toStdString(), CV_LOAD_IMAGE_GRAYSCALE);
         cv::Rect roi(0,0,600,600);
         cv::Mat out(im,roi);
         QString filename = p_output->folder + "/" + path.split("/").back();
-        qDebug() << "Thread: " << m_index << "File: " << filename;
         cv::imwrite(filename.toStdString(), out);
-        //        float progress = (float(current) / float(total)) * 100;
+        int progress = int((float(current) / float(total)) * 100);
+        emit progressChanged(m_index, progress);
+        current++;
     }
-}
-
-
-OutputEngine::~OutputEngine() {
+    emit done();
 }

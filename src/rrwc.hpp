@@ -22,8 +22,18 @@ class Rrwc : public QObject {
 
     void go(QString inputPath);
 
+  public slots:
+    void onProgressChanged(int progress);
+    void onDone();
+
+  signals:
+    void progressChanged(int progress);
+    void started();
+    void done(int);
+
   private:
     OutputManager m_outputManager;
+    EngineManager *p_engineManager;
 };
 
 #endif // RRWC_HPP

@@ -12,6 +12,8 @@ OutputTab::OutputTab(QWidget *parent) :
 {
     ui->setupUi(this);
     connectButtons();
+
+    ui->inputOutputFolder->setText("/home/gramanas/Code/rrwc/tests/out");
 }
 
 OutputTab::~OutputTab()

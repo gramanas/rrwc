@@ -13,6 +13,11 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     connectButtons();
     slotAddOutput();
 
+    connect(rrwc, SIGNAL(progressChanged(int)), ui->progressBar, SLOT(setValue(int)));
+    connect(rrwc, SIGNAL(done(int)), ui->progressBar, SLOT(setValue(int)));
+    connect(rrwc, SIGNAL(done(int)), this, SLOT(onDone()));
+    connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
+    ui->inputInputFolder->setText("/home/gramanas/Code/rrwc/tests/new");
 }
 
 void MainWindow::connectButtons() {
@@ -66,8 +71,26 @@ void MainWindow::slotGo() {
     p_rrwc->go(ui->inputInputFolder->text());
 }
 
-void MainWindow::slotProgressChanged(int average) {
-    ui->progressBar->valueChanged(average);
+void MainWindow::enableLayout(bool t) {
+    for (auto &it : m_outputTabs) {
+        QList<QWidget *> list = it->findChildren<QWidget *>();
+        for (auto &widget : list) {
+            widget->setEnabled(t);
+        }
+    }
+
+    ui->butGo->setEnabled(t);
+    ui->butAddOutput->setEnabled(t);
+    ui->inputInputFolder->setEnabled(t);
+    ui->butBrowse->setEnabled(t);
+}
+
+void MainWindow::onStarted() {
+    enableLayout(false);
+}
+
+void MainWindow::onDone() {
+    enableLayout(true);
 }
 
 MainWindow::~MainWindow() {

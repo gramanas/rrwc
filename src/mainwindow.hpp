@@ -25,12 +25,15 @@ class MainWindow : public QMainWindow
     void slotGo();
     void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
+    void onStarted();
+    void onDone();
 
   private:
-    QVector<OutputTab *> m_outputTabs;
-    Rrwc *p_rrwc;
     void connectButtons();
     void finalizeTabs();
+    void enableLayout(bool t);
+    QVector<OutputTab *> m_outputTabs;
+    Rrwc *p_rrwc;
     Ui::MainWindow *ui;
 };
 
