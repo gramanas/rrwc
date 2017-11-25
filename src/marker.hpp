@@ -1,4 +1,4 @@
-#ifndef MERKER_HPP
+#ifndef MARKER_HPP
 #define MARKER_HPP
 
 #include "opencv2/opencv.hpp"
@@ -13,6 +13,8 @@ class Marker {
 
   private:
     bool isRotated();
+
+    // code from: https://jepsonsblog.blogspot.gr/2012/10/overlay-transparent-image-in-opencv.html
     void overlayImage(const cv::Mat &background, const cv::Mat &foreground,
                       cv::Mat &output, cv::Point2i location);
     float m_opacity;

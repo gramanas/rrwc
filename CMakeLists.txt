@@ -22,9 +22,9 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
   ${PROJECT_SOURCE_DIR}/outputengine.cpp
   ${PROJECT_SOURCE_DIR}/enginemanager.cpp
-  ${PROJECT_SOURCE_DIR}/worker.cpp
   ${PROJECT_SOURCE_DIR}/resizer.cpp
   ${PROJECT_SOURCE_DIR}/marker.cpp
+  ${PROJECT_SOURCE_DIR}/renamer.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
@@ -34,9 +34,9 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
   ${PROJECT_SOURCE_DIR}/outputengine.hpp
   ${PROJECT_SOURCE_DIR}/enginemanager.hpp
-  ${PROJECT_SOURCE_DIR}/worker.hpp
   ${PROJECT_SOURCE_DIR}/resizer.hpp
   ${PROJECT_SOURCE_DIR}/marker.hpp
+  ${PROJECT_SOURCE_DIR}/renamer.hpp
 )
 
 # Include directories

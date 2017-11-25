@@ -16,7 +16,7 @@ void Marker::exec(cv::Mat &destination) {
     cv::Rect watermarkArea(0,0,m_source.cols, m_source.rows);
     cv::Mat finalWatermark(m_watermark, watermarkArea);
 
-    overlayImage(m_source, finalWatermark, destination, cv::Point2i(0));
+    overlayImage(m_source, finalWatermark, destination, cv::Point(0,0));
 }
 
 void Marker::overlayImage(const cv::Mat &background, const cv::Mat &foreground,
@@ -49,7 +49,7 @@ void Marker::overlayImage(const cv::Mat &background, const cv::Mat &foreground,
 
         / 255.;
       if (opacity != 0) {
-          opacity-=m_opacity;
+          opacity-=(1.-m_opacity);
       }
 
 

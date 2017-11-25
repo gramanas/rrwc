@@ -5,21 +5,24 @@
 #include <QString>
 #include "outputtab.hpp"
 
+struct Counter {int counterStart;
+    int start;
+    int step;
+    int digits;
+};
+
 struct Output {
     QString folder;
     bool resize;
     bool rename;
     bool watermark;
-    bool comment;
     QString renameText;
     QString watermarkText;
-    QString commentText;
     int length;
     int height;
     int opacity;
-    int counterStart;
-    int counterStep;
-    int counterDigit;
+    int threads;
+    Counter counter;
 };
 
 class OutputManager {
