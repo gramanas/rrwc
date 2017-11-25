@@ -32,14 +32,14 @@ void OutputEngine::run() {
     while(it.hasNext()) {
         QString path = it.next();
         QString type = path.split(".").back();
-        filename = path.split("/").back().split(".").front();
+        filename = path.split(QDir::separator()).back().split(".").front();
         int progress = int((float(current) / float(total)) * 100);
 
         // if ONLY rename is on
         if (p_output->rename && !p_output->resize && !p_output->watermark) {
             Renamer renamer(filename, p_output->renameText, p_output->counter, current);
             renamer.exec(filename);
-            fullName = p_output->folder + "/" + filename + "." + type;
+            fullName = p_output->folder + QDir::separator() + filename + "." + type;
             QFile::copy(path, fullName);
             emit progressChanged(m_index, progress);
             current++;
@@ -66,7 +66,7 @@ void OutputEngine::run() {
             Resizer resizer(source, p_output->length, p_output->height);
             resizer.exec(out);
         }
-        
+
         // if rename is on
         if (p_output->rename) {
             Renamer renamer(filename, p_output->renameText, p_output->counter, current);
@@ -74,7 +74,7 @@ void OutputEngine::run() {
         }
 
         // write
-        fullName = p_output->folder + "/" + filename + "." + type;
+        fullName = p_output->folder + QDir::separator() + filename + "." + type;
         cv::imwrite(fullName.toStdString(), out);
         emit progressChanged(m_index, progress);
         current++;

@@ -1,4 +1,5 @@
 #include <QFileDialog>
+#include <QStandardPaths>
 #include <QLineEdit>
 #include <QString>
 #include <QString>
@@ -28,7 +29,9 @@ void OutputTab::connectButtons() {
 
 void OutputTab::slotBrowse(QLineEdit *line) {
      QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
-                                                   "",
+                                                   QStandardPaths::locate(
+                                                     QStandardPaths::HomeLocation,
+                                                     "", QStandardPaths::LocateDirectory),
                                                    QFileDialog::ShowDirsOnly
                                                    | QFileDialog::DontResolveSymlinks);
 
