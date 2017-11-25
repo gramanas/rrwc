@@ -35,7 +35,8 @@ void OutputTab::slotBrowse(QLineEdit *line) {
                                                    QFileDialog::ShowDirsOnly
                                                    | QFileDialog::DontResolveSymlinks);
 
-    line->setText(dir);
+     if (!dir.isEmpty())
+         line->setText(dir);
 }
 
 void OutputTab::slotBrowseWatermark(QLineEdit *line) {

@@ -67,7 +67,8 @@ void MainWindow::slotBrowse(QLineEdit *line) {
                                                       "", QStandardPaths::LocateDirectory),
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
-    line->setText(dir);
+    if (!dir.isEmpty())
+        line->setText(dir);
 }
 
 void MainWindow::slotGo() {
