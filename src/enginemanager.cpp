@@ -3,43 +3,80 @@
 #include <QThread>
 
 
+
 EngineManager::EngineManager(OutputManager *outputManager,
                              const QString &inputPath)
     : p_outputManager(outputManager),
-      m_inputPath(inputPath) {
+      m_inputDir(inputPath) {
+    m_inputDir.setFilter(QDir::Files);
+
     for (int i = 0; i < p_outputManager->outputs().size(); i++) {
-        // new thread
-        m_engineThreads.append(new OutputEngine());
-        connect(m_engineThreads[i], SIGNAL(progressChanged(int, int)),
-                this, SLOT(onProgressChanged(int, int)));
-        connect(m_engineThreads[i], SIGNAL(done()),
-                this, SLOT(onDone()));
-        connect(m_engineThreads[i], SIGNAL(finished()),
-                m_engineThreads[i], SLOT(deleteLater()));
-        // progress
-        m_threadProgress.append(0);
+        m_totalThreads += p_outputManager->outputs()[i]->threads;
     }
-    m_threadNumber = p_outputManager->outputs().size();
+
+    m_threadsRemaning = m_totalThreads;
 }
 
 void EngineManager::startNew(int i) {
-    m_engineThreads[i]->init(p_outputManager->outputs()[i], m_inputPath, i);
-    m_engineThreads[i]->start();
+    if (p_outputManager->outputs()[i]->threads == 1) {
+        int currentThread = m_totalThreads - m_threadsRemaning;
+        m_engineThreads.append(new OutputEngine());
+        connect(m_engineThreads[currentThread], SIGNAL(progressChanged(int, int)),
+                this, SLOT(onProgressChanged(int, int)));
+        connect(m_engineThreads[currentThread], SIGNAL(done()),
+                this, SLOT(onDone()));
+        connect(m_engineThreads[currentThread], SIGNAL(finished()),
+                m_engineThreads[currentThread], SLOT(deleteLater()));
+        // progress
+        m_threadProgress.append(0);
+        // init
+        m_engineThreads[currentThread]->init(p_outputManager->outputs()[i], m_inputDir, currentThread);
+        m_engineThreads[currentThread]->start();
+        m_threadsRemaning--;
+    } else {
+        int filesPerThread = (m_inputDir.count() / p_outputManager->outputs()[i]->threads) + 1;
+        for (int j = 0; j < p_outputManager->outputs()[i]->threads; j++) {
+            int currentThread = m_totalThreads - m_threadsRemaning;
+            m_engineThreads.append(new OutputEngine());
+            connect(m_engineThreads[currentThread], SIGNAL(progressChanged(int, int)),
+                    this, SLOT(onProgressChanged(int, int)));
+            connect(m_engineThreads[currentThread], SIGNAL(done()),
+                    this, SLOT(onDone()));
+            connect(m_engineThreads[currentThread], SIGNAL(finished()),
+                    m_engineThreads[currentThread], SLOT(deleteLater()));
+            // progress
+            m_threadProgress.append(0);
+            // init
+            m_engineThreads[currentThread]->init(p_outputManager->outputs()[i], m_inputDir, currentThread);
+            m_engineThreads[currentThread]->setFilesPerThread(filesPerThread);
+            // TI VLAKAS POU EIMAI ELEOS RE
+            m_engineThreads[currentThread]->setStartingFilePosition(j * filesPerThread);
+            m_engineThreads[currentThread]->start();
+            m_threadsRemaning--;
+        }
+    }
+    m_outputProgress.append(0);
 }
 
 void EngineManager::onProgressChanged(int thread, int progress) {
+    qDebug() << "Thread, Progress" << thread << progress;
     m_threadProgress[thread] = progress;
     int sum = 0;
-    for (int i = 0; i < p_outputManager->outputs().size(); i++) {
-        sum = sum + m_threadProgress[i];
+    int sum2 = 0;
+    for (int i = 0; i < p_outputManager->outputs().size(); i+=p_outputManager->outputs()[i]->threads) {
+        for (int j = 0; j < p_outputManager->outputs()[i]->threads; j++) {
+            sum2 += m_threadProgress[i + j];
+        }
+        int avgOutput = float(sum2) / float(p_outputManager->outputs()[i]->threads);
+        sum += avgOutput;
     }
-    int avg = float(sum)/float(p_outputManager->outputs().size());
+    int avg = float(sum)/float(m_totalThreads);
     emit progressChanged(avg);
 }
 
 void EngineManager::onDone() {
-    m_threadNumber--;
-    if (m_threadNumber == 0) {
+    m_totalThreads--;
+    if (m_totalThreads == 0) {
         emit done();
     }
 }

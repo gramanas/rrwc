@@ -2,6 +2,7 @@
 #define ENGINEMANAGER_HPP
 
 #include <QObject>
+#include <QDir>
 
 #include "outputengine.hpp"
 #include "outputmanager.hpp"
@@ -18,7 +19,7 @@ class EngineManager : public QObject {
                            const QString &inputPath);
     ~EngineManager();
 
-    // Start thread corresponding to output i
+    // Start threads corresponding to output i
     void startNew(int i);
 
   public slots:
@@ -31,10 +32,12 @@ class EngineManager : public QObject {
 
   private:
     OutputManager *p_outputManager;
-    int m_threadNumber;
+    int m_totalThreads = 0;
+    int m_threadsRemaning;
     QVector<OutputEngine *> m_engineThreads;
     QVector<int> m_threadProgress;
-    const QString m_inputPath;
+    QVector<int> m_outputProgress;
+    QDir m_inputDir;
 };
 
 #endif // ENGINEMANAGER_HPP

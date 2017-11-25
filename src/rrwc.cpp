@@ -18,7 +18,7 @@ void Rrwc::go(QString inputPath) {
     connect(p_engineManager, SIGNAL(done()),
             this, SLOT(onDone()));
 
-    // start the threads
+    // start the outputs
     for (int i = 0; i < m_outputManager.outputs().size(); i++) {
         p_engineManager->startNew(i);
     }

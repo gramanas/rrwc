@@ -9,40 +9,47 @@
 #include "renamer.hpp"
 
 void OutputEngine::init(Output const * output,
-                        const QString &inputPath,
+                        const QDir &inputDir,
                         int index) {
     m_index = index;
-    m_inputPath = inputPath;
+    m_inputDir = inputDir;
     p_output = output;
+    m_total = m_inputDir.count();
+    m_filesPerThread = m_total;
 }
 
 void OutputEngine::run() {
-    QDir dir(m_inputPath);
-    dir.setFilter(QDir::Files);
-    int total = dir.count();
-    int current = 0;
-    QDirIterator it(dir);
+    //    QDir dir(m_inputPath);
+    //int total = m_inputDir.count();
+    //int current = 0;
+    QDirIterator it(m_inputDir);
     cv::Mat source;
     cv::Mat watermark;
     cv::Mat out;
     QString filename;
     QString fullName;
 
-
-    while(it.hasNext()) {
+    int doneByThisThread = 0;
+    while(it.hasNext() && doneByThisThread <= m_filesPerThread) {
+        if (m_current < m_startingFilePosition) {
+            it.next();
+            m_current++;
+            continue;
+        }
         QString path = it.next();
         QString type = path.split(".").back();
         filename = path.split(QDir::separator()).back().split(".").front();
-        int progress = int((float(current) / float(total)) * 100);
+        qDebug() << "Thread" << m_index << "File" << filename;
+        int progress = int((float(doneByThisThread) / float(m_filesPerThread)) * 100);
 
         // if ONLY rename is on
         if (p_output->rename && !p_output->resize && !p_output->watermark) {
-            Renamer renamer(filename, p_output->renameText, p_output->counter, current);
+            Renamer renamer(filename, p_output->renameText, p_output->counter, m_current);
             renamer.exec(filename);
             fullName = p_output->folder + QDir::separator() + filename + "." + type;
             QFile::copy(path, fullName);
             emit progressChanged(m_index, progress);
-            current++;
+            m_current++;
             continue;
         }
 
@@ -69,7 +76,7 @@ void OutputEngine::run() {
 
         // if rename is on
         if (p_output->rename) {
-            Renamer renamer(filename, p_output->renameText, p_output->counter, current);
+            Renamer renamer(filename, p_output->renameText, p_output->counter, m_current);
             renamer.exec(filename);
         }
 
@@ -77,7 +84,8 @@ void OutputEngine::run() {
         fullName = p_output->folder + QDir::separator() + filename + "." + type;
         cv::imwrite(fullName.toStdString(), out);
         emit progressChanged(m_index, progress);
-        current++;
+        m_current++;
+        doneByThisThread++;
     }
     emit done();
 }
