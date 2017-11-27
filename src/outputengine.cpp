@@ -9,20 +9,22 @@
 #include "renamer.hpp"
 
 void OutputEngine::init(Output const * output,
-                        const QDir &inputDir,
-                        int index) {
+                        QStringList &inputFiles,
+                        const int current,
+                        const int index) {
     m_index = index;
-    m_inputDir = inputDir;
+    m_inputFiles.swap(inputFiles);
     p_output = output;
-    m_total = m_inputDir.count();
-    m_filesPerThread = m_total;
+    m_total = m_inputFiles.count();
+    m_current = current;
 }
 
 void OutputEngine::run() {
     //    QDir dir(m_inputPath);
     //int total = m_inputDir.count();
     //int current = 0;
-    QDirIterator it(m_inputDir);
+    //m_inputDir.setSorting(QDir::Name);
+    QStringListIterator it(m_inputFiles);
     cv::Mat source;
     cv::Mat watermark;
     cv::Mat out;
@@ -30,17 +32,12 @@ void OutputEngine::run() {
     QString fullName;
 
     int doneByThisThread = 0;
-    while(it.hasNext() && doneByThisThread <= m_filesPerThread) {
-        if (m_current < m_startingFilePosition) {
-            it.next();
-            m_current++;
-            continue;
-        }
+    while(it.hasNext()) {
         QString path = it.next();
         QString type = path.split(".").back();
         filename = path.split(QDir::separator()).back().split(".").front();
-        qDebug() << "Thread" << m_index << "File" << filename;
-        int progress = int((float(doneByThisThread) / float(m_filesPerThread)) * 100);
+        qDebug() << "Thread:" << m_index << "\tCurrent:" << m_current << "\tFile:" << filename;
+        int progress = int((float(doneByThisThread) / float(m_total)) * 100);
 
         // if ONLY rename is on
         if (p_output->rename && !p_output->resize && !p_output->watermark) {
@@ -89,7 +86,4 @@ void OutputEngine::run() {
     }
     emit done();
 }
-
-        // cv::Rect roi(0,0,600,600);
-        // cv::Mat out(source,roi);
 

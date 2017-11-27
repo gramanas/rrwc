@@ -1,11 +1,12 @@
 #ifndef ENGINEMANAGER_HPP
 #define ENGINEMANAGER_HPP
 
-#include <QObject>
+#include <QVector>
 #include <QDir>
 
 #include "outputengine.hpp"
-#include "outputmanager.hpp"
+#include "output.hpp"
+//#include "outputmanager.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
 // The EngineManager object must be created just before the output threads //
@@ -15,28 +16,28 @@
 class EngineManager : public QObject {
     Q_OBJECT
   public:
-    explicit EngineManager(OutputManager *outputManager,
-                           const QString &inputPath);
+    explicit EngineManager(Output const *output,
+                           const QString &inputPath,
+                           const int &index);
     ~EngineManager();
 
     // Start threads corresponding to output i
-    void startNew(int i);
+    void startThreads();
 
   public slots:
     void onProgressChanged(int thread, int progress);
     void onDone();
 
   signals:
-    void progressChanged(int progress);
+    void progressChanged(int output, int progress);
     void done();
 
   private:
-    OutputManager *p_outputManager;
-    int m_totalThreads = 0;
-    int m_threadsRemaning;
+    const int m_index;
+    Output const *p_output;
+    int m_threadsRemaining;
     QVector<OutputEngine *> m_engineThreads;
     QVector<int> m_threadProgress;
-    QVector<int> m_outputProgress;
     QDir m_inputDir;
 };
 

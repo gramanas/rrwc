@@ -3,25 +3,18 @@
 #include "rrwc.hpp"
 
 Rrwc::Rrwc() {
+    connect(&m_outputManager, SIGNAL(progressChanged(int)),
+            this, SLOT(onProgressChanged(int)));
+    connect(&m_outputManager, SIGNAL(done()),
+            this, SLOT(onDone()));
 }
 
-/////////////////////////////////////////////////////
-// create new EngineManager                        //
-// it will later be deleted when the done() signal //
-// is emmited from all the threads                 //
-/////////////////////////////////////////////////////
-void Rrwc::go(QString inputPath) {
-    p_engineManager = new EngineManager(&m_outputManager, inputPath);
-    // connect the signals
-    connect(p_engineManager, SIGNAL(progressChanged(int)),
-            this, SLOT(onProgressChanged(int)));
-    connect(p_engineManager, SIGNAL(done()),
-            this, SLOT(onDone()));
-
-    // start the outputs
+void Rrwc::go(const QString &inputPath) {
+    qDebug() << "Starting outputs...";
     for (int i = 0; i < m_outputManager.outputs().size(); i++) {
-        p_engineManager->startNew(i);
+        m_outputManager.startOutput(i, inputPath);
     }
+    qDebug() << "Done starting outputs";
     emit started();
 }
 
@@ -30,9 +23,8 @@ void Rrwc::onProgressChanged(int progress) {
 }
 
 void Rrwc::onDone() {
-    // delete EngineManager
-    delete p_engineManager;
-    p_engineManager = nullptr;
+    qDebug() << "Cleaning output manager";
+    m_outputManager.clean();
     qDebug() << "Job's done.";
     emit done(100);
 }

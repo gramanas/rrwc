@@ -33,6 +33,7 @@ class MainWindow : public QMainWindow
     void connectButtons();
     void finalizeTabs();
     void enableLayout(bool t);
+
     QVector<OutputTab *> m_outputTabs;
     Rrwc *p_rrwc;
     Ui::MainWindow *ui;

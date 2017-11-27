@@ -30,6 +30,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
   ${PROJECT_SOURCE_DIR}/mainwindow.hpp
   ${PROJECT_SOURCE_DIR}/outputtab.hpp
+  ${PROJECT_SOURCE_DIR}/output.hpp
   ${PROJECT_SOURCE_DIR}/outputmanager.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
   ${PROJECT_SOURCE_DIR}/outputengine.hpp

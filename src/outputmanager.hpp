@@ -3,41 +3,40 @@
 
 #include <QVector>
 #include <QString>
+
 #include "outputtab.hpp"
+#include "enginemanager.hpp"
+#include "output.hpp"
 
-struct Counter {int counterStart;
-    int start;
-    int step;
-    int digits;
-};
-
-struct Output {
-    QString folder;
-    bool resize;
-    bool rename;
-    bool watermark;
-    QString renameText;
-    QString watermarkText;
-    int length;
-    int height;
-    int opacity;
-    int threads;
-    Counter counter;
-};
-
-class OutputManager {
+class OutputManager : public QObject {
+    Q_OBJECT
   public:
     OutputManager();
     ~OutputManager();
     void generateOutputsFromTabs(QVector<OutputTab *> outputTabs);
     void print() const;
 
+    void startOutput(int output, const QString &inputPath);
+    void clean();
+
     QVector<Output *> outputs() const {
         return m_outputs;
     }
 
+  public slots:
+    void onProgressChanged(int output, int progress);
+    void onDone();
+
+  signals:
+    void progressChanged(int progress);
+    void done();
+
+
   private:
     QVector<Output *> m_outputs;
+    QVector<int> m_outputProgress;
+    QVector<EngineManager *> m_engines;
+    int m_outputsRemaining;
 };
 
 #endif // OUTPUTMANAGER_HPP

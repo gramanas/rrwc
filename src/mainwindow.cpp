@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
 
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
-    
+
     ui->inputInputFolder->setText("/home/gramanas/Code/rrwc/tests/new");
 }
 
@@ -73,7 +73,7 @@ void MainWindow::slotBrowse(QLineEdit *line) {
 
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->outputManager()->print();
+    //p_rrwc->outputManager()->print();
     p_rrwc->go(ui->inputInputFolder->text());
 }
 

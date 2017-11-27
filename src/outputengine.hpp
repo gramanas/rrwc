@@ -5,25 +5,26 @@
 #include <QObject>
 #include <QDir>
 
-#include "outputmanager.hpp"
+#include "output.hpp"
 
 class OutputEngine : public QThread {
     Q_OBJECT
   public:
     void init(Output const *output,
-              const QDir &inputDir,
-              int index);
+              QStringList &inputFiles,
+              const int current,
+              const int index);
 
     // parallel code
     void run() override;
 
-    void setFilesPerThread(int files) {
-        m_filesPerThread = files;
-    }
+    // void setFilesPerThread(int files) {
+    //     m_filesPerThread = files;
+    // }
 
-    void setStartingFilePosition(int pos) {
-        m_startingFilePosition = pos;
-    }
+    // void setStartingFilePosition(int pos) {
+    //     m_startingFilePosition = pos;
+    // }
 
   signals:
     void progressChanged(int thread, int progress);
@@ -31,12 +32,10 @@ class OutputEngine : public QThread {
 
   private:
     int m_current = 0;
-    int m_startingFilePosition = 0;
-    int m_filesPerThread;
-    int m_index;
     int m_total;
+    int m_index;
     Output const *p_output;
-    QDir m_inputDir;
+    QStringList m_inputFiles = {};
 };
 
 #endif // OUTPUTENGINE_HPP

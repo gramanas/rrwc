@@ -5,7 +5,6 @@
 #include <QApplication>
 
 #include "outputmanager.hpp"
-#include "enginemanager.hpp"
 
 // TODO: Add cli support, initializing the same stuff
 // but without the GUI compartments
@@ -20,7 +19,7 @@ class Rrwc : public QObject {
         return &m_outputManager;
     }
 
-    void go(QString inputPath);
+    void go(const QString &inputPath);
 
   public slots:
     void onProgressChanged(int progress);
@@ -33,7 +32,6 @@ class Rrwc : public QObject {
 
   private:
     OutputManager m_outputManager;
-    EngineManager *p_engineManager;
 };
 
 #endif // RRWC_HPP
