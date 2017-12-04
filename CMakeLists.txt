@@ -25,6 +25,7 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/resizer.cpp
   ${PROJECT_SOURCE_DIR}/marker.cpp
   ${PROJECT_SOURCE_DIR}/renamer.cpp
+  ${PROJECT_SOURCE_DIR}/profileparser.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
@@ -38,6 +39,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/resizer.hpp
   ${PROJECT_SOURCE_DIR}/marker.hpp
   ${PROJECT_SOURCE_DIR}/renamer.hpp
+  ${PROJECT_SOURCE_DIR}/profileparser.hpp
 )
 
 # Include directories

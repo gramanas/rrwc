@@ -87,8 +87,8 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <addaction name="actionOpen_Profile"/>
-    <addaction name="actionSave_Profile"/>
+    <addaction name="actionLoadProfile"/>
+    <addaction name="actionSaveProfile"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionExit"/>
@@ -102,12 +102,12 @@
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
-  <action name="actionOpen_Profile">
+  <action name="actionLoadProfile">
    <property name="text">
-    <string>&amp;Open Profile...</string>
+    <string>&amp;Load Profile...</string>
    </property>
   </action>
-  <action name="actionSave_Profile">
+  <action name="actionSaveProfile">
    <property name="text">
     <string>&amp;Save Profile</string>
    </property>

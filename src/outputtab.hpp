@@ -15,7 +15,7 @@ class OutputTab : public QWidget
   public:
     explicit OutputTab(QWidget *parent = 0);
     ~OutputTab();
-    Ui::OutputTab *getUi() const {
+    Ui::OutputTab *getUi() const{
         return ui;
     }
   private slots:

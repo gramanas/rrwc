@@ -26,6 +26,8 @@ class MainWindow : public QMainWindow
     void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
     void actionHelp();
+    void actionSaveProfile();
+    void actionLoadProfile();
     void onStarted();
     void onDone();
 

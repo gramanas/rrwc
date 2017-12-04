@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include "outputmanager.hpp"
+#include "profileparser.hpp"
 #include "ui_outputtab.h"
 
 OutputManager::OutputManager() {
@@ -34,23 +35,35 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
     m_outputsRemaining = outputTabs.size();
 }
 
+void OutputManager::saveProfile(const QString &filename) {
+    ProfileParser profileParser(m_outputs);
+    profileParser.writeToFile(filename);
+}
+
+bool OutputManager::loadProfile(const QString &filename) {
+    ProfileParser profileParser;
+    m_outputs.clear();
+    return profileParser.readFromFile(filename, m_outputs);
+}
+
 void OutputManager::print() const {
     qDebug() << "Outputs:";
     for (const auto& output : m_outputs) {
         qDebug() << "----Output----";
-        qDebug() << "folder: " << output->folder;
-        qDebug() << "resize: " << output->resize;
-        qDebug() << "rename: " << output->rename;
-        qDebug() << "watermark: " << output->watermark;
-        qDebug() << "length: " << output->length;
-        qDebug() << "height: " << output->height;
-        qDebug() << "rename: " << output->renameText;
-        qDebug() << "watermark: " << output->watermarkText;
-        qDebug() << "threads: " << output->threads;
-        qDebug() << "opacity: " << output->opacity;
-        qDebug() << "start: " << output->counter.start;
-        qDebug() << "step: " << output->counter.step;
-        qDebug() << "digits: " << output->counter.digits;
+        qDebug() << "index=" << output->index;
+        qDebug() << "folder=" << output->folder;
+        qDebug() << "resize=" << output->resize;
+        qDebug() << "rename=" << output->rename;
+        qDebug() << "watermark=" << output->watermark;
+        qDebug() << "length=" << output->length;
+        qDebug() << "height=" << output->height;
+        qDebug() << "rename=" << output->renameText;
+        qDebug() << "watermark=" << output->watermarkText;
+        qDebug() << "threads=" << output->threads;
+        qDebug() << "opacity=" << output->opacity;
+        qDebug() << "start=" << output->counter.start;
+        qDebug() << "step=" << output->counter.step;
+        qDebug() << "digits=" << output->counter.digits;
         qDebug() << "\n";
     }
 }

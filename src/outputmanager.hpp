@@ -14,6 +14,8 @@ class OutputManager : public QObject {
     OutputManager();
     ~OutputManager();
     void generateOutputsFromTabs(QVector<OutputTab *> outputTabs);
+    void saveProfile(const QString &filename);
+    bool loadProfile(const QString &filename);
     void print() const;
 
     void startOutput(int output, const QString &inputPath);
