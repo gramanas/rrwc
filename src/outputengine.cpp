@@ -36,8 +36,9 @@ void OutputEngine::run() {
         QString path = it.next();
         QString type = path.split(".").back();
         filename = path.split(QDir::separator()).back().split(".").front();
-        qDebug() << "Thread:" << m_index << "\tCurrent:" << m_current << "\tFile:" << filename;
         int progress = int((float(doneByThisThread) / float(m_total)) * 100);
+        qDebug() << "O:" << p_output->index << "\tT:" << m_index <<
+            "\tC:" << m_current << "\tF:" << filename;
 
         // if ONLY rename is on
         if (p_output->rename && !p_output->resize && !p_output->watermark) {

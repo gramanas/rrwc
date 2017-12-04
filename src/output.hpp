@@ -21,6 +21,7 @@ struct Output {
     int opacity;
     int threads;
     Counter counter;
+    int index;
 };
 
 #endif // OUTPUT_HPP

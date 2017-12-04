@@ -1,3 +1,4 @@
+
 #include <QDebug>
 
 #include "outputmanager.hpp"
@@ -9,6 +10,7 @@ OutputManager::OutputManager() {
 void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
     m_outputs.clear();
     Output *p_output;
+    int i;
     for (const auto& tab : outputTabs) {
         p_output = new Output;
         p_output->folder = tab->getUi()->inputOutputFolder->text();
@@ -24,7 +26,7 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
         p_output->counter.start = tab->getUi()->inputCounterStart->value();
         p_output->counter.step = tab->getUi()->inputCounterStep->value();
         p_output->counter.digits = tab->getUi()->inputCounterDigits->value();
-
+        p_output->index = i++;
         m_outputs.append(p_output);
     }
 
@@ -61,7 +63,8 @@ void OutputManager::startOutput(int output, const QString &inputPath) {
     }
 
     // One engine manager for each output
-    m_engines[output] =  new EngineManager(m_outputs[output], inputPath, output);
+    m_engines.insert(output, new EngineManager(m_outputs[output], inputPath, output));
+    m_outputProgress.insert(output, 0);
 
     // connect the signals
     connect(m_engines[output], SIGNAL(progressChanged(int, int)),
@@ -74,12 +77,13 @@ void OutputManager::startOutput(int output, const QString &inputPath) {
 
 void OutputManager::onProgressChanged(int output, int progress) {
     m_outputProgress[output] = progress;
+
     int sum = 0;
-    for (const auto &it : m_outputProgress) {
-        sum += it;
+    for (int i = 0; i < m_outputProgress.size(); i++) {
+        sum += m_outputProgress[i];
     }
     // emit the average
-    emit progressChanged(int(float(sum) / float(m_outputProgress.size())));
+    emit progressChanged(int(float(sum)/float(m_outputProgress.size())));
 }
 
 void OutputManager::onDone() {
@@ -93,10 +97,11 @@ void OutputManager::clean() {
     for (int i = 0; i < m_outputs.size(); i++) {
         delete m_outputs[i];
         delete m_engines[i];
-        m_outputProgress[i] = 0;
+        //m_outputProgress[i] = 0;
     }
     m_outputs.clear();
     m_engines.clear();
+    m_outputProgress.clear();
 }
 
 OutputManager::~OutputManager() {

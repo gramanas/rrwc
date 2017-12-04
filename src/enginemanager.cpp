@@ -34,6 +34,7 @@ void EngineManager::startThreads() {
       QStringList({"*.jpg", "*.JPG"}),
       QDir::Files, QDir::Name);
     int totalFiles = allFiles.count();
+    qDebug() << "Total files:" << totalFiles;
     int filesPerThread = totalFiles / p_output->threads;
     QStringList threadFiles = {};
     for (int i = 0; i < p_output->threads; i++) {
@@ -45,7 +46,6 @@ void EngineManager::startThreads() {
             allFiles.clear();
         } else {
             for (int j = 0; j < filesPerThread && j < totalFiles; j++) {
-                qDebug() << allFiles.first();
                 threadFiles << m_inputDir.absolutePath() + QDir::separator() + allFiles.first();
                 allFiles.removeFirst();
             }
@@ -60,8 +60,8 @@ void EngineManager::startThreads() {
 void EngineManager::onProgressChanged(int thread, int progress) {
     m_threadProgress[thread] = progress;
     int sum = 0;
-    for (const auto &it : m_threadProgress) {
-        sum += it;
+    for (int i = 0; i < p_output->threads; i++) {
+        sum += m_threadProgress[i];
     }
 
     emit progressChanged(m_index, int(float(sum) / float(p_output->threads)));
