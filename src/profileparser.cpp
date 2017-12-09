@@ -22,6 +22,7 @@ ProfileParser::ProfileParser(const QVector<Output *> &outputs) {
         p_output->counter.start = output->counter.start;
         p_output->counter.step = output->counter.step;
         p_output->counter.digits = output->counter.digits;
+        p_output->stripMetadata = output->stripMetadata;
         p_output->index = output->index;
         m_outputs << p_output;
     }
@@ -50,6 +51,7 @@ void ProfileParser::writeToFile(const QString &filename) {
         out << OTP_WATERMARK << "=" << (output->watermark ? "true" : "false") << "\n";
         out << OTP_WATERMARK_TEXT << "= \"" << output->watermarkText << "\"" << "\n";
         out << OTP_OPACITY << "=" << output->opacity << "\n";
+        out << OTP_STRIP_METADATA << "=" << (output->stripMetadata ? "true" : "false") << "\n";
         out << OTP_THREADS << "=" << output->threads << "\n";
         out << "}\n";
     }
@@ -73,6 +75,7 @@ void ProfileParser::copyOutputsToVector(QVector<Output *> &vector) {
         p_output->counter.start = output->counter.start;
         p_output->counter.step = output->counter.step;
         p_output->counter.digits = output->counter.digits;
+        p_output->stripMetadata = output->stripMetadata;
         p_output->index = output->index;
         vector << p_output;
     }
@@ -156,6 +159,8 @@ bool ProfileParser::readFromFile(const QString &filename, QVector<Output *> &vec
                 parse(p_output->opacity, data);
             } else if (data[0] == OTP_THREADS) {
                 parse(p_output->threads, data);
+            } else if (data[0] == OTP_STRIP_METADATA) {
+                parse(p_output->stripMetadata, data);
             } else {
                 qDebug() << "Error in profile" << filename;
                 qDebug() << "Line" << line;

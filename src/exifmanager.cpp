@@ -1,4 +1,5 @@
 #include <QDir>
+#include <QDebug>
 
 #include "exifmanager.hpp"
 
@@ -6,7 +7,12 @@ ExifManager::ExifManager(const QString &dirPath)
     :m_dirPath(dirPath + QDir::separator()) {
 }
 
+ExifManager::ExifManager()
+    :m_dirPath("") {
+}
+
 DateTime ExifManager::getDateTime(const QString &fullPath) {
+    qDebug() << "Getting datetime from:" << fullPath;
     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(fullPath.toStdString());
     image->readMetadata();
     QString str;
@@ -47,3 +53,16 @@ void ExifManager::sortByDateTime(QStringList &list) {
             }
         });
 }
+
+void ExifManager::copyMetadata(const QString &from, const QString &to) {
+    Exiv2::Image::AutoPtr imageFrom = Exiv2::ImageFactory::open(from.toStdString());
+    imageFrom->readMetadata();
+    Exiv2::ExifData &exifData = imageFrom->exifData();
+    Exiv2::Image::AutoPtr imageTo = Exiv2::ImageFactory::open(to.toStdString());
+    imageTo->setExifData(exifData);
+    imageTo->writeMetadata();
+}
+
+ExifManager::~ExifManager() {
+}
+

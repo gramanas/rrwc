@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
       ui(new Ui::MainWindow),
       p_rrwc(rrwc) {
     ui->setupUi(this);
+    setWindowTitle("Rrwc");
     connectButtons();
     slotAddOutput();
 
@@ -151,6 +152,7 @@ void MainWindow::actionLoadProfile() {
             m_outputTabs[i]->getUi()->watermark->setChecked(output->watermark);
             m_outputTabs[i]->getUi()->inputWatermark->setText(output->watermarkText);
             m_outputTabs[i]->getUi()->inputOpacity->setValue(output->opacity);
+            m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
             m_outputTabs[i]->getUi()->inputThreads->setValue(output->threads);
         }
         qDebug() << "Profile" << filename << "loaded";

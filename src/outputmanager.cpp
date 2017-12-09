@@ -28,6 +28,7 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
         p_output->counter.start = tab->getUi()->inputCounterStart->value();
         p_output->counter.step = tab->getUi()->inputCounterStep->value();
         p_output->counter.digits = tab->getUi()->inputCounterDigits->value();
+        p_output->stripMetadata = tab->getUi()->stripExifData->isChecked();
         p_output->index = i++;
         m_outputs.append(p_output);
     }
@@ -65,6 +66,7 @@ void OutputManager::print() const {
         qDebug() << "start=" << output->counter.start;
         qDebug() << "step=" << output->counter.step;
         qDebug() << "digits=" << output->counter.digits;
+        qDebug() << "stripMetadata=" << output->stripMetadata;
         qDebug() << "\n";
     }
 }

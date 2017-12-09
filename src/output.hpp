@@ -14,6 +14,7 @@ struct Output {
     bool resize;
     bool rename;
     bool watermark;
+    bool stripMetadata;
     QString renameText;
     QString watermarkText;
     int length;

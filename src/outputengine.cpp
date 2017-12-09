@@ -3,10 +3,12 @@
 #include <QDirIterator>
 #include <QDebug>
 #include <QObject>
+
 #include "outputengine.hpp"
 #include "resizer.hpp"
 #include "marker.hpp"
 #include "renamer.hpp"
+#include "exifmanager.hpp"
 
 void OutputEngine::init(Output const * output,
                         QStringList &inputFiles,
@@ -81,6 +83,15 @@ void OutputEngine::run() {
         // write
         fullName = p_output->folder + QDir::separator() + filename + "." + type;
         cv::imwrite(fullName.toStdString(), out);
+
+        qDebug() << p_output->stripMetadata << m_index;
+
+        // if strip exif data is on
+        if (!p_output->stripMetadata) {
+            ExifManager exifManager;
+            exifManager.copyMetadata(path, fullName);
+        }
+
         emit progressChanged(m_index, progress);
         m_current++;
         doneByThisThread++;

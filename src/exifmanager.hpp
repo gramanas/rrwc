@@ -16,11 +16,13 @@ struct DateTime {
 class ExifManager {
   public:
     ExifManager(const QString &dirPath);
+    ExifManager();
+    ~ExifManager();
     void sortByDateTime(QStringList &list);
+    void copyMetadata(const QString &from, const QString &to);
 
   private:
     DateTime getDateTime(const QString &fullPath);
-    bool lessThan(const QString &item, const QString &meti);
     const QString m_dirPath;
 };
 
