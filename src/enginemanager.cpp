@@ -2,8 +2,8 @@
 #include <QThread>
 
 #include "enginemanager.hpp"
-#include "../easyexif/exif.h"
-
+#include "exifmanager.hpp"
+//#include "../easyexif/exif.h"
 EngineManager::EngineManager(Output const *output,
                              const QString &inputPath,
                              const int &index)
@@ -33,6 +33,11 @@ void EngineManager::startThreads() {
     QStringList allFiles = m_inputDir.entryList(
       QStringList({"*.jpg", "*.JPG"}),
       QDir::Files, QDir::Name);
+
+    ExifManager exifManager(m_inputDir.absolutePath());
+    exifManager.sortByDateTime(allFiles);
+
+
     int totalFiles = allFiles.count();
     qDebug() << "Total files:" << totalFiles;
     int filesPerThread = totalFiles / p_output->threads;

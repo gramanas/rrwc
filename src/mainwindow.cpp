@@ -8,6 +8,9 @@
 #include "ui_mainwindow.h"
 #include "ui_outputtab.h"
 
+//#include "exiv2/exif.hpp"
+#include "exiv2/exiv2.hpp"
+
 MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
@@ -65,7 +68,6 @@ void MainWindow::slotAddOutput() {
 }
 
 void MainWindow::slotBrowse(QLineEdit *line) {
-    m_outputTabs[0]->getUi()->inputOpacity->setValue(100);
     QString dir = QFileDialog::getExistingDirectory(this, "Select input folder",
                                                     QStandardPaths::locate(
                                                       QStandardPaths::HomeLocation,

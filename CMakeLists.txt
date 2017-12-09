@@ -2,8 +2,10 @@ cmake_minimum_required (VERSION 3.9.4)
 project(rrwc)
 
 # Find external libraries
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/exiv2)
 find_package(Qt5Widgets)
 find_package(OpenCV REQUIRED) # COMPONENTS core imgproc highgui
+find_package(Exiv2 REQUIRED)
 
 # Set project directories
 set(PROJECT_SOURCE_DIR ./src)
@@ -26,6 +28,7 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/marker.cpp
   ${PROJECT_SOURCE_DIR}/renamer.cpp
   ${PROJECT_SOURCE_DIR}/profileparser.cpp
+  ${PROJECT_SOURCE_DIR}/exifmanager.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
@@ -40,6 +43,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/marker.hpp
   ${PROJECT_SOURCE_DIR}/renamer.hpp
   ${PROJECT_SOURCE_DIR}/profileparser.hpp
+  ${PROJECT_SOURCE_DIR}/exifmanager.hpp
 )
 
 # Include directories
@@ -62,5 +66,6 @@ add_library (rrwcLib SHARED
 # Link
 target_link_libraries (rrwcLib Qt5::Widgets)
 add_executable(rrwc ${rrwcBin_src})
+target_link_libraries (rrwcLib exiv2)
 target_link_libraries(rrwc ${OpenCV_LIBS})
 target_link_libraries (rrwc rrwcLib)
