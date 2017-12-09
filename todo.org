@@ -1,0 +1,3 @@
+* add Q_ASSERT
+from <QtGlobal>
+https://doc.qt.io/qt-5/debug.html
