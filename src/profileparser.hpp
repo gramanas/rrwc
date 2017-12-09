@@ -8,7 +8,7 @@
 
 class ProfileParser {
   public:
-    ProfileParser(const QVector<Output *> outputs);
+    ProfileParser(const QVector<Output *> &outputs);
     ProfileParser();
     ~ProfileParser();
 

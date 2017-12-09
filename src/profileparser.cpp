@@ -2,8 +2,9 @@
 #include <QDebug>
 
 #include "profileparser.hpp"
+#include "globals.hpp"
 
-ProfileParser::ProfileParser(const QVector<Output *> outputs) {
+ProfileParser::ProfileParser(const QVector<Output *> &outputs) {
     m_outputs.reserve(outputs.size());
     Output *p_output;
     for (const auto& output : outputs) {
@@ -37,19 +38,19 @@ void ProfileParser::writeToFile(const QString &filename) {
     QTextStream out(&file);
     for (const auto *output : m_outputs) {
         out << "Output {\n";
-        out << "outputFolder=" << "\"" << output->folder << "\"" << "\n";
-        out << "resize=" << (output->resize == true ? "true" : "false") << "\n";
-        out << "length=" << output->length << "\n";
-        out << "height=" << output->height << "\n";
-        out << "rename=" << (output->rename == true ? "true" : "false") << "\n";
-        out << "renameText=" << "\"" << output->renameText << "\"" << "\n";
-        out << "counterStart=" << output->counter.start << "\n";
-        out << "counterStep=" << output->counter.step << "\n";
-        out << "counterDigits=" << output->counter.digits << "\n";
-        out << "watermark=" << (output->watermark == true ? "true" : "false") << "\n";
-        out << "watermarkText=" << "\"" << output->watermarkText << "\"" << "\n";
-        out << "opacity=" << output->opacity << "\n";
-        out << "threads=" << output->threads << "\n";
+        out << OTP_FOLDER << "= \"" << output->folder << "\"" << "\n";
+        out << OTP_RESIZE << "=" << (output->resize ? "true" : "false") << "\n";
+        out << OTP_LENGTH << "=" << output->length << "\n";
+        out << OTP_HEIGHT << "=" << output->height << "\n";
+        out << OTP_RENAME << "=" << (output->rename ? "true" : "false") << "\n";
+        out << OTP_RENAME_TEXT << "= \"" << output->renameText << "\"" << "\n";
+        out << OTP_COUNTER_START << "=" << output->counter.start << "\n";
+        out << OTP_COUNTER_STEP << "=" << output->counter.step << "\n";
+        out << OTP_COUNTER_DIGITS << "=" << output->counter.digits << "\n";
+        out << OTP_WATERMARK << "=" << (output->watermark ? "true" : "false") << "\n";
+        out << OTP_WATERMARK_TEXT << "= \"" << output->watermarkText << "\"" << "\n";
+        out << OTP_OPACITY << "=" << output->opacity << "\n";
+        out << OTP_THREADS << "=" << output->threads << "\n";
         out << "}\n";
     }
     file.close();
@@ -114,11 +115,11 @@ bool ProfileParser::readFromFile(const QString &filename, QVector<Output *> &vec
         if (line.startsWith('#')) {
             continue;
         } else if (line.contains('{')) {
-            // if (p_output != nullptr) {
-            //     qDebug() << "Error in profile" << filename;
-            //     qDebug() << "Outputs must be enclosed in \"{}\"";
-            //     return false;
-            // }
+            if (p_output != nullptr) {
+                qDebug() << "Error in profile" << filename;
+                qDebug() << "Outputs must be enclosed in \"{}\"";
+                return false;
+            }
             p_output = new Output;
             p_output->index = index++;
         } else if (p_output != nullptr) {
@@ -129,31 +130,31 @@ bool ProfileParser::readFromFile(const QString &filename, QVector<Output *> &vec
                 p_output = nullptr;
             } else if (line.isEmpty()) {
                 continue;
-            } else if (data[0] == "outputFolder") {
+            } else if (data[0] == OTP_FOLDER) {
                 parse(p_output->folder, data);
-            } else if (data[0] == "resize") {
+            } else if (data[0] == OTP_RESIZE) {
                 parse(p_output->resize, data);
-            } else if (data[0] == "length") {
+            } else if (data[0] == OTP_LENGTH) {
                 parse(p_output->length, data);
-            } else if (data[0] == "height") {
+            } else if (data[0] == OTP_HEIGHT) {
                 parse(p_output->height, data);
-            } else if (data[0] == "rename") {
+            } else if (data[0] == OTP_RENAME) {
                 parse(p_output->rename, data);
-            } else if (data[0] == "renameText") {
+            } else if (data[0] == OTP_RENAME_TEXT) {
                 parse(p_output->renameText, data);
-            } else if (data[0] == "counterStart") {
+            } else if (data[0] == OTP_COUNTER_START) {
                 parse(p_output->counter.start, data);
-            } else if (data[0] == "counterStep") {
+            } else if (data[0] == OTP_COUNTER_STEP) {
                 parse(p_output->counter.step, data);
-            } else if (data[0] == "counterDigits") {
+            } else if (data[0] == OTP_COUNTER_DIGITS) {
                 parse(p_output->counter.digits, data);
-            } else if (data[0] == "watermark") {
+            } else if (data[0] == OTP_WATERMARK) {
                 parse(p_output->watermark, data);
-            } else if (data[0] == "watermarkText") {
+            } else if (data[0] == OTP_WATERMARK_TEXT) {
                 parse(p_output->watermarkText, data);
-            } else if (data[0] == "opacity") {
+            } else if (data[0] == OTP_OPACITY) {
                 parse(p_output->opacity, data);
-            } else if (data[0] == "threads") {
+            } else if (data[0] == OTP_THREADS) {
                 parse(p_output->threads, data);
             } else {
                 qDebug() << "Error in profile" << filename;
@@ -166,13 +167,6 @@ bool ProfileParser::readFromFile(const QString &filename, QVector<Output *> &vec
     copyOutputsToVector(vector);
     return true;
 }
-
-
-
-
-
-
-
 
 ProfileParser::~ProfileParser(){
     for (int i = 0; i < m_outputs.size(); i++) {
