@@ -18,7 +18,7 @@ class OutputManager : public QObject {
     bool loadProfile(const QString &filename);
     void print() const;
 
-    void startOutput(int output, const QString &inputPath);
+    void startOutput(int output, const QString &inputPath, const QString &sort);
     void clean();
 
     QVector<Output *> outputs() const {
@@ -35,6 +35,9 @@ class OutputManager : public QObject {
 
 
   private:
+    void fillEntryList(QDir dir, const QString &sort);
+
+    QStringList m_entryList;
     QVector<Output *> m_outputs;
     QVector<int> m_outputProgress;
     QVector<EngineManager *> m_engines;

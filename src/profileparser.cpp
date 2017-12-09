@@ -114,17 +114,19 @@ bool ProfileParser::readFromFile(const QString &filename, QVector<Output *> &vec
         if (line.startsWith('#')) {
             continue;
         } else if (line.contains('{')) {
-            if (p_output != nullptr) {
-                qDebug() << "Error in profile" << filename;
-                qDebug() << "Outputs must be enclosed in \"{}\"";
-                return false;
-            }
+            // if (p_output != nullptr) {
+            //     qDebug() << "Error in profile" << filename;
+            //     qDebug() << "Outputs must be enclosed in \"{}\"";
+            //     return false;
+            // }
             p_output = new Output;
             p_output->index = index++;
         } else if (p_output != nullptr) {
             QStringList data = stripWhitespaces(line.split('='));
             if (line.contains('}')) {
                 m_outputs << p_output;
+                // reset
+                p_output = nullptr;
             } else if (line.isEmpty()) {
                 continue;
             } else if (data[0] == "outputFolder") {

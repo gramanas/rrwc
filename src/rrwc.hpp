@@ -19,7 +19,7 @@ class Rrwc : public QObject {
         return &m_outputManager;
     }
 
-    void go(const QString &inputPath);
+    void go(const QString &inputPath, const QString &sort);
 
   public slots:
     void onProgressChanged(int progress);
