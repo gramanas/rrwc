@@ -10,17 +10,17 @@ It's currently under developement.
 
 * Goals
   - Cross Platform (linux + windows)
-  - Lightning Fast
+  - Fast
   - Multithreading
-  - Ability to work with smb/sshfs 
   - cli
 
 * Dependencies
   - [[https://www.qt.io/][Qt5]] for the Gui
   - Qt5 for the data
-  - [[https://opencv.org/][OpenCV]] for the rest
+  - [[http://www.exiv2.org/][Exiv2]] for exif management
+  - [[https://opencv.org/][OpenCV]] for the image processing
 
-You also need [[https://www.hdfgroup.org/solutions/hdf5/][Hdf5]] for reasons I have yet to discover. (Maybe an OpenCV dependency)
+You also need the [[https://www.hdfgroup.org/solutions/hdf5/][Hdf5]] library.
 
 * Test - contribute - notes
 
