@@ -81,7 +81,7 @@ void MainWindow::slotBrowse(QLineEdit *line) {
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
     p_rrwc->outputManager()->print();
-    p_rrwc->go(ui->inputInputFolder->text());
+    p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText());
 }
 
 void MainWindow::enableLayout(bool t) {
@@ -92,6 +92,7 @@ void MainWindow::enableLayout(bool t) {
     ui->butGo->setEnabled(t);
     ui->butAddOutput->setEnabled(t);
     ui->inputInputFolder->setEnabled(t);
+    ui->inputSortMode->setEnabled(t);
     ui->butBrowse->setEnabled(t);
 }
 
@@ -128,8 +129,8 @@ void MainWindow::actionLoadProfile() {
                                                     "Rrwc profile (*.rrwcp)");
 
     if (p_rrwc->outputManager()->loadProfile(filename)) {
+        p_rrwc->outputManager()->print();
         int oldSize = m_outputTabs.size();
-        qDebug() << oldSize;
         for (int i = oldSize - 1; i >= 0; i--) {
             slotRemoveOutput(i);
         }

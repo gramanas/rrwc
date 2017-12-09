@@ -17,7 +17,7 @@ class EngineManager : public QObject {
     Q_OBJECT
   public:
     explicit EngineManager(Output const *output,
-                           const QString &inputPath,
+                           const QStringList &inputFiles,
                            const int &index);
     ~EngineManager();
 
@@ -38,7 +38,7 @@ class EngineManager : public QObject {
     int m_threadsRemaining;
     QVector<OutputEngine *> m_engineThreads;
     QVector<int> m_threadProgress;
-    QDir m_inputDir;
+    const QStringList &m_inputFiles;
 };
 
 #endif // ENGINEMANAGER_HPP

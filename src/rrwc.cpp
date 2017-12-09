@@ -9,10 +9,10 @@ Rrwc::Rrwc() {
             this, SLOT(onDone()));
 }
 
-void Rrwc::go(const QString &inputPath) {
+void Rrwc::go(const QString &inputPath, const QString &sort) {
     qDebug() << "Starting outputs...";
     for (int i = 0; i < m_outputManager.outputs().size(); i++) {
-        m_outputManager.startOutput(i, inputPath);
+        m_outputManager.startOutput(i, inputPath, sort);
     }
     qDebug() << "Done starting outputs";
     emit started();

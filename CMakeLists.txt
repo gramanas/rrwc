@@ -44,6 +44,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/renamer.hpp
   ${PROJECT_SOURCE_DIR}/profileparser.hpp
   ${PROJECT_SOURCE_DIR}/exifmanager.hpp
+  ${PROJECT_SOURCE_DIR}/globals.hpp
 )
 
 # Include directories

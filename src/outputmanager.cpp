@@ -1,8 +1,9 @@
-
 #include <QDebug>
 
+#include "globals.hpp"
 #include "outputmanager.hpp"
 #include "profileparser.hpp"
+#include "exifmanager.hpp"
 #include "ui_outputtab.h"
 
 OutputManager::OutputManager() {
@@ -11,7 +12,7 @@ OutputManager::OutputManager() {
 void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
     m_outputs.clear();
     Output *p_output;
-    int i;
+    int i = 0;
     for (const auto& tab : outputTabs) {
         p_output = new Output;
         p_output->folder = tab->getUi()->inputOutputFolder->text();
@@ -68,15 +69,34 @@ void OutputManager::print() const {
     }
 }
 
-void OutputManager::startOutput(int output, const QString &inputPath) {
+void OutputManager::fillEntryList(QDir dir, const QString &sort) {
+    if (sort == SORT_EXIF) {
+        m_entryList = dir.entryList(
+          QStringList({"*.jpg", "*.JPG"}),
+          QDir::Files);
+        ExifManager exifManager(dir.absolutePath());
+        exifManager.sortByDateTime(m_entryList);
+    } else { // if (sort == SORT_FILENAME)
+        m_entryList = dir.entryList(
+          QStringList({"*.jpg", "*.JPG"}),
+          QDir::Files, QDir::Name);
+    }
+    for (int i = 0; i < m_entryList.size(); i++) {
+        m_entryList[i] = dir.absolutePath() + QDir::separator() + m_entryList[i];
+    }
+}
+
+void OutputManager::startOutput(int output, const QString &inputPath, const QString  &sort) {
     // Lazy initialization
     if (m_engines.isEmpty()) {
         m_engines.reserve(m_outputs.size());
         m_outputProgress.reserve(m_outputs.size());
     }
 
+    fillEntryList(QDir(inputPath), sort);
+
     // One engine manager for each output
-    m_engines.insert(output, new EngineManager(m_outputs[output], inputPath, output));
+    m_engines.insert(output, new EngineManager(m_outputs[output], m_entryList, output));
     m_outputProgress.insert(output, 0);
 
     // connect the signals

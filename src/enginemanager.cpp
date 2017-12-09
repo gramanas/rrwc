@@ -2,13 +2,12 @@
 #include <QThread>
 
 #include "enginemanager.hpp"
-#include "exifmanager.hpp"
-//#include "../easyexif/exif.h"
+
 EngineManager::EngineManager(Output const *output,
-                             const QString &inputPath,
+                             const QStringList &inputFiles,
                              const int &index)
     : p_output(output),
-      m_inputDir(inputPath),
+      m_inputFiles(inputFiles),
       m_index(index){
 
     m_engineThreads.reserve(p_output->threads);
@@ -30,13 +29,7 @@ EngineManager::EngineManager(Output const *output,
 }
 
 void EngineManager::startThreads() {
-    QStringList allFiles = m_inputDir.entryList(
-      QStringList({"*.jpg", "*.JPG"}),
-      QDir::Files, QDir::Name);
-
-    ExifManager exifManager(m_inputDir.absolutePath());
-    exifManager.sortByDateTime(allFiles);
-
+    QStringList allFiles = QStringList(m_inputFiles);
 
     int totalFiles = allFiles.count();
     qDebug() << "Total files:" << totalFiles;
@@ -46,12 +39,12 @@ void EngineManager::startThreads() {
         // if we are on the last thread
         if (i == p_output->threads - 1) {
             for (const auto &it : allFiles) {
-                threadFiles << m_inputDir.absolutePath() + QDir::separator() + it;
+                threadFiles << it;
             }
             allFiles.clear();
         } else {
             for (int j = 0; j < filesPerThread && j < totalFiles; j++) {
-                threadFiles << m_inputDir.absolutePath() + QDir::separator() + allFiles.first();
+                threadFiles << allFiles.first();
                 allFiles.removeFirst();
             }
         }
