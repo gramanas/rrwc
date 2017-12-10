@@ -8,7 +8,7 @@
 #include "ui_mainwindow.h"
 #include "ui_outputtab.h"
 
-//#include "exiv2/exif.hpp"
+#include "exiv2/exif.hpp"
 #include "exiv2/exiv2.hpp"
 
 MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)

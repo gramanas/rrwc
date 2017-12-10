@@ -15,7 +15,7 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
     qDebug() << "Getting datetime from:" << fullPath;
     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(fullPath.toStdString());
     image->readMetadata();
-    QString str;
+    QString str = "";
     Exiv2::ExifData &exifData = image->exifData();
     Exiv2::ExifData::const_iterator end = exifData.end();
     for (Exiv2::ExifData::const_iterator i = exifData.begin(); i != end; ++i) {
@@ -25,13 +25,18 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
             break;
         }
     }
-
-    QStringList data = str.split(" ");
-    QStringList date = data[0].split(":");
-    QStringList time = data[1].split(":");
     DateTime dateTime;
-    dateTime.date = QDate(date[0].toInt(), date[1].toInt(), date[2].toInt());
-    dateTime.time = QTime(time[0].toInt(), time[1].toInt());
+    if (str == "") {
+        // set invalid date and time
+        dateTime.date = QDate(-1, -1, -1);
+        dateTime.time = QTime(-1, -1, -1);
+    } else {
+        QStringList data = str.split(" ");
+        QStringList date = data[0].split(":");
+        QStringList time = data[1].split(":");
+        dateTime.date = QDate(date[0].toInt(), date[1].toInt(), date[2].toInt());
+        dateTime.time = QTime(time[0].toInt(), time[1].toInt(), time[2].toInt());
+    }
     return dateTime;
 }
 
@@ -40,6 +45,14 @@ void ExifManager::sortByDateTime(QStringList &list) {
             DateTime dateTimeA = getDateTime(m_dirPath + a);
             DateTime dateTimeB = getDateTime(m_dirPath + b);
 
+            if (!dateTimeA.date.isValid() || !dateTimeB.date.isValid()) {
+                // compare names if no exif data is avaliable;
+                if (a < b) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             if (dateTimeA.date < dateTimeB.date) {
                 return true;
             } else if (dateTimeA.date > dateTimeB.date) {
@@ -47,7 +60,7 @@ void ExifManager::sortByDateTime(QStringList &list) {
             } else {
                 if (dateTimeA.time < dateTimeB.time) {
                     return true;
-                } else {
+                }  else {
                     return false;
                 }
             }
