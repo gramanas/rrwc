@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.9.4)
 project(rrwc)
+set (CMAKE_CXX_STANDARD 11)
 
 # Find external libraries
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/exiv2)

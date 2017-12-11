@@ -22,6 +22,12 @@ It's currently under developement.
 
 You also need the [[https://www.hdfgroup.org/solutions/hdf5/][Hdf5]] library.
 
+On ubuntu:
+#+BEGIN_SRC
+sudo apt-get install libopencv2-dev qt5base-dev libhdf5-dev libexiv2-dev qtcreator
+#+END_SRC
+
+
 * Test - contribute - notes
 
 Anyone is welcome to contribute whatever they want.
@@ -37,9 +43,5 @@ I've only tested it on Arch linux, but the process is as follows:
 - ~cmake .~
 - ~make~
 - ~./rrwc~
-
-Obviously you need to have QT5 and OpenCV installed correctly so
-cmake can find them. Don't forget to also install Hdf5 so you won't get
-compiler errors.
 
 Make sure to use CMake >= 3.9.4
