@@ -18,16 +18,10 @@ class OutputEngine : public QThread {
     // parallel code
     void run() override;
 
-    // void setFilesPerThread(int files) {
-    //     m_filesPerThread = files;
-    // }
-
-    // void setStartingFilePosition(int pos) {
-    //     m_startingFilePosition = pos;
-    // }
 
   signals:
     void progressChanged(int thread, int progress);
+    void writeLog(QString log, QString str);
     void done();
 
   private:

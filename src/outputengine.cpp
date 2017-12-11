@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "outputengine.hpp"
+#include "globals.hpp"
 #include "resizer.hpp"
 #include "marker.hpp"
 #include "renamer.hpp"
@@ -22,10 +23,6 @@ void OutputEngine::init(Output const * output,
 }
 
 void OutputEngine::run() {
-    //    QDir dir(m_inputPath);
-    //int total = m_inputDir.count();
-    //int current = 0;
-    //m_inputDir.setSorting(QDir::Name);
     QStringListIterator it(m_inputFiles);
     cv::Mat source;
     cv::Mat watermark;
@@ -39,9 +36,13 @@ void OutputEngine::run() {
         QString type = path.split(".").back();
         filename = path.split(QDir::separator()).back().split(".").front();
         int progress = int((float(doneByThisThread) / float(m_total)) * 100);
-        qDebug() << "O:" << p_output->index << "\tT:" << m_index <<
-            "\tC:" << m_current << "\tF:" << filename;
-
+        // qDebug() << "O:" << p_output->index << "\tT:" << m_index <<
+        //     "\tC:" << m_current << "\tF:" << filename;
+        QString logEntry = "O: " + QString::number(p_output->index) + "\tT: " + QString::number(m_index) +
+            "\tC: " + QString::number(m_current) + "\tF: " + filename;
+        emit writeLog(LOG_PROGRESS,
+                      FILE_PROGRESS.arg(p_output->index).arg(
+                        m_index).arg(filename + "." + type));
         // if ONLY rename is on
         if (p_output->rename && !p_output->resize && !p_output->watermark) {
             Renamer renamer(filename, p_output->renameText, p_output->counter, m_current);
@@ -83,8 +84,6 @@ void OutputEngine::run() {
         // write
         fullName = p_output->folder + QDir::separator() + filename + "." + type;
         cv::imwrite(fullName.toStdString(), out);
-
-        qDebug() << p_output->stripMetadata << m_index;
 
         // if strip exif data is on
         if (!p_output->stripMetadata) {

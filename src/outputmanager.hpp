@@ -28,11 +28,12 @@ class OutputManager : public QObject {
   public slots:
     void onProgressChanged(int output, int progress);
     void onDone();
+    void onWriteLog(QString log, QString str);
 
   signals:
     void progressChanged(int progress);
     void done();
-
+    void writeLog(QString log, QString str);
 
   private:
     void fillEntryList(QDir dir, const QString &sort);

@@ -12,7 +12,6 @@ ExifManager::ExifManager()
 }
 
 DateTime ExifManager::getDateTime(const QString &fullPath) {
-    qDebug() << "Getting datetime from:" << fullPath;
     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(fullPath.toStdString());
     image->readMetadata();
     QString str = "";

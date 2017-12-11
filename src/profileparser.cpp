@@ -104,7 +104,6 @@ void ProfileParser::parse(bool &output, QStringList &data) {
 bool ProfileParser::readFromFile(const QString &filename, QVector<Output *> &vector) {
     QFile file(filename);
     if(!file.open(QIODevice::ReadOnly)) {
-        //QMessageBox::information(0, "error", file.errorString());
         return false;
     }
 

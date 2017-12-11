@@ -4,6 +4,7 @@
 #include <QLineEdit>
 #include <QDebug>
 #include "mainwindow.hpp"
+#include "globals.hpp"
 #include "outputmanager.hpp"
 #include "ui_mainwindow.h"
 #include "ui_outputtab.h"
@@ -24,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     connect(rrwc, SIGNAL(done(int)), ui->progressBar, SLOT(setValue(int)));
     connect(rrwc, SIGNAL(done(int)), this, SLOT(onDone()));
     connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
+    connect(rrwc, SIGNAL(error(QStringList)), this, SLOT(slotError(QStringList)));
+    connect(rrwc, SIGNAL(writeLog(QString, QString)), this, SLOT(slotWriteLog(QString, QString)));
 
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
     connect(ui->actionSaveProfile, SIGNAL(triggered()), this, SLOT(actionSaveProfile()));
@@ -37,6 +40,7 @@ void MainWindow::connectButtons() {
     connect(ui->butAddOutput, &QPushButton::clicked, [=](){ slotAddOutput(); });
     connect(ui->tabWidget, SIGNAL (tabCloseRequested(int)), this, SLOT (slotRemoveOutput(int)));
     connect(ui->butGo, SIGNAL (clicked()), this, SLOT (slotGo()));
+    connect(ui->butToggleLogOutputs, SIGNAL (clicked()), this, SLOT (slotToggleLogOutputs()));
 }
 
 void MainWindow::finalizeTabs() {
@@ -58,6 +62,42 @@ void MainWindow::slotRemoveOutput(int index) {
     delete m_outputTabs[index];
     m_outputTabs.remove(index);
     finalizeTabs();
+}
+
+void MainWindow::slotError(QStringList list) {
+    QString errors;
+    for (auto const &it : list) {
+        errors += it + "\n";
+    }
+    ui->outputErrorLog->setText(errors);
+}
+
+void MainWindow::slotWriteLog(QString log, QString str) {
+    if (log == LOG_ERROR) {
+        if (str == LOG_CLEAR) {
+            ui->outputErrorLog->setText("");
+            return;
+        }
+        ui->outputErrorLog->append(str);
+    } else if (log == LOG_PROGRESS) {
+        if (str == LOG_CLEAR) {
+            ui->outputProgressLog->setText("");
+            return;
+        }
+        ui->outputProgressLog->append(str);
+    }
+}
+
+void MainWindow::slotToggleLogOutputs() {
+    int index = ui->stackedWidget->currentIndex();
+    int next = (index + 1) % 2;
+    ui->stackedWidget->setCurrentIndex(next);
+
+    if (next == 0) {
+        ui->butToggleLogOutputs->setText(BUT_LOG);
+    } else {
+        ui->butToggleLogOutputs->setText(BUT_OUTPUTS);
+    }
 }
 
 void MainWindow::slotAddOutput() {
@@ -130,7 +170,6 @@ void MainWindow::actionLoadProfile() {
                                                     "Rrwc profile (*.rrwcp)");
 
     if (p_rrwc->outputManager()->loadProfile(filename)) {
-        p_rrwc->outputManager()->print();
         int oldSize = m_outputTabs.size();
         for (int i = oldSize - 1; i >= 0; i--) {
             slotRemoveOutput(i);

@@ -27,4 +27,23 @@ static const QString OTP_OPACITY = "opacity";
 static const QString OTP_THREADS = "threads";
 static const QString OTP_STRIP_METADATA = "stripMetadata";
 
+// logs
+static const QString LOG_PROGRESS = "__progress__";
+static const QString LOG_ERROR = "__error__";
+static const QString LOG_CLEAR = "__clear__";
+
+// errors
+static const QString ERR_OTP = "Error in output %1: ";
+static const QString ERR_IMAGE = "Error in image %1: ";
+static const QString ERR_NO_INPUT_FILES = "Error: The input folder does not contain any JPEG files.";
+static const QString ERR_WATERMARK_TEXT = "Watermark file \"%1\" does not exist.";
+static const QString ERR_SMALL_WATERMARK = "Watermark is too small to fit this resize setting. Rows: %1 Columns: %2";
+
+// progress
+static const QString FILE_PROGRESS = "Output: %1\t Thread: %2\t File: %3";
+
+// buttons
+static const QString BUT_LOG = "Logs";
+static const QString BUT_OUTPUTS = "Outputs";
+
 #endif // GLOBALS_HPP

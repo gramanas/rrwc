@@ -27,10 +27,12 @@ class EngineManager : public QObject {
   public slots:
     void onProgressChanged(int thread, int progress);
     void onDone();
+    void onWriteLog(QString log, QString str);
 
   signals:
     void progressChanged(int output, int progress);
     void done();
+    void writeLog(QString log, QString str);
 
   private:
     const int m_index;

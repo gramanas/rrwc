@@ -24,10 +24,13 @@ class Rrwc : public QObject {
   public slots:
     void onProgressChanged(int progress);
     void onDone();
+    void onWriteLog(QString log, QString str);
 
   signals:
     void progressChanged(int progress);
     void started();
+    void error(QStringList errors);
+    void writeLog(QString log, QString str);
     void done(int);
 
   private:

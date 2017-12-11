@@ -2,6 +2,7 @@
 #include <QThread>
 
 #include "enginemanager.hpp"
+#include "globals.hpp"
 
 EngineManager::EngineManager(Output const *output,
                              const QStringList &inputFiles,
@@ -19,12 +20,13 @@ EngineManager::EngineManager(Output const *output,
                 this, SLOT(onProgressChanged(int, int)));
         connect(m_engineThreads[i], SIGNAL(done()),
                 this, SLOT(onDone()));
+        connect(m_engineThreads[i], SIGNAL(writeLog(QString, QString)),
+                this, SLOT(onWriteLog(QString, QString)));
         connect(m_engineThreads[i], SIGNAL(finished()),
                 m_engineThreads[i], SLOT(deleteLater()));
 
         m_threadProgress[i] = 0;
     }
-
     m_threadsRemaining = p_output->threads;
 }
 
@@ -32,7 +34,6 @@ void EngineManager::startThreads() {
     QStringList allFiles = QStringList(m_inputFiles);
 
     int totalFiles = allFiles.count();
-    qDebug() << "Total files:" << totalFiles;
     int filesPerThread = totalFiles / p_output->threads;
     QStringList threadFiles = {};
     for (int i = 0; i < p_output->threads; i++) {
@@ -53,6 +54,10 @@ void EngineManager::startThreads() {
         // m_engineThreads[i]->setStartingFilePosition(i * int(m_inputDir.count() / p_output->threads));
         m_engineThreads[i]->start();
     }
+}
+
+void EngineManager::onWriteLog(QString log, QString str) {
+    emit writeLog(log, str);
 }
 
 void EngineManager::onProgressChanged(int thread, int progress) {

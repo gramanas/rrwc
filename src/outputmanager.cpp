@@ -106,8 +106,14 @@ void OutputManager::startOutput(int output, const QString &inputPath, const QStr
             this, SLOT(onProgressChanged(int, int)));
     connect(m_engines[output], SIGNAL(done()),
             this, SLOT(onDone()));
+    connect(m_engines[output], SIGNAL(writeLog(QString, QString)),
+            this, SLOT(onWriteLog(QString, QString)));
 
     m_engines[output]->startThreads();
+}
+
+void OutputManager::onWriteLog(QString log, QString str) {
+    emit writeLog(log, str);
 }
 
 void OutputManager::onProgressChanged(int output, int progress) {

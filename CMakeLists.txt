@@ -29,6 +29,7 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/renamer.cpp
   ${PROJECT_SOURCE_DIR}/profileparser.cpp
   ${PROJECT_SOURCE_DIR}/exifmanager.cpp
+  ${PROJECT_SOURCE_DIR}/errormanager.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/person.hpp
@@ -44,6 +45,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/renamer.hpp
   ${PROJECT_SOURCE_DIR}/profileparser.hpp
   ${PROJECT_SOURCE_DIR}/exifmanager.hpp
+  ${PROJECT_SOURCE_DIR}/errormanager.hpp
   ${PROJECT_SOURCE_DIR}/globals.hpp
 )
 
