@@ -2,7 +2,6 @@
 #include <QMessageBox>
 
 #include "rrwc.hpp"
-#include "errormanager.hpp"
 #include "globals.hpp"
 
 Rrwc::Rrwc() {
@@ -44,7 +43,6 @@ void Rrwc::onProgressChanged(int progress) {
 void Rrwc::onDone() {
     emit writeLog(LOG_PROGRESS, "Cleaning output manager");
     m_outputManager.clean();
-    emit writeLog(LOG_PROGRESS, "Job's done.");
     emit done(100);
 }
 

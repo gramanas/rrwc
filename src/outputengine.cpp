@@ -32,22 +32,24 @@ void OutputEngine::run() {
 
     int doneByThisThread = 0;
     while(it.hasNext()) {
+        bool flag = true;
         QString path = it.next();
         QString type = path.split(".").back();
         filename = path.split(QDir::separator()).back().split(".").front();
+        QString originalName = filename + "." + type;
         int progress = int((float(doneByThisThread) / float(m_total)) * 100);
         // qDebug() << "O:" << p_output->index << "\tT:" << m_index <<
         //     "\tC:" << m_current << "\tF:" << filename;
         QString logEntry = "O: " + QString::number(p_output->index) + "\tT: " + QString::number(m_index) +
             "\tC: " + QString::number(m_current) + "\tF: " + filename;
         emit writeLog(LOG_PROGRESS,
-                      FILE_PROGRESS.arg(p_output->index).arg(
-                        m_index).arg(filename + "." + type));
+                      FILE_PROGRESS.arg(p_output->index + 1).arg(
+                        m_index + 1).arg(originalName));
         // if ONLY rename is on
         if (p_output->rename && !p_output->resize && !p_output->watermark) {
             Renamer renamer(filename, p_output->renameText, p_output->counter, m_current);
             renamer.exec(filename);
-            fullName = p_output->folder + QDir::separator() + filename + "." + type;
+            fullName = p_output->folder + QDir::separator() + originalName;
             QFile::copy(path, fullName);
             emit progressChanged(m_index, progress);
             m_current++;
@@ -65,7 +67,10 @@ void OutputEngine::run() {
             // just watermark
             watermark = cv::imread(p_output->watermarkText.toStdString(), cv::IMREAD_UNCHANGED);
             Marker marker(source, watermark, p_output->opacity);
-            marker.exec(out);
+            if (!marker.exec(out)) {
+                emit writeLog(LOG_ERROR, ERR_OTP.arg(p_output->index + 1) + " " + ERR_IMAGE.arg(originalName) + ERR_WATERMARK_FIT);
+                flag = false;
+            }
         }
 
         // if resize is on, but no watermark
@@ -82,13 +87,19 @@ void OutputEngine::run() {
         }
 
         // write
-        fullName = p_output->folder + QDir::separator() + filename + "." + type;
-        cv::imwrite(fullName.toStdString(), out);
+        if (flag) {
+            fullName = p_output->folder + QDir::separator() + originalName;
+            cv::imwrite(fullName.toStdString(), out);
 
-        // if strip exif data is on
-        if (!p_output->stripMetadata) {
-            ExifManager exifManager;
-            exifManager.copyMetadata(path, fullName);
+            // if strip exif data is on
+            if (!p_output->stripMetadata) {
+                ExifManager exifManager;
+                if (!exifManager.copyMetadata(path, fullName)) {
+                    emit writeLog(LOG_ERROR, ERR_OTP.arg(p_output->index + 1) + ERR_IMAGE.arg(originalName) + ERR_NO_EXIF);
+                }
+            }
+        } else {
+            emit writeLog(LOG_ERROR, ERR_FAIL.arg(p_output->index + 1).arg(originalName));
         }
 
         emit progressChanged(m_index, progress);

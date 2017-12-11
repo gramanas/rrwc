@@ -23,7 +23,6 @@ class MainWindow : public QMainWindow
   private slots:
     void slotAddOutput();
     void slotToggleLogOutputs();
-    void slotError(QStringList errors);
     void slotWriteLog(QString log, QString str);
     void slotGo();
     void slotRemoveOutput(int index);

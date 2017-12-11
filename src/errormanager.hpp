@@ -16,6 +16,7 @@ class ErrorManager : public QObject {
 
   private:
     const OutputManager &m_outputManager;
+    bool m_flag = true;
 };
 
 #endif // ERRORMANAGER_HPP

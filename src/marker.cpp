@@ -12,11 +12,18 @@ bool Marker::isRotated() {
     return false;
 }
 
-void Marker::exec(cv::Mat &destination) {
+bool Marker::exec(cv::Mat &destination) {
+    if (m_source.cols > m_watermark.cols ||
+        m_source.rows > m_watermark.rows ||
+        m_source.cols > m_watermark.cols ||
+        m_source.rows > m_watermark.rows) {
+        return false;
+    }
     cv::Rect watermarkArea(0,0,m_source.cols, m_source.rows);
     cv::Mat finalWatermark(m_watermark, watermarkArea);
 
     overlayImage(m_source, finalWatermark, destination, cv::Point(0,0));
+    return true;
 }
 
 void Marker::overlayImage(const cv::Mat &background, const cv::Mat &foreground,

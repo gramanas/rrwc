@@ -66,13 +66,17 @@ void ExifManager::sortByDateTime(QStringList &list) {
         });
 }
 
-void ExifManager::copyMetadata(const QString &from, const QString &to) {
+bool ExifManager::copyMetadata(const QString &from, const QString &to) {
     Exiv2::Image::AutoPtr imageFrom = Exiv2::ImageFactory::open(from.toStdString());
     imageFrom->readMetadata();
     Exiv2::ExifData &exifData = imageFrom->exifData();
+    if (exifData.empty()) {
+        return false;
+    }
     Exiv2::Image::AutoPtr imageTo = Exiv2::ImageFactory::open(to.toStdString());
     imageTo->setExifData(exifData);
     imageTo->writeMetadata();
+    return true;
 }
 
 ExifManager::~ExifManager() {

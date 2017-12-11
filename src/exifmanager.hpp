@@ -19,7 +19,7 @@ class ExifManager {
     ExifManager();
     ~ExifManager();
     void sortByDateTime(QStringList &list);
-    void copyMetadata(const QString &from, const QString &to);
+    bool copyMetadata(const QString &from, const QString &to);
 
   private:
     DateTime getDateTime(const QString &fullPath);

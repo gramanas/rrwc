@@ -5,6 +5,8 @@
 #include <QApplication>
 
 #include "outputmanager.hpp"
+#include "errormanager.hpp"
+
 
 // TODO: Add cli support, initializing the same stuff
 // but without the GUI compartments
@@ -29,7 +31,6 @@ class Rrwc : public QObject {
   signals:
     void progressChanged(int progress);
     void started();
-    void error(QStringList errors);
     void writeLog(QString log, QString str);
     void done(int);
 

@@ -9,7 +9,7 @@ class Marker {
     Marker(cv::Mat &source, cv::Mat &watermark, int opacity);
     ~Marker();
 
-    void exec(cv::Mat &destination);
+    bool exec(cv::Mat &destination);
 
   private:
     bool isRotated();

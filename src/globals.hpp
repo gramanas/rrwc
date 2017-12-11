@@ -33,14 +33,17 @@ static const QString LOG_ERROR = "__error__";
 static const QString LOG_CLEAR = "__clear__";
 
 // errors
-static const QString ERR_OTP = "Error in output %1: ";
-static const QString ERR_IMAGE = "Error in image %1: ";
+static const QString ERR_OTP = "Error in output [%1]: ";
+static const QString ERR_IMAGE = "In image \"%1\": ";
 static const QString ERR_NO_INPUT_FILES = "Error: The input folder does not contain any JPEG files.";
 static const QString ERR_WATERMARK_TEXT = "Watermark file \"%1\" does not exist.";
 static const QString ERR_SMALL_WATERMARK = "Watermark is too small to fit this resize setting. Rows: %1 Columns: %2";
+static const QString ERR_WATERMARK_FIT = "Watermark is too small to fit this image.";
+static const QString ERR_NO_EXIF = "No exif information found.";
+static const QString ERR_FAIL = "Output: [%1]\t File: \"%2\" failed.";
 
 // progress
-static const QString FILE_PROGRESS = "Output: %1\t Thread: %2\t File: %3";
+static const QString FILE_PROGRESS = "Output: [%1]\t Thread: [%2]\t File: \"%3\"";
 
 // buttons
 static const QString BUT_LOG = "Logs";

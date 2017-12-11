@@ -226,7 +226,29 @@
          <number>4</number>
         </property>
         <item>
-         <widget class="QTextBrowser" name="outputProgressLog"/>
+         <widget class="QTextEdit" name="outputProgressLog">
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
+          <property name="documentTitle">
+           <string/>
+          </property>
+          <property name="undoRedoEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="acceptRichText">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QFrame" name="frameExportProgress">
@@ -283,7 +305,23 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextBrowser" name="outputErrorLog"/>
+         <widget class="QTextEdit" name="outputErrorLog">
+          <property name="tabChangesFocus">
+           <bool>true</bool>
+          </property>
+          <property name="undoRedoEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="acceptRichText">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QFrame" name="frameExportError">

@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     connect(rrwc, SIGNAL(done(int)), ui->progressBar, SLOT(setValue(int)));
     connect(rrwc, SIGNAL(done(int)), this, SLOT(onDone()));
     connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
-    connect(rrwc, SIGNAL(error(QStringList)), this, SLOT(slotError(QStringList)));
     connect(rrwc, SIGNAL(writeLog(QString, QString)), this, SLOT(slotWriteLog(QString, QString)));
 
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
@@ -62,14 +61,6 @@ void MainWindow::slotRemoveOutput(int index) {
     delete m_outputTabs[index];
     m_outputTabs.remove(index);
     finalizeTabs();
-}
-
-void MainWindow::slotError(QStringList list) {
-    QString errors;
-    for (auto const &it : list) {
-        errors += it + "\n";
-    }
-    ui->outputErrorLog->setText(errors);
 }
 
 void MainWindow::slotWriteLog(QString log, QString str) {
@@ -143,6 +134,11 @@ void MainWindow::onStarted() {
 
 void MainWindow::onDone() {
     enableLayout(true);
+    if (ui->outputErrorLog->toPlainText() != "") {
+        ui->outputProgressLog->append("Job's done with errors.");
+        return;
+    }
+    ui->outputProgressLog->append("Job's done.");
 }
 
 void MainWindow::actionHelp() {
@@ -159,6 +155,7 @@ void MainWindow::actionSaveProfile() {
 
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
     p_rrwc->outputManager()->saveProfile(filename);
+    ui->outputProgressLog->append("Profile saved to " + filename);
 }
 
 void MainWindow::actionLoadProfile() {
@@ -194,7 +191,7 @@ void MainWindow::actionLoadProfile() {
             m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
             m_outputTabs[i]->getUi()->inputThreads->setValue(output->threads);
         }
-        qDebug() << "Profile" << filename << "loaded";
+        ui->outputProgressLog->append("Profile " + filename + " loaded");
     }
 }
 
