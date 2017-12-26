@@ -4,7 +4,7 @@
 #include <QVector>
 #include <QDir>
 
-#include "outputengine.hpp"
+#include "outputthread.hpp"
 #include "output.hpp"
 //#include "outputmanager.hpp"
 
@@ -38,7 +38,7 @@ class EngineManager : public QObject {
     const int m_index;
     Output const *p_output;
     int m_threadsRemaining;
-    QVector<OutputEngine *> m_engineThreads;
+    QVector<OutputThread *> m_engineThreads;
     QVector<int> m_threadProgress;
     const QStringList &m_inputFiles;
 };

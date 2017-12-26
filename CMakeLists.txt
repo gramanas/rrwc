@@ -18,11 +18,11 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_GUI_DIR})
 # Set source code locations
 set(rrwcBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
 set(rrwcLib_src
-  ${PROJECT_SOURCE_DIR}/person.cpp
   ${PROJECT_SOURCE_DIR}/mainwindow.cpp
   ${PROJECT_SOURCE_DIR}/outputtab.cpp
   ${PROJECT_SOURCE_DIR}/outputmanager.cpp
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
+  ${PROJECT_SOURCE_DIR}/outputthread.cpp
   ${PROJECT_SOURCE_DIR}/outputengine.cpp
   ${PROJECT_SOURCE_DIR}/enginemanager.cpp
   ${PROJECT_SOURCE_DIR}/resizer.cpp
@@ -33,11 +33,11 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/errormanager.cpp
 )
 set(rrwcLib_hdr
-  ${PROJECT_SOURCE_DIR}/person.hpp
   ${PROJECT_SOURCE_DIR}/mainwindow.hpp
   ${PROJECT_SOURCE_DIR}/outputtab.hpp
   ${PROJECT_SOURCE_DIR}/output.hpp
-  ${PROJECT_SOURCE_DIR}/outputmanager.hpp
+  ${PROJECT_SOURCE_DIR}/outputthread.hpp
+  ${PROJECT_SOURCE_DIR}/outputengine.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
   ${PROJECT_SOURCE_DIR}/outputengine.hpp
   ${PROJECT_SOURCE_DIR}/enginemanager.hpp

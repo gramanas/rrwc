@@ -1,6 +1,5 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "person.hpp"
 #include "mainwindow.hpp"
 #include "rrwc.hpp"
 #include <QString>

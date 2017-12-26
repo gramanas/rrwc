@@ -15,7 +15,7 @@ EngineManager::EngineManager(Output const *output,
     m_threadProgress.reserve(p_output->threads);
 
     for (int i = 0; i < p_output->threads; i++) {
-        m_engineThreads[i] = new OutputEngine();
+        m_engineThreads[i] = new OutputThread();
         connect(m_engineThreads[i], SIGNAL(progressChanged(int, int)),
                 this, SLOT(onProgressChanged(int, int)));
         connect(m_engineThreads[i], SIGNAL(done()),
