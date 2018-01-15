@@ -3,9 +3,9 @@
 #include <QStandardPaths>
 #include <QLineEdit>
 #include <QDebug>
-#include "mainwindow.hpp"
+#include "gui/mainwindow.hpp"
+#include "output/outputmanager.hpp"
 #include "globals.hpp"
-#include "outputmanager.hpp"
 #include "ui_mainwindow.h"
 #include "ui_outputtab.h"
 
@@ -112,7 +112,6 @@ void MainWindow::slotBrowse(QLineEdit *line) {
 
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->outputManager()->print();
     p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText());
 }
 
@@ -164,7 +163,7 @@ void MainWindow::actionLoadProfile() {
                                                       QStandardPaths::HomeLocation,
                                                       "",
                                                       QStandardPaths::LocateDirectory) + QString("untitled.rrwcp"),
-                                                    "Rrwc profile (*.rrwcp)");
+                                                    "Rrwc profile (*.rrwcp);;All files (*)");
 
     if (p_rrwc->outputManager()->loadProfile(filename)) {
         int oldSize = m_outputTabs.size();

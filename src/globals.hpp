@@ -41,6 +41,7 @@ static const QString ERR_SMALL_WATERMARK = "Watermark is too small to fit this r
 static const QString ERR_WATERMARK_FIT = "Watermark is too small to fit this image.";
 static const QString ERR_NO_EXIF = "No exif information found.";
 static const QString ERR_FAIL = "Output: [%1]\t File: \"%2\" failed.";
+static const QString ERR_WRONG_OUTPUT = "Output folder is not a directory, or you don't have the right permissions.";
 
 // progress
 static const QString FILE_PROGRESS = "Output: [%1]\t Thread: [%2]\t File: \"%3\"";

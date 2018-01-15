@@ -4,8 +4,8 @@
 #include <QVector>
 #include <QString>
 
-#include "outputtab.hpp"
-#include "enginemanager.hpp"
+#include "gui/outputtab.hpp"
+#include "output/engine/enginemanager.hpp"
 #include "output.hpp"
 
 class OutputManager : public QObject {

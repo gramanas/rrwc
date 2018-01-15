@@ -18,36 +18,36 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_GUI_DIR})
 # Set source code locations
 set(rrwcBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
 set(rrwcLib_src
-  ${PROJECT_SOURCE_DIR}/mainwindow.cpp
-  ${PROJECT_SOURCE_DIR}/outputtab.cpp
-  ${PROJECT_SOURCE_DIR}/outputmanager.cpp
+  ${PROJECT_SOURCE_DIR}/gui/mainwindow.cpp
+  ${PROJECT_SOURCE_DIR}/gui/outputtab.cpp
+  ${PROJECT_SOURCE_DIR}/output/outputmanager.cpp
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
-  ${PROJECT_SOURCE_DIR}/outputthread.cpp
-  ${PROJECT_SOURCE_DIR}/outputengine.cpp
-  ${PROJECT_SOURCE_DIR}/enginemanager.cpp
-  ${PROJECT_SOURCE_DIR}/resizer.cpp
-  ${PROJECT_SOURCE_DIR}/marker.cpp
-  ${PROJECT_SOURCE_DIR}/renamer.cpp
-  ${PROJECT_SOURCE_DIR}/profileparser.cpp
-  ${PROJECT_SOURCE_DIR}/exifmanager.cpp
-  ${PROJECT_SOURCE_DIR}/errormanager.cpp
+  ${PROJECT_SOURCE_DIR}/output/outputthread.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/outputengine.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/enginemanager.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/resizer.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/marker.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/renamer.cpp
+  ${PROJECT_SOURCE_DIR}/profile/profileparser.cpp
+  ${PROJECT_SOURCE_DIR}/exif/exifmanager.cpp
+  ${PROJECT_SOURCE_DIR}/error/errormanager.cpp
 )
 set(rrwcLib_hdr
-  ${PROJECT_SOURCE_DIR}/mainwindow.hpp
-  ${PROJECT_SOURCE_DIR}/outputtab.hpp
-  ${PROJECT_SOURCE_DIR}/output.hpp
-  ${PROJECT_SOURCE_DIR}/outputthread.hpp
-  ${PROJECT_SOURCE_DIR}/outputengine.hpp
+  ${PROJECT_SOURCE_DIR}/gui/mainwindow.hpp
+  ${PROJECT_SOURCE_DIR}/gui/outputtab.hpp
+  ${PROJECT_SOURCE_DIR}/output/output.hpp
+  ${PROJECT_SOURCE_DIR}/output/outputthread.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
-  ${PROJECT_SOURCE_DIR}/outputengine.hpp
-  ${PROJECT_SOURCE_DIR}/enginemanager.hpp
-  ${PROJECT_SOURCE_DIR}/resizer.hpp
-  ${PROJECT_SOURCE_DIR}/marker.hpp
-  ${PROJECT_SOURCE_DIR}/renamer.hpp
-  ${PROJECT_SOURCE_DIR}/profileparser.hpp
-  ${PROJECT_SOURCE_DIR}/exifmanager.hpp
-  ${PROJECT_SOURCE_DIR}/errormanager.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/outputengine.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/enginemanager.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/resizer.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/marker.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/renamer.hpp
+  ${PROJECT_SOURCE_DIR}/profile/profileparser.hpp
+  ${PROJECT_SOURCE_DIR}/exif/exifmanager.hpp
+  ${PROJECT_SOURCE_DIR}/error/errormanager.hpp
   ${PROJECT_SOURCE_DIR}/globals.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/worker.hpp
 )
 
 # Include directories

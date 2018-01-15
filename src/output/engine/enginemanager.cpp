@@ -1,7 +1,7 @@
 #include <QDebug>
 #include <QThread>
 
-#include "enginemanager.hpp"
+#include "output/engine/enginemanager.hpp"
 #include "globals.hpp"
 
 EngineManager::EngineManager(Output const *output,
@@ -50,8 +50,6 @@ void EngineManager::startThreads() {
             }
         }
         m_engineThreads[i]->init(p_output, threadFiles, i * (filesPerThread), i);
-        // m_engineThreads[i]->setFilesPerThread(int(m_inputDir.count() / p_output->threads));
-        // m_engineThreads[i]->setStartingFilePosition(i * int(m_inputDir.count() / p_output->threads));
         m_engineThreads[i]->start();
     }
 }

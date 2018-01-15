@@ -1,7 +1,7 @@
 #ifndef ERRORMANAGER_HPP
 #define ERRORMANAGER_HPP
 
-#include "outputmanager.hpp"
+#include "output/outputmanager.hpp"
 
 class ErrorManager : public QObject {
     Q_OBJECT

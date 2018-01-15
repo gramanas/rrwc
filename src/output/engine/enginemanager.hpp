@@ -4,8 +4,8 @@
 #include <QVector>
 #include <QDir>
 
-#include "outputthread.hpp"
-#include "output.hpp"
+#include "output/output.hpp"
+#include "output/outputthread.hpp"
 //#include "outputmanager.hpp"
 
 /////////////////////////////////////////////////////////////////////////////

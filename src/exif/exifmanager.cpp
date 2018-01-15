@@ -1,7 +1,7 @@
 #include <QDir>
 #include <QDebug>
 
-#include "exifmanager.hpp"
+#include "exif/exifmanager.hpp"
 
 ExifManager::ExifManager(const QString &dirPath)
     :m_dirPath(dirPath + QDir::separator()) {

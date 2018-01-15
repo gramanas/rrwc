@@ -4,8 +4,8 @@
 #include <QString>
 #include <QApplication>
 
-#include "outputmanager.hpp"
-#include "errormanager.hpp"
+#include "output/outputmanager.hpp"
+#include "error/errormanager.hpp"
 
 
 // TODO: Add cli support, initializing the same stuff

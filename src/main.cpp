@@ -1,9 +1,8 @@
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include "mainwindow.hpp"
-#include "rrwc.hpp"
 #include <QString>
 #include <QApplication>
+
+#include "gui/mainwindow.hpp"
+#include "rrwc.hpp"
 
 int main(int argc, char *argv[]) {
     Rrwc rrwc;

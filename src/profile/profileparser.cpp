@@ -1,7 +1,8 @@
 #include <QTextStream>
+#include <QFileInfo>
 #include <QDebug>
 
-#include "profileparser.hpp"
+#include "profile/profileparser.hpp"
 #include "globals.hpp"
 
 ProfileParser::ProfileParser(const QVector<Output *> &outputs) {

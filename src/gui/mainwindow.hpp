@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 #include <QLineEdit>
-#include "outputtab.hpp"
+#include "gui/outputtab.hpp"
 #include "rrwc.hpp"
 
 namespace Ui {

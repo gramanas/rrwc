@@ -4,7 +4,7 @@
 #include <QString>
 #include <QString>
 
-#include "outputtab.hpp"
+#include "gui/outputtab.hpp"
 #include "ui_outputtab.h"
 
 OutputTab::OutputTab(QWidget *parent) :

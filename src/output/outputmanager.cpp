@@ -1,9 +1,10 @@
 #include <QDebug>
 
 #include "globals.hpp"
-#include "outputmanager.hpp"
-#include "profileparser.hpp"
-#include "exifmanager.hpp"
+#include "output/outputmanager.hpp"
+#include "profile/profileparser.hpp"
+#include "exif/exifmanager.hpp"
+
 #include "ui_outputtab.h"
 
 OutputManager::OutputManager() {
@@ -95,7 +96,12 @@ void OutputManager::startOutput(int output, const QString &inputPath, const QStr
         m_outputProgress.reserve(m_outputs.size());
     }
 
-    fillEntryList(QDir(inputPath), sort);
+    if (m_entryList.isEmpty()) {
+        QTime t;
+        t.start();
+        fillEntryList(QDir(inputPath), sort);
+        qDebug("Time elapsed: %d ms", t.elapsed());
+    }
 
     // One engine manager for each output
     m_engines.insert(output, new EngineManager(m_outputs[output], m_entryList, output));
@@ -143,6 +149,7 @@ void OutputManager::clean() {
     m_outputs.clear();
     m_engines.clear();
     m_outputProgress.clear();
+    m_entryList.clear();
 }
 
 OutputManager::~OutputManager() {

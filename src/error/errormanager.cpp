@@ -1,4 +1,4 @@
-#include "errormanager.hpp"
+#include "error/errormanager.hpp"
 #include "globals.hpp"
 
 #include "opencv2/opencv.hpp"
@@ -18,6 +18,11 @@ bool ErrorManager::checkInputErrors(const QString &inputPath) {
     Output *p;
     for (int i = 0; i < m_outputManager.outputs().size(); i++) {
          p = m_outputManager.outputs()[i];
+         QFileInfo fi(p->folder);
+         if (!fi.isDir() || !fi.isWritable()) {
+             emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_WRONG_OUTPUT);
+             m_flag = false;
+         }
          if (p->watermark) {
              if (!QFile::exists(p->watermarkText)) {
                  emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_WATERMARK_TEXT.arg(p->watermarkText));

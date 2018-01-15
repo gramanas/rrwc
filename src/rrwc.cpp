@@ -27,7 +27,6 @@ void Rrwc::go(const QString &inputPath, const QString &sort) {
         emit writeLog(LOG_PROGRESS, "All outputs are active.");
         emit started();
     } else {
-        qDebug() << "Errors in output, check the error log.";
         QMessageBox::warning(0, "Configuration Error", "Check the error log for details.");
     }
 }
