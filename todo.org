@@ -4,3 +4,4 @@
 * deal with files without metada
   how to sort
 * error checkign object
+https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target
