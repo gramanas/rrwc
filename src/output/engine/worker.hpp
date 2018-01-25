@@ -25,14 +25,6 @@ class Worker {
 
 
   protected:
-    // TODO add exif!
-    bool isRotated() {
-        if (p_source->rows > p_source->cols) {
-            return true;
-        }
-        return false;
-    }
-
     cv::Mat *p_source;
 
   private:

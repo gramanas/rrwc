@@ -10,9 +10,16 @@ void Resizer::loadData(int length, int height) {
     m_height = height;
  }
 
+bool Resizer::isPortrait() {
+    if (p_source->rows > p_source->cols) {
+        return true;
+    }
+    return false;
+}
+
 bool Resizer::exec(cv::Mat &destination) {
     cv::Size size;
-    isRotated() ? size = cv::Size(m_height, m_length) : size = cv::Size(m_length, m_height);
+    isPortrait() ? size = cv::Size(m_height, m_length) : size = cv::Size(m_length, m_height);
 
     cv::resize(*p_source, destination, size);
     if (destination.empty()) {

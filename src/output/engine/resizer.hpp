@@ -14,6 +14,9 @@ class Resizer : public Worker {
     bool exec(cv::Mat &destination);
 
   private:
+    // if there are more rows than collumns we have a portrait
+    bool isPortrait();
+
     int m_length;
     int m_height;
 };
