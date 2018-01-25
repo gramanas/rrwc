@@ -8,6 +8,14 @@
 #include "ui_outputtab.h"
 
 OutputManager::OutputManager() {
+    connect(&m_entryList, SIGNAL(statusChanged(QString)),
+            this, SLOT(onStatusChanged(QString)));
+    connect(&m_entryList, SIGNAL(progressChanged(int)),
+            this, SLOT(onProgressChanged(int)));
+    connect(&m_entryList, SIGNAL(writeLog(QString, QString)),
+            this, SLOT(onWriteLog(QString, QString)));
+    connect(&m_entryList, SIGNAL(finished()),
+            this, SLOT(slotEntryListFull()));
 }
 
 void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
@@ -72,39 +80,20 @@ void OutputManager::print() const {
     }
 }
 
-void OutputManager::fillEntryList(QDir dir, const QString &sort) {
-    if (sort == SORT_EXIF) {
-        m_entryList = dir.entryList(
-          QStringList({"*.jpg", "*.JPG"}),
-          QDir::Files);
-        ExifManager exifManager(dir.absolutePath());
-        exifManager.sortByDateTime(m_entryList);
-    } else { // if (sort == SORT_FILENAME)
-        m_entryList = dir.entryList(
-          QStringList({"*.jpg", "*.JPG"}),
-          QDir::Files, QDir::Name);
-    }
-    for (int i = 0; i < m_entryList.size(); i++) {
-        m_entryList[i] = dir.absolutePath() + QDir::separator() + m_entryList[i];
-    }
+void OutputManager::fillEntryList(const QString &inputPath, const QString &sort) {
+    m_entryList.setDir(inputPath, sort);
+    m_entryList.start();
 }
 
-void OutputManager::startOutput(int output, const QString &inputPath, const QString  &sort) {
+void OutputManager::startOutput(int output) {
     // Lazy initialization
     if (m_engines.isEmpty()) {
         m_engines.reserve(m_outputs.size());
         m_outputProgress.reserve(m_outputs.size());
     }
 
-    if (m_entryList.isEmpty()) {
-        QTime t;
-        t.start();
-        fillEntryList(QDir(inputPath), sort);
-        qDebug("Time elapsed: %d ms", t.elapsed());
-    }
-
     // One engine manager for each output
-    m_engines.insert(output, new EngineManager(m_outputs[output], m_entryList, output));
+    m_engines.insert(output, new EngineManager(m_outputs[output], *m_entryList.get(), output));
     m_outputProgress.insert(output, 0);
 
     // connect the signals
@@ -133,6 +122,19 @@ void OutputManager::onProgressChanged(int output, int progress) {
     emit progressChanged(int(float(sum)/float(m_outputProgress.size())));
 }
 
+void OutputManager::onProgressChanged(int progress) {
+    emit progressChanged(progress);
+    //qDebug() << progress;
+}
+
+void OutputManager::onStatusChanged(QString status) {
+    emit statusChanged(status);
+}
+
+void OutputManager::slotEntryListFull() {
+    emit entryListFull();
+}
+
 void OutputManager::onDone() {
     m_outputsRemaining--;
     if (m_outputsRemaining == 0) {
@@ -144,7 +146,6 @@ void OutputManager::clean() {
     for (int i = 0; i < m_outputs.size(); i++) {
         delete m_outputs[i];
         delete m_engines[i];
-        //m_outputProgress[i] = 0;
     }
     m_outputs.clear();
     m_engines.clear();

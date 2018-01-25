@@ -22,12 +22,14 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     slotAddOutput();
 
     connect(rrwc, SIGNAL(progressChanged(int)), ui->progressBar, SLOT(setValue(int)));
+    connect(rrwc, SIGNAL(statusChanged(QString)), this, SLOT(slotStatusChanged(QString)));
     connect(rrwc, SIGNAL(done(int)), ui->progressBar, SLOT(setValue(int)));
     connect(rrwc, SIGNAL(done(int)), this, SLOT(onDone()));
     connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
     connect(rrwc, SIGNAL(writeLog(QString, QString)), this, SLOT(slotWriteLog(QString, QString)));
 
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionSaveProfile, SIGNAL(triggered()), this, SLOT(actionSaveProfile()));
     connect(ui->actionLoadProfile, SIGNAL(triggered()), this, SLOT(actionLoadProfile()));
 
@@ -110,6 +112,10 @@ void MainWindow::slotBrowse(QLineEdit *line) {
         line->setText(dir);
 }
 
+void MainWindow::slotStatusChanged(QString status) {
+    ui->progressBar->setFormat(status);
+}
+
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
     p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText());
@@ -120,6 +126,7 @@ void MainWindow::enableLayout(bool t) {
         it->setEnabled(t);
     }
 
+    ui->menuBar->setEnabled(t);
     ui->butGo->setEnabled(t);
     ui->butAddOutput->setEnabled(t);
     ui->inputInputFolder->setEnabled(t);
@@ -152,9 +159,11 @@ void MainWindow::actionSaveProfile() {
                                                       QStandardPaths::LocateDirectory) + QString("untitled.rrwcp"),
                                                     "Rrwc profile (*.rrwcp)");
 
-    p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->outputManager()->saveProfile(filename);
-    ui->outputProgressLog->append("Profile saved to " + filename);
+    if (!filename.isEmpty()) {
+        p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
+        p_rrwc->outputManager()->saveProfile(filename);
+        ui->outputProgressLog->append("Profile saved to " + filename);
+    }
 }
 
 void MainWindow::actionLoadProfile() {

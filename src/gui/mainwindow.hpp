@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
     ~MainWindow();
 
   private slots:
+    void slotStatusChanged(QString status);
     void slotAddOutput();
     void slotToggleLogOutputs();
     void slotWriteLog(QString log, QString str);
