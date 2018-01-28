@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 #include <QLineEdit>
-#include "outputtab.hpp"
+#include "gui/outputtab.hpp"
 #include "rrwc.hpp"
 
 namespace Ui {
@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
     ~MainWindow();
 
   private slots:
+    void slotStatusChanged(QString status);
     void slotAddOutput();
     void slotToggleLogOutputs();
     void slotWriteLog(QString log, QString str);
@@ -28,14 +29,15 @@ class MainWindow : public QMainWindow
     void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
     void actionHelp();
+    void actionAbout();
     void actionSaveProfile();
     void actionLoadProfile();
     void onStarted();
     void onDone();
+    void finalizeTabs();
 
   private:
     void connectButtons();
-    void finalizeTabs();
     void enableLayout(bool t);
 
     QVector<OutputTab *> m_outputTabs;

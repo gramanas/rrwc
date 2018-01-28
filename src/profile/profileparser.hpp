@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QVector>
 
-#include "output.hpp"
+#include "output/output.hpp"
 
 class ProfileParser {
   public:

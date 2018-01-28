@@ -1,14 +1,9 @@
 #include <QDir>
 #include <QDebug>
 
-#include "exifmanager.hpp"
+#include "exif/exifmanager.hpp"
 
-ExifManager::ExifManager(const QString &dirPath)
-    :m_dirPath(dirPath + QDir::separator()) {
-}
-
-ExifManager::ExifManager()
-    :m_dirPath("") {
+ExifManager::ExifManager() {
 }
 
 DateTime ExifManager::getDateTime(const QString &fullPath) {
@@ -40,9 +35,13 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
 }
 
 void ExifManager::sortByDateTime(QStringList &list) {
+    QMap<QString, DateTime> map;
+    for(auto const& key : list) {
+        map.insert(key, getDateTime(key));
+    }
     std::sort(list.begin(), list.end(), [=](QString a, QString b) {
-            DateTime dateTimeA = getDateTime(m_dirPath + a);
-            DateTime dateTimeB = getDateTime(m_dirPath + b);
+            DateTime dateTimeA = map.value(a);
+            DateTime dateTimeB = map.value(b);
 
             if (!dateTimeA.date.isValid() || !dateTimeB.date.isValid()) {
                 // compare names if no exif data is avaliable;

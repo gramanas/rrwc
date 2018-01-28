@@ -1,28 +1,25 @@
-#include "marker.hpp"
+#include "output/engine/marker.hpp"
 
-Marker::Marker(cv::Mat &source, cv::Mat &watermark, int opacity)
-    : m_source(source),
-      m_watermark(watermark) {
+Marker::Marker() {
+}
+
+void Marker::loadData(cv::Mat *watermark,
+                      int opacity) {
+    p_watermark = watermark;
     m_opacity = float(opacity) / 100;
 }
 
-bool Marker::isRotated() {
-    if (m_source.rows > m_source.cols)
-        return true;
-    return false;
-}
-
 bool Marker::exec(cv::Mat &destination) {
-    if (m_source.cols > m_watermark.cols ||
-        m_source.rows > m_watermark.rows ||
-        m_source.cols > m_watermark.cols ||
-        m_source.rows > m_watermark.rows) {
+    if (p_source->cols > p_watermark->cols ||
+        p_source->rows > p_watermark->rows ||
+        p_source->cols > p_watermark->cols ||
+        p_source->rows > p_watermark->rows) {
         return false;
     }
-    cv::Rect watermarkArea(0,0,m_source.cols, m_source.rows);
-    cv::Mat finalWatermark(m_watermark, watermarkArea);
+    cv::Rect watermarkArea(0,0,p_source->cols, p_source->rows);
+    cv::Mat finalWatermark(*p_watermark, watermarkArea);
 
-    overlayImage(m_source, finalWatermark, destination, cv::Point(0,0));
+    overlayImage(*p_source, finalWatermark, destination, cv::Point(0,0));
     return true;
 }
 

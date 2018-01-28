@@ -4,8 +4,9 @@
 #include <QVector>
 #include <QString>
 
-#include "outputtab.hpp"
-#include "enginemanager.hpp"
+#include "gui/outputtab.hpp"
+#include "output/engine/enginemanager.hpp"
+#include "output/entrylist.hpp"
 #include "output.hpp"
 
 class OutputManager : public QObject {
@@ -18,8 +19,9 @@ class OutputManager : public QObject {
     bool loadProfile(const QString &filename);
     void print() const;
 
-    void startOutput(int output, const QString &inputPath, const QString &sort);
+    void startOutput(int output);
     void clean();
+    void fillEntryList(const QString &inputPath, const QString &sort);
 
     QVector<Output *> outputs() const {
         return m_outputs;
@@ -27,18 +29,21 @@ class OutputManager : public QObject {
 
   public slots:
     void onProgressChanged(int output, int progress);
+    void onProgressChanged(int progress);
+    void onStatusChanged(QString status);
+    void slotEntryListFull();
     void onDone();
     void onWriteLog(QString log, QString str);
 
   signals:
     void progressChanged(int progress);
+    void statusChanged(QString status);
+    void entryListFull();
     void done();
     void writeLog(QString log, QString str);
 
   private:
-    void fillEntryList(QDir dir, const QString &sort);
-
-    QStringList m_entryList;
+    EntryList m_entryList;
     QVector<Output *> m_outputs;
     QVector<int> m_outputProgress;
     QVector<EngineManager *> m_engines;

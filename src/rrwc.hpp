@@ -2,10 +2,11 @@
 #define RRWC_HPP
 
 #include <QString>
+#include <QTime>
 #include <QApplication>
 
-#include "outputmanager.hpp"
-#include "errormanager.hpp"
+#include "output/outputmanager.hpp"
+#include "error/errormanager.hpp"
 
 
 // TODO: Add cli support, initializing the same stuff
@@ -25,17 +26,21 @@ class Rrwc : public QObject {
 
   public slots:
     void onProgressChanged(int progress);
+    void onStatusChanged(QString status);
+    void slotEntryListFull();
     void onDone();
     void onWriteLog(QString log, QString str);
 
   signals:
     void progressChanged(int progress);
+    void statusChanged(QString status);
     void started();
     void writeLog(QString log, QString str);
     void done(int);
 
   private:
     OutputManager m_outputManager;
+    QTime m_totalTime;
 };
 
 #endif // RRWC_HPP

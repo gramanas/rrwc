@@ -1,11 +1,12 @@
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QDesktopServices>
 #include <QStandardPaths>
 #include <QLineEdit>
 #include <QDebug>
-#include "mainwindow.hpp"
+#include "gui/mainwindow.hpp"
+#include "output/outputmanager.hpp"
 #include "globals.hpp"
-#include "outputmanager.hpp"
 #include "ui_mainwindow.h"
 #include "ui_outputtab.h"
 
@@ -22,16 +23,17 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
     slotAddOutput();
 
     connect(rrwc, SIGNAL(progressChanged(int)), ui->progressBar, SLOT(setValue(int)));
+    connect(rrwc, SIGNAL(statusChanged(QString)), this, SLOT(slotStatusChanged(QString)));
     connect(rrwc, SIGNAL(done(int)), ui->progressBar, SLOT(setValue(int)));
     connect(rrwc, SIGNAL(done(int)), this, SLOT(onDone()));
     connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
     connect(rrwc, SIGNAL(writeLog(QString, QString)), this, SLOT(slotWriteLog(QString, QString)));
 
     connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionSaveProfile, SIGNAL(triggered()), this, SLOT(actionSaveProfile()));
     connect(ui->actionLoadProfile, SIGNAL(triggered()), this, SLOT(actionLoadProfile()));
-
-    ui->inputInputFolder->setText("/home/gramanas/Code/rrwc/tests/new");
 }
 
 void MainWindow::connectButtons() {
@@ -43,9 +45,20 @@ void MainWindow::connectButtons() {
 }
 
 void MainWindow::finalizeTabs() {
-    // rename them according to their index
+    // rename them according to checkboxes clicked
     for (int i = 0; i < m_outputTabs.size(); i++) {
-        ui->tabWidget->setTabText(i, "Output " + QString::number(i + 1));
+        QString name = "";
+        if (m_outputTabs[i]->getUi()->resize->isChecked())
+            name += "Rs";
+        if (m_outputTabs[i]->getUi()->rename->isChecked())
+            name += "Rn";
+        if (m_outputTabs[i]->getUi()->watermark->isChecked())
+            name += "W";
+        if (name == "") {
+            ui->tabWidget->setTabText(i, QString::number(i + 1) + " - " + "Empty");
+        } else {
+            ui->tabWidget->setTabText(i, QString::number(i + 1) + " - " + name);
+        }
     }
 
     // disable tab deletion it there is only one left
@@ -94,6 +107,11 @@ void MainWindow::slotToggleLogOutputs() {
 void MainWindow::slotAddOutput() {
     OutputTab *outputTab = new OutputTab;
     int index = ui->tabWidget->addTab(outputTab, "Output");
+
+    connect(outputTab->getUi()->resize, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
+    connect(outputTab->getUi()->rename, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
+    connect(outputTab->getUi()->watermark, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
+
     m_outputTabs.append(outputTab);
     finalizeTabs();
     ui->tabWidget->setCurrentIndex(index);
@@ -110,9 +128,12 @@ void MainWindow::slotBrowse(QLineEdit *line) {
         line->setText(dir);
 }
 
+void MainWindow::slotStatusChanged(QString status) {
+    ui->progressBar->setFormat(status);
+}
+
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->outputManager()->print();
     p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText());
 }
 
@@ -121,6 +142,8 @@ void MainWindow::enableLayout(bool t) {
         it->setEnabled(t);
     }
 
+    ui->tabWidget->setTabsClosable(t);
+    ui->menuBar->setEnabled(t);
     ui->butGo->setEnabled(t);
     ui->butAddOutput->setEnabled(t);
     ui->inputInputFolder->setEnabled(t);
@@ -135,14 +158,18 @@ void MainWindow::onStarted() {
 void MainWindow::onDone() {
     enableLayout(true);
     if (ui->outputErrorLog->toPlainText() != "") {
-        ui->outputProgressLog->append("Job's done with errors.");
+        ui->outputProgressLog->append("Job's done, but something didn't go as planed...");
+        ui->outputProgressLog->append("Check the error log below for details.");
         return;
     }
-    ui->outputProgressLog->append("Job's done.");
+    ui->outputProgressLog->append("Job's done!");
 }
 
 void MainWindow::actionHelp() {
     QDesktopServices::openUrl(QUrl("https://github.com/gramanas/rrwc/wiki"));
+}
+void MainWindow::actionAbout() {
+    QMessageBox::information(this, "About rrwc...", "Version 1.0\nΆντε και καλά ξεσκάρτ!");
 }
 
 void MainWindow::actionSaveProfile() {
@@ -153,9 +180,11 @@ void MainWindow::actionSaveProfile() {
                                                       QStandardPaths::LocateDirectory) + QString("untitled.rrwcp"),
                                                     "Rrwc profile (*.rrwcp)");
 
-    p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->outputManager()->saveProfile(filename);
-    ui->outputProgressLog->append("Profile saved to " + filename);
+    if (!filename.isEmpty()) {
+        p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
+        p_rrwc->outputManager()->saveProfile(filename);
+        ui->outputProgressLog->append("Profile saved to " + filename);
+    }
 }
 
 void MainWindow::actionLoadProfile() {
@@ -164,7 +193,7 @@ void MainWindow::actionLoadProfile() {
                                                       QStandardPaths::HomeLocation,
                                                       "",
                                                       QStandardPaths::LocateDirectory) + QString("untitled.rrwcp"),
-                                                    "Rrwc profile (*.rrwcp)");
+                                                    "Rrwc profile (*.rrwcp);;All files (*)");
 
     if (p_rrwc->outputManager()->loadProfile(filename)) {
         int oldSize = m_outputTabs.size();
@@ -191,8 +220,9 @@ void MainWindow::actionLoadProfile() {
             m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
             m_outputTabs[i]->getUi()->inputThreads->setValue(output->threads);
         }
-        ui->outputProgressLog->append("Profile " + filename + " loaded");
+        slotWriteLog(LOG_PROGRESS, "Profile " + filename + " loaded");
     }
+    finalizeTabs();
 }
 
 MainWindow::~MainWindow() {

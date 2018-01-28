@@ -2,10 +2,19 @@
 #define GLOBALS_HPP
 
 #include <QString>
+#include <QStringList>
 
 ///////////////////////////
 // Global values in rrwc //
 ///////////////////////////
+
+// valid image types
+static const QStringList VALID_IMAGE_TYPES = {"*.jpg", "*.JPG"};
+
+// status bar
+static const QString STATUS_TOTAL = "Total: %p%";
+static const QString STATUS_SORTING = "Sorting with Exif information...";
+static const QString STATUS_ENTRY_LIST = "Generating image lists: %p%";
 
 // sort modes
 static const QString SORT_EXIF = "Exif date";
@@ -41,9 +50,12 @@ static const QString ERR_SMALL_WATERMARK = "Watermark is too small to fit this r
 static const QString ERR_WATERMARK_FIT = "Watermark is too small to fit this image.";
 static const QString ERR_NO_EXIF = "No exif information found.";
 static const QString ERR_FAIL = "Output: [%1]\t File: \"%2\" failed.";
+static const QString ERR_WRONG_OUTPUT = "Output folder is not a directory, or you don't have the right permissions.";
+static const QString ERR_WRONG_INPUT = "Input folder is not a directory, or you don't have the right permissions.";
 
 // progress
 static const QString FILE_PROGRESS = "Output: [%1]\t Thread: [%2]\t File: \"%3\"";
+static const QString TIME_ELAPSED = "Filling the entry list took %1 ms";
 
 // buttons
 static const QString BUT_LOG = "Logs";

@@ -5,7 +5,8 @@
 #include <QObject>
 #include <QDir>
 
-#include "output.hpp"
+#include "output/output.hpp"
+#include "output/engine/outputengine.hpp"
 
 class OutputThread : public QThread {
     Q_OBJECT
@@ -19,13 +20,18 @@ class OutputThread : public QThread {
     void run() override;
 
 
+  public slots:
+    void onWriteLog(QString log, QString str);
+
   signals:
     void progressChanged(int thread, int progress);
     void writeLog(QString log, QString str);
     void done();
 
   private:
+    OutputEngine engine;
     int m_current = 0;
+    int m_progress = 0;
     int m_total;
     int m_index;
     Output const *p_output;
