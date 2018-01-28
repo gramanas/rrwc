@@ -54,9 +54,9 @@ void Rrwc::onStatusChanged(QString status) {
 }
 
 void Rrwc::onDone() {
-    emit writeLog(LOG_PROGRESS, "Cleaning output manager");
+    emit writeLog(LOG_PROGRESS, "Freeing up memory...");
     m_outputManager.clean();
-    emit writeLog(LOG_PROGRESS, QString("Total time task: %1 ms").arg(m_totalTime.elapsed()));
+    emit writeLog(LOG_PROGRESS, QString("Total time elapsed: %1 ms").arg(m_totalTime.elapsed()));
     emit done(100);
 }
 

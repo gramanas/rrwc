@@ -31,6 +31,7 @@ class OutputThread : public QThread {
   private:
     OutputEngine engine;
     int m_current = 0;
+    int m_progress = 0;
     int m_total;
     int m_index;
     Output const *p_output;

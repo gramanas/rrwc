@@ -29,14 +29,15 @@ class MainWindow : public QMainWindow
     void slotRemoveOutput(int index);
     void slotBrowse(QLineEdit *line);
     void actionHelp();
+    void actionAbout();
     void actionSaveProfile();
     void actionLoadProfile();
     void onStarted();
     void onDone();
+    void finalizeTabs();
 
   private:
     void connectButtons();
-    void finalizeTabs();
     void enableLayout(bool t);
 
     QVector<OutputTab *> m_outputTabs;

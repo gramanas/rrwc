@@ -36,6 +36,7 @@ void EngineManager::startThreads() {
     int totalFiles = allFiles.count();
     int filesPerThread = totalFiles / p_output->threads;
     QStringList threadFiles = {};
+    m_time.start();
     for (int i = 0; i < p_output->threads; i++) {
         // if we are on the last thread
         if (i == p_output->threads - 1) {
@@ -65,12 +66,17 @@ void EngineManager::onProgressChanged(int thread, int progress) {
         sum += m_threadProgress[i];
     }
 
-    emit progressChanged(m_index, int(float(sum) / float(p_output->threads)));
+    int tmp = int(float(sum) / float(p_output->threads));
+    if (tmp != m_progress) {
+        m_progress = tmp;
+        emit progressChanged(m_index, m_progress);
+    }
 }
 
 void EngineManager::onDone() {
     m_threadsRemaining--;
     if (m_threadsRemaining == 0) {
+        emit writeLog(LOG_PROGRESS, QString("Output [%1] finished after %2 ms").arg(m_index + 1).arg(m_time.elapsed()));
         emit done();
     }
 }

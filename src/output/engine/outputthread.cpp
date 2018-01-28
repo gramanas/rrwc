@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QObject>
 
-#include "output/outputthread.hpp"
+#include "output/engine/outputthread.hpp"
 
 void OutputThread::init(Output const * output,
                         QStringList &inputFiles,
@@ -24,6 +24,7 @@ void OutputThread::run() {
     QStringListIterator it(m_inputFiles);
 
     int doneByThisThread = 0;
+    int tmp;
     while(it.hasNext()) {
         QString path = it.next();
         emit writeLog(LOG_PROGRESS,
@@ -36,8 +37,11 @@ void OutputThread::run() {
 
         engine.write();
 
-        int progress = int((float(doneByThisThread) / float(m_total)) * 100);
-        emit progressChanged(m_index, progress);
+        tmp = int((float(doneByThisThread) / float(m_total)) * 100);
+        if (tmp != m_progress) {
+            m_progress = tmp;
+            emit progressChanged(m_index, m_progress);
+        }
         doneByThisThread++;
     }
     emit done();

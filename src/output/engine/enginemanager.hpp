@@ -3,9 +3,10 @@
 
 #include <QVector>
 #include <QDir>
+#include <QTime>
 
 #include "output/output.hpp"
-#include "output/outputthread.hpp"
+#include "output/engine/outputthread.hpp"
 //#include "outputmanager.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -35,11 +36,13 @@ class EngineManager : public QObject {
     void writeLog(QString log, QString str);
 
   private:
+    QTime m_time;
     const int m_index;
     Output const *p_output;
     int m_threadsRemaining;
     QVector<OutputThread *> m_engineThreads;
     QVector<int> m_threadProgress;
+    int m_progress = 0;
     const QStringList &m_inputFiles;
 };
 

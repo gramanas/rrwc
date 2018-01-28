@@ -13,8 +13,6 @@ OutputTab::OutputTab(QWidget *parent) :
 {
     ui->setupUi(this);
     connectButtons();
-
-    ui->inputOutputFolder->setText("/home/gramanas/Code/rrwc/tests/out");
 }
 
 OutputTab::~OutputTab()
@@ -42,6 +40,7 @@ void OutputTab::slotBrowse(QLineEdit *line) {
 void OutputTab::slotBrowseWatermark(QLineEdit *line) {
     QString fileName = QFileDialog::getOpenFileName(this, "Open File",
                                                     "",
-                                                    "Images (*.png *.xpm *.jpg)");
+                                                    "Watermarks (*.png, *.PNG)");
+    if (!fileName.isEmpty())
         line->setText(fileName);
 }

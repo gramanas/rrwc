@@ -22,7 +22,7 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/gui/outputtab.cpp
   ${PROJECT_SOURCE_DIR}/output/outputmanager.cpp
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
-  ${PROJECT_SOURCE_DIR}/output/outputthread.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/outputthread.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/outputengine.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/enginemanager.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/resizer.cpp
@@ -37,7 +37,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/gui/mainwindow.hpp
   ${PROJECT_SOURCE_DIR}/gui/outputtab.hpp
   ${PROJECT_SOURCE_DIR}/output/output.hpp
-  ${PROJECT_SOURCE_DIR}/output/outputthread.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/outputthread.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
   ${PROJECT_SOURCE_DIR}/output/engine/outputengine.hpp
   ${PROJECT_SOURCE_DIR}/output/engine/enginemanager.hpp
