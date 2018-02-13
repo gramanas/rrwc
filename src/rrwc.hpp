@@ -39,6 +39,7 @@ class Rrwc : public QObject {
     void done(int);
 
   private:
+    void clearLogs();
     OutputManager m_outputManager;
     QTime m_totalTime;
 };

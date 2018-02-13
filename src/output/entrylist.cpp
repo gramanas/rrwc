@@ -13,7 +13,8 @@ void EntryList::setDir(const QString &path,
 void EntryList::applyFilters() {
     if (m_sort == SORT_EXIF) {
         m_dir.setFilter(QDir::Files);
-    } else {
+    }
+    else {
         m_dir.setFilter(QDir::Files);
         m_dir.setSorting(QDir::Name);
     }
@@ -24,28 +25,24 @@ void EntryList::applyFilters() {
 void EntryList::run() {
     m_time.start();
     fillEntryList();
-    emit writeLog(LOG_PROGRESS, TIME_ELAPSED.arg(m_time.elapsed()));
+    emit writeLog(LOG_PROGRESS, TIME_ENTRYLIST.arg(m_time.elapsed()));
 }
 
 void EntryList::fillEntryList() {
     emit statusChanged(STATUS_ENTRY_LIST);
+
     applyFilters();
-    int fileCount = m_dir.count();
-    m_entryList.reserve(fileCount);
+    m_entryList.reserve(m_dir.count());
 
     QDirIterator it(m_dir);
-    int current = 0;
     while(it.hasNext()) {
-        int progress = int((float(current) / float(fileCount)) * 100);
-        emit progressChanged(progress);
         m_entryList << it.next();
-        current++;
     }
     if (m_sort == SORT_EXIF) {
-        emit progressChanged(100);
         emit statusChanged(STATUS_SORTING);
         ExifManager().sortByDateTime(m_entryList);
     }
+
     emit statusChanged(STATUS_TOTAL);
 }
 

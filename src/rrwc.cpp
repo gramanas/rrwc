@@ -17,17 +17,25 @@ Rrwc::Rrwc() {
             this, SLOT(slotEntryListFull()));
 }
 
-void Rrwc::go(const QString &inputPath, const QString &sort) {
+void Rrwc::clearLogs() {
     emit writeLog(LOG_ERROR, LOG_CLEAR);
     emit writeLog(LOG_PROGRESS, LOG_CLEAR);
+}
+
+void Rrwc::go(const QString &inputPath, const QString &sort) {
+    clearLogs();
     m_totalTime.start();
+
     ErrorManager errorManager(m_outputManager);
     connect(&errorManager, SIGNAL(writeLog(QString, QString)),
             this, SLOT(onWriteLog(QString, QString)));
+
     if (errorManager.checkInputErrors(inputPath)) {
+        emit progressChanged(0);
         emit started();
         m_outputManager.fillEntryList(inputPath, sort);
-    } else {
+    }
+    else {
         QMessageBox::warning(0, "Configuration Error", "Check the error log for details.");
     }
 }
@@ -56,7 +64,7 @@ void Rrwc::onStatusChanged(QString status) {
 void Rrwc::onDone() {
     emit writeLog(LOG_PROGRESS, "Freeing up memory...");
     m_outputManager.clean();
-    emit writeLog(LOG_PROGRESS, QString("Total time elapsed: %1 ms").arg(m_totalTime.elapsed()));
+    emit writeLog(LOG_PROGRESS, TIME_TOTAL.arg(m_totalTime.elapsed()));
     emit done(100);
 }
 

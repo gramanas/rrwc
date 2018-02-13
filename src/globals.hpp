@@ -55,7 +55,8 @@ static const QString ERR_WRONG_INPUT = "Input folder is not a directory, or you 
 
 // progress
 static const QString FILE_PROGRESS = "Output: [%1]\t Thread: [%2]\t File: \"%3\"";
-static const QString TIME_ELAPSED = "Filling the entry list took %1 ms";
+static const QString TIME_ENTRYLIST = "Filling the entry list took %1 ms";
+static const QString TIME_TOTAL = "Total time elapsed: %1 ms";
 
 // buttons
 static const QString BUT_LOG = "Logs";

@@ -12,16 +12,15 @@ struct DateTime {
     QTime time;
 };
 
-
 class ExifManager {
   public:
     ExifManager();
     ~ExifManager();
     void sortByDateTime(QStringList &list);
     bool copyMetadata(const QString &from, const QString &to);
-    DateTime getDateTime(const QString &fullPath);
 
   private:
+    DateTime getDateTime(const QString &fullPath);
 };
 
 #endif // EXIFMANAGER_HPP

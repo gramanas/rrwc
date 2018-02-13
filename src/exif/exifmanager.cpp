@@ -24,7 +24,8 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
         // set invalid date and time
         dateTime.date = QDate(-1, -1, -1);
         dateTime.time = QTime(-1, -1, -1);
-    } else {
+    }
+    else {
         QStringList data = str.split(" ");
         QStringList date = data[0].split(":");
         QStringList time = data[1].split(":");
@@ -35,33 +36,29 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
 }
 
 void ExifManager::sortByDateTime(QStringList &list) {
-    QMap<QString, DateTime> map;
-    for(auto const& key : list) {
-        map.insert(key, getDateTime(key));
+    QHash<QString, DateTime> hash;
+    hash.reserve(list.count());
+    for (auto const& key : list) {
+        hash.insert(key, getDateTime(key));
     }
-    std::sort(list.begin(), list.end(), [=](QString a, QString b) {
-            DateTime dateTimeA = map.value(a);
-            DateTime dateTimeB = map.value(b);
 
-            if (!dateTimeA.date.isValid() || !dateTimeB.date.isValid()) {
-                // compare names if no exif data is avaliable;
-                if (a < b) {
-                    return true;
-                } else {
-                    return false;
-                }
+    std::sort(list.begin(), list.end(), [=](QString a, QString b) {
+            DateTime dateTimeA = hash.value(a);
+            DateTime dateTimeB = hash.value(b);
+
+            // compare names if no exif data is avaliable;
+            if (!dateTimeA.date.isValid()
+                || !dateTimeB.date.isValid()) {
+                return a < b ? true : false;
             }
-            if (dateTimeA.date < dateTimeB.date) {
-                return true;
-            } else if (dateTimeA.date > dateTimeB.date) {
-                return false;
-            } else {
-                if (dateTimeA.time < dateTimeB.time) {
-                    return true;
-                }  else {
-                    return false;
-                }
+            // most of the time the date in a set of photographs is the same while
+            // the time is what determines the sorting, so we check for that first
+            // to (hopefully) reduce the total amount of if statements
+            if (dateTimeA.date == dateTimeB.date) {
+                return dateTimeA.time < dateTimeB.time ? true : false;
             }
+            // finally compare by date
+            return dateTimeA.date < dateTimeB.date ? true : false;
         });
 }
 

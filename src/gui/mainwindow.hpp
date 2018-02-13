@@ -41,6 +41,7 @@ class MainWindow : public QMainWindow
     void enableLayout(bool t);
 
     QVector<OutputTab *> m_outputTabs;
+    bool m_isRunning = false;
     Rrwc *p_rrwc;
     Ui::MainWindow *ui;
 };

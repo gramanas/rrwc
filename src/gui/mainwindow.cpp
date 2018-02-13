@@ -99,8 +99,14 @@ void MainWindow::slotToggleLogOutputs() {
 
     if (next == 0) {
         ui->butToggleLogOutputs->setText(BUT_LOG);
+        if (!m_isRunning) {
+            ui->butAddOutput->setEnabled(true);
+        }
     } else {
         ui->butToggleLogOutputs->setText(BUT_OUTPUTS);
+        if (!m_isRunning) {
+            ui->butAddOutput->setEnabled(false);
+        }
     }
 }
 
@@ -145,7 +151,9 @@ void MainWindow::enableLayout(bool t) {
     ui->tabWidget->setTabsClosable(t);
     ui->menuBar->setEnabled(t);
     ui->butGo->setEnabled(t);
-    ui->butAddOutput->setEnabled(t);
+    // hack... remove
+    if (ui->butToggleLogOutputs->text() != "Outputs")
+        ui->butAddOutput->setEnabled(t);
     ui->inputInputFolder->setEnabled(t);
     ui->inputSortMode->setEnabled(t);
     ui->butBrowse->setEnabled(t);
@@ -153,6 +161,7 @@ void MainWindow::enableLayout(bool t) {
 
 void MainWindow::onStarted() {
     enableLayout(false);
+    m_isRunning = true;
 }
 
 void MainWindow::onDone() {
@@ -163,6 +172,7 @@ void MainWindow::onDone() {
         return;
     }
     ui->outputProgressLog->append("Job's done!");
+    m_isRunning = false;
 }
 
 void MainWindow::actionHelp() {

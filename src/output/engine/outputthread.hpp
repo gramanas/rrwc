@@ -29,7 +29,7 @@ class OutputThread : public QThread {
     void done();
 
   private:
-    OutputEngine engine;
+    OutputEngine m_engine;
     int m_current = 0;
     int m_progress = 0;
     int m_total;

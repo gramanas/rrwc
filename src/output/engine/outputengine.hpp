@@ -31,9 +31,9 @@ class OutputEngine : public QObject {
     Output const *p_output;
     bool m_copyFlag;
 
-    Resizer resizer;
-    Marker marker;
-    Renamer renamer;
+    Resizer m_resizer;
+    Marker m_marker;
+    Renamer m_renamer;
 
     QFileInfo m_sourceInfo;
     int m_current;

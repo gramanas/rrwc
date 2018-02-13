@@ -124,7 +124,6 @@ void OutputManager::onProgressChanged(int output, int progress) {
 
 void OutputManager::onProgressChanged(int progress) {
     emit progressChanged(progress);
-    //qDebug() << progress;
 }
 
 void OutputManager::onStatusChanged(QString status) {
