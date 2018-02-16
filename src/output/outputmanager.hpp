@@ -5,7 +5,7 @@
 #include <QString>
 
 #include "gui/outputtab.hpp"
-#include "output/engine/enginemanager.hpp"
+#include "engine/enginemanager.hpp"
 #include "output/entrylist.hpp"
 #include "output.hpp"
 

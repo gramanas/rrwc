@@ -1,7 +1,7 @@
 #include <QDebug>
 #include <QThread>
 
-#include "output/engine/enginemanager.hpp"
+#include "engine/enginemanager.hpp"
 #include "globals.hpp"
 
 EngineManager::EngineManager(Output const *output,

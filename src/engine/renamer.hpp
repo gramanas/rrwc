@@ -2,7 +2,7 @@
 #define RENAMER_HPP
 
 #include "output/output.hpp"
-#include "output/engine/worker.hpp"
+#include "engine/worker.hpp"
 
 class Renamer : public Worker {
   public:

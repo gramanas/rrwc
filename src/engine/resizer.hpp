@@ -3,7 +3,7 @@
 
 #include <opencv2/core/core.hpp>
 
-#include "output/engine/worker.hpp"
+#include "engine/worker.hpp"
 
 class Resizer : public Worker {
   public:
