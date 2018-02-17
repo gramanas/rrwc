@@ -6,6 +6,7 @@
 
 #include "gui/outputtab.hpp"
 #include "engine/enginemanager.hpp"
+#include "engine/imagebuffer.hpp"
 #include "output/entrylist.hpp"
 #include "output.hpp"
 

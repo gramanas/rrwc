@@ -8,25 +8,30 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-typedef QSharedPointer<cv::Mat> ImagePointer;
+typedef std::unique_ptr<cv::Mat> ImagePointer;
 
 class ImageBuffer : public QObject {
     Q_OBJECT
 
   public:
-    ImageBuffer(QStringList entryList);
+    ImageBuffer(const QStringList &entryList, int ountputNumber);
     ~ImageBuffer();
 
-    bool requestNext();
     const cv::Mat * getNext(int outputIndex);
 
   private:
-    cv::Mat * loadNext();
+    void loadNextBlock();
+    ImagePointer load(int i);
     void releaseOld();
-    bool isUsed(int index);
 
-    QVector<std::unique_ptr<cv::Mat>> m_buffer;
+    QVector<ImagePointer> m_buffer;
     QVector<int> m_currentForOutput;
+    int m_lastUsedImage = 0;
+    int m_outputHead = 0;
+    int m_bufferHead = 0;
+    int m_blockSize;
+
+    const QStringList m_entryList;
 };
 
 
