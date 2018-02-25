@@ -4,38 +4,41 @@
 #include "output/engine/outputengine.hpp"
 #include <QDebug>
 
-OutputEngine::OutputEngine() {
-}
-OutputEngine::~OutputEngine() {
-}
+OutputEngine::OutputEngine(const QVector<Output *> &outputs,
+                           const int &current)
+    : m_current(current-1) {
+    m_gears.reserve(outputs.size());
 
-void OutputEngine::init(Output const *output, int current) {
-    p_output = output;
-    m_current = current;
-
-    if (p_output->resize) {
-        m_resizer.activate();
-        m_resizer.loadData(p_output->length, p_output->height);
-    }
-    if (p_output->rename) {
-        m_renamer.activate();
-        m_renamer.loadData(p_output->renameText, p_output->counter);
-    }
-    if (p_output->watermark) {
-        m_watermark = cv::imread(p_output->watermarkText.toStdString(), cv::IMREAD_UNCHANGED);
-        if (!m_watermark.empty()) {
-            m_marker.activate();
-            m_marker.loadData(&m_watermark, p_output->opacity);
+    for (const auto &it : outputs) {
+        int i = it->index;
+        m_gears[i] = new Gears;
+        if (m_gears[i]->resizer.enable(it->resize)) {
+            m_gears[i]->resizer.loadData(it->length, it->height);
         }
+        if (m_gears[i]->renamer.enable(it->rename)) {
+            m_gears[i]->renamer.loadData(it->renameText, it->counter);
+        }
+        if (m_gears[i]->marker.enable(it->watermark)) {
+            m_gears[i]->marker.loadData(it->watermarkText, it->opacity);
+        }
+        m_gears[i]->copyFlag = !it->resize && !it->watermark ? true : false;
+        m_gears[i]->p_output = it;
     }
-    // set copy mode
-    // If neither watermark nor resize is turned on
-    // we don't need to load the image in openCV
-    // since we'll just copy it.
-    m_copyFlag = !p_output->resize && !p_output->watermark ? true : false;
+}
+
+void OutputEngine::setCurrentOutput(int index) {
+    m_gear = m_gears[index];
+}
+
+OutputEngine::~OutputEngine() {
+    for (auto it : m_gears) {
+        delete it;
+    }
+    m_gears.clear();
 }
 
 bool OutputEngine::loadImage(const QString &path) {
+    m_current++;
     QTime a;
     a.start();
     m_sourceInfo = QFileInfo(path);
@@ -43,12 +46,10 @@ bool OutputEngine::loadImage(const QString &path) {
         // LOG
         return false;
     }
-    if (!m_copyFlag) {
-        m_source = cv::imread(path.toStdString());
-        if (m_source.empty()) {
-            // LOG
-            return false;
-        }
+    m_source = cv::imread(path.toStdString());
+    if (m_source.empty()) {
+        // LOG
+        return false;
     }
     qDebug() << "Time to read" << path.split('/').back() << a.elapsed();
     return true;
@@ -56,38 +57,38 @@ bool OutputEngine::loadImage(const QString &path) {
 
 bool OutputEngine::exec() {
     m_source.copyTo(m_out);
-    if (m_renamer.isOn()) {
-        m_renamer.loadNext(m_sourceInfo.baseName(), m_current);
-        m_renamer.exec(m_newName);
+    if (m_gear->renamer.isEnabled()) {
+        m_gear->renamer.loadNext(m_sourceInfo.baseName(), m_current);
+        m_gear->renamer.exec(m_newName);
     }
     else {
         m_newName = m_sourceInfo.baseName();
     }
-    if (m_resizer.isOn()) {
+    if (m_gear->resizer.isEnabled()) {
         QTime a;
         a.start();
-        m_resizer.loadSource(&m_out);
-        if (!m_resizer.exec(m_out)) {
+        m_gear->resizer.loadSource(&m_out);
+        if (!m_gear->resizer.exec(m_out)) {
             // LOG
         }
         qDebug() << "Time to resize" << m_newName << a.elapsed();
-        //m_out.copyTo(m_temp);
     }
 
-    if (m_marker.isOn()) {
+    if (m_gear->marker.isEnabled()) {
         QTime a;
         a.start();
-        m_marker.loadSource(&m_out);
-        if (!m_marker.exec(m_out)) {
-            emit writeLog(LOG_ERROR, ERR_OTP.arg(p_output->index + 1) + " " + ERR_IMAGE.arg(m_sourceInfo.baseName()) + ERR_WATERMARK_FIT);
+        m_gear->marker.loadSource(&m_out);
+        if (!m_gear->marker.exec(m_out)) {
+            emit writeLog(LOG_ERROR,
+                          ERR_OTP.arg(m_gear->p_output->index + 1)
+                          + " "
+                          + ERR_IMAGE.arg(m_sourceInfo.baseName())
+                          + ERR_WATERMARK_FIT);
         }
         qDebug() << "Time to watermark" << m_newName << a.elapsed();
-        //m_out.copyTo(m_temp);
     }
 
     // strip metadata
-
-    //m_temp.copyTo(m_out);
     return true;
 }
 
@@ -95,17 +96,16 @@ bool OutputEngine::write() {
     QTime a;
     a.start();
 
-    QString fullName = p_output->folder + QDir::separator() + m_newName + "." + m_sourceInfo.suffix();
-    if (m_copyFlag) {
+    QString fullName = m_gear->p_output->folder + QDir::separator() + m_newName + "." + m_sourceInfo.suffix();
+    if (m_gear->copyFlag) {
         QFile::copy(m_sourceInfo.absoluteFilePath(), fullName);
     }
     else {
         if (!cv::imwrite(fullName.toStdString(), m_out)) {
-            emit writeLog(LOG_ERROR, ERR_FAIL.arg(p_output->index + 1).arg(m_sourceInfo.baseName()));
+            emit writeLog(LOG_ERROR, ERR_FAIL.arg(m_gear->p_output->index + 1).arg(m_sourceInfo.baseName()));
             return false;
         }
     }
-    m_current++;
     qDebug() << "Time to write" << m_newName << a.elapsed();
     return true;
 }

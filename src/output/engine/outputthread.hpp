@@ -2,6 +2,7 @@
 #define OUTPUTTHREAD_HPP
 
 #include <QThread>
+#include <QVector>
 #include <QObject>
 #include <QDir>
 
@@ -11,10 +12,11 @@
 class OutputThread : public QThread {
     Q_OBJECT
   public:
-    void init(Output const *output,
-              QStringList &inputFiles,
-              const int current,
-              const int index);
+    OutputThread(const QVector<Output *> &outputs,
+                 QVector<QString> &inputFiles,
+                 const int current,
+                 const int index);
+    ~OutputThread();
 
     // parallel code
     void run() override;
@@ -29,13 +31,14 @@ class OutputThread : public QThread {
     void done();
 
   private:
-    OutputEngine m_engine;
     int m_current = 0;
     int m_progress = 0;
     int m_total;
     int m_index;
-    Output const *p_output;
-    QStringList m_inputFiles = {};
+
+    const QVector<Output *> m_outputs;
+    QVector<QString> m_inputFiles = {};
+    OutputEngine m_engine;
 };
 
 #endif // OUTPUTTHREAD_HPP

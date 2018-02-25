@@ -33,7 +33,6 @@ static const QString OTP_COUNTER_DIGITS = "counterDigits";
 static const QString OTP_WATERMARK = "watermark";
 static const QString OTP_WATERMARK_TEXT = "watermarkText";
 static const QString OTP_OPACITY = "opacity";
-static const QString OTP_THREADS = "threads";
 static const QString OTP_STRIP_METADATA = "stripMetadata";
 
 // logs

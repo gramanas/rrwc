@@ -5,6 +5,7 @@
 #include "profile/profileparser.hpp"
 #include "exif/exifmanager.hpp"
 
+
 #include "ui_outputtab.h"
 
 OutputManager::OutputManager() {
@@ -32,7 +33,6 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
         p_output->height = tab->getUi()->inputHeight->value();
         p_output->renameText = tab->getUi()->inputRename->text();
         p_output->watermarkText = tab->getUi()->inputWatermark->text();
-        p_output->threads = tab->getUi()->inputThreads->value();
         p_output->opacity = tab->getUi()->inputOpacity->value();
         p_output->counter.start = tab->getUi()->inputCounterStart->value();
         p_output->counter.step = tab->getUi()->inputCounterStep->value();
@@ -41,9 +41,6 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
         p_output->index = i++;
         m_outputs.append(p_output);
     }
-
-    // update the remaining outputs
-    m_outputsRemaining = outputTabs.size();
 }
 
 void OutputManager::saveProfile(const QString &filename) {
@@ -70,7 +67,6 @@ void OutputManager::print() const {
         qDebug() << "height=" << output->height;
         qDebug() << "rename=" << output->renameText;
         qDebug() << "watermark=" << output->watermarkText;
-        qDebug() << "threads=" << output->threads;
         qDebug() << "opacity=" << output->opacity;
         qDebug() << "start=" << output->counter.start;
         qDebug() << "step=" << output->counter.step;
@@ -85,26 +81,10 @@ void OutputManager::fillEntryList(const QString &inputPath, const QString &sort)
     m_entryList.start();
 }
 
-void OutputManager::startOutput(int output) {
-    // Lazy initialization
-    if (m_engines.isEmpty()) {
-        m_engines.reserve(m_outputs.size());
-        m_outputProgress.reserve(m_outputs.size());
-    }
-
-    // One engine manager for each output
-    m_engines.insert(output, new EngineManager(m_outputs[output], *m_entryList.get(), output));
-    m_outputProgress.insert(output, 0);
-
-    // connect the signals
-    connect(m_engines[output], SIGNAL(progressChanged(int, int)),
-            this, SLOT(onProgressChanged(int, int)));
-    connect(m_engines[output], SIGNAL(done()),
-            this, SLOT(onDone()));
-    connect(m_engines[output], SIGNAL(writeLog(QString, QString)),
-            this, SLOT(onWriteLog(QString, QString)));
-
-    m_engines[output]->startThreads();
+void OutputManager::startOutputs(const int &threadNumber) {
+    p_threadManager = new ThreadManager(m_entryList, m_outputs, threadNumber);
+    connect(p_threadManager, SIGNAL(done()), this, SLOT(onDone()));
+    p_threadManager->startThreads();
 }
 
 void OutputManager::onWriteLog(QString log, QString str) {
@@ -112,14 +92,14 @@ void OutputManager::onWriteLog(QString log, QString str) {
 }
 
 void OutputManager::onProgressChanged(int output, int progress) {
-    m_outputProgress[output] = progress;
+    // m_outputProgress[output] = progress;
 
-    int sum = 0;
-    for (int i = 0; i < m_outputProgress.size(); i++) {
-        sum += m_outputProgress[i];
-    }
-    // emit the average
-    emit progressChanged(int(float(sum)/float(m_outputProgress.size())));
+    // int sum = 0;
+    // for (int i = 0; i < m_outputProgress.size(); i++) {
+    //     sum += m_outputProgress[i];
+    // }
+    // // emit the average
+    // emit progressChanged(int(float(sum)/float(m_outputProgress.size())));
 }
 
 void OutputManager::onProgressChanged(int progress) {
@@ -135,20 +115,14 @@ void OutputManager::slotEntryListFull() {
 }
 
 void OutputManager::onDone() {
-    m_outputsRemaining--;
-    if (m_outputsRemaining == 0) {
-        emit done();
-    }
+    emit done();
 }
 
 void OutputManager::clean() {
     for (int i = 0; i < m_outputs.size(); i++) {
         delete m_outputs[i];
-        delete m_engines[i];
     }
     m_outputs.clear();
-    m_engines.clear();
-    m_outputProgress.clear();
     m_entryList.clear();
 }
 

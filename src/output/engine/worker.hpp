@@ -11,12 +11,13 @@
 
 class Worker {
   public:
-    void activate() {
-        m_active = true;
+    bool enable(bool flag) {
+        m_enabled = flag;
+        return flag;
     }
 
-    bool isOn() {
-        return m_active;
+    bool isEnabled() {
+        return m_enabled;
     }
 
     void loadSource(cv::Mat *source) {
@@ -28,7 +29,7 @@ class Worker {
     cv::Mat *p_source;
 
   private:
-    bool m_active = false;
+    bool m_enabled = false;
 };
 
 #endif // WORKER_HPP

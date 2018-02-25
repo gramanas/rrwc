@@ -24,7 +24,7 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/outputthread.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/outputengine.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/enginemanager.cpp
+  ${PROJECT_SOURCE_DIR}/output/engine/threadmanager.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/resizer.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/marker.cpp
   ${PROJECT_SOURCE_DIR}/output/engine/renamer.cpp
@@ -40,7 +40,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/output/engine/outputthread.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
   ${PROJECT_SOURCE_DIR}/output/engine/outputengine.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/enginemanager.hpp
+  ${PROJECT_SOURCE_DIR}/output/engine/threadmanager.hpp
   ${PROJECT_SOURCE_DIR}/output/engine/resizer.hpp
   ${PROJECT_SOURCE_DIR}/output/engine/marker.hpp
   ${PROJECT_SOURCE_DIR}/output/engine/renamer.hpp

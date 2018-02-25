@@ -22,8 +22,7 @@ class Rrwc : public QObject {
         return &m_outputManager;
     }
 
-    void go(const QString &inputPath, const QString &sort);
-
+    void go(const QString &inputPath, const QString &sort, const int &threadNumber);
   public slots:
     void onProgressChanged(int progress);
     void onStatusChanged(QString status);
@@ -40,6 +39,8 @@ class Rrwc : public QObject {
 
   private:
     void clearLogs();
+
+    int m_threadNumber;
     OutputManager m_outputManager;
     QTime m_totalTime;
 };

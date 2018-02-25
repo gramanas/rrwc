@@ -22,7 +22,8 @@ void Rrwc::clearLogs() {
     emit writeLog(LOG_PROGRESS, LOG_CLEAR);
 }
 
-void Rrwc::go(const QString &inputPath, const QString &sort) {
+void Rrwc::go(const QString &inputPath, const QString &sort, const int &threadNumber) {
+    m_threadNumber = threadNumber;
     clearLogs();
     m_totalTime.start();
 
@@ -42,11 +43,8 @@ void Rrwc::go(const QString &inputPath, const QString &sort) {
 
 void Rrwc::slotEntryListFull() {
     emit writeLog(LOG_PROGRESS, "Starting outputs...");
-    for (int i = 0; i < m_outputManager.outputs().size(); i++) {
-        m_outputManager.startOutput(i);
-    }
+        m_outputManager.startOutputs(m_threadNumber);
     emit writeLog(LOG_PROGRESS, "All outputs are active.");
-
 }
 
 void Rrwc::onWriteLog(QString log, QString str) {

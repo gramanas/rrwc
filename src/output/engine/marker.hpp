@@ -1,6 +1,7 @@
 #ifndef MARKER_HPP
 #define MARKER_HPP
 
+#include <QString>
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "output/engine/worker.hpp"
@@ -10,8 +11,7 @@ class Marker : public Worker {
     Marker();
     ~Marker();
 
-    void loadData(cv::Mat *watermark,
-                       int opacity);
+    void loadData(QString watermarkPath, int opacity);
     bool exec(cv::Mat &destination);
 
   private:
@@ -20,7 +20,8 @@ class Marker : public Worker {
                       cv::Mat &output, cv::Point2i location);
 
     float m_opacity;
-    cv::Mat *p_watermark;
+    cv::Mat m_finalWatermark;
+    cv::Mat m_watermark;
 };
 
 #endif // MARKER_HPP

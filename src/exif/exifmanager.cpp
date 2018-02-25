@@ -35,7 +35,7 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
     return dateTime;
 }
 
-void ExifManager::sortByDateTime(QStringList &list) {
+void ExifManager::sortByDateTime(QVector<QString> &list) {
     QHash<QString, DateTime> hash;
     hash.reserve(list.count());
     for (auto const& key : list) {

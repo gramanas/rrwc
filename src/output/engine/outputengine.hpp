@@ -2,6 +2,7 @@
 #define OUTPUTENGINE_HPP
 
 #include <QStringList>
+#include <QVector>
 #include <QFileInfo>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -12,14 +13,26 @@
 #include "output/engine/renamer.hpp"
 #include "output/output.hpp"
 
+// the engine's gears
+struct Gears {
+    Resizer resizer;
+    Marker marker;
+    Renamer renamer;
+
+    // the data
+    Output const *p_output = nullptr;
+    bool copyFlag = false;
+};
+
 class OutputEngine : public QObject {
     Q_OBJECT
   public:
-    // loads the rules
-    OutputEngine();
+    OutputEngine(const QVector<Output *> &outputs,
+                 const int &current);
     ~OutputEngine();
 
     void init(Output const * output, int current);
+    void setCurrentOutput(int index);
     bool loadImage(const QString &path);
     bool exec();
     bool write();
@@ -28,20 +41,16 @@ class OutputEngine : public QObject {
     void writeLog(QString log, QString str);
 
   private:
-    Output const *p_output;
-    bool m_copyFlag;
-
-    Resizer m_resizer;
-    Marker m_marker;
-    Renamer m_renamer;
-
-    QFileInfo m_sourceInfo;
     int m_current;
     QString m_newName;
+    QFileInfo m_sourceInfo;
+
+    QVector<Gears *> m_gears;
+
+    // current gear
+    Gears * m_gear = nullptr;
 
     cv::Mat m_source;
-    cv::Mat m_watermark;
-    cv::Mat m_temp;
     cv::Mat m_out;
 };
 

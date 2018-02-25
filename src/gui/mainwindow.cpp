@@ -140,7 +140,7 @@ void MainWindow::slotStatusChanged(QString status) {
 
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText());
+    p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText(), ui->inputThreads->value());
 }
 
 void MainWindow::enableLayout(bool t) {
@@ -156,6 +156,7 @@ void MainWindow::enableLayout(bool t) {
         ui->butAddOutput->setEnabled(t);
     ui->inputInputFolder->setEnabled(t);
     ui->inputSortMode->setEnabled(t);
+    ui->inputThreads->setEnabled(t);
     ui->butBrowse->setEnabled(t);
 }
 
@@ -228,7 +229,6 @@ void MainWindow::actionLoadProfile() {
             m_outputTabs[i]->getUi()->inputWatermark->setText(output->watermarkText);
             m_outputTabs[i]->getUi()->inputOpacity->setValue(output->opacity);
             m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
-            m_outputTabs[i]->getUi()->inputThreads->setValue(output->threads);
         }
         slotWriteLog(LOG_PROGRESS, "Profile " + filename + " loaded");
     }

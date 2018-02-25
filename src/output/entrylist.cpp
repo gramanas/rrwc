@@ -36,7 +36,7 @@ void EntryList::fillEntryList() {
 
     QDirIterator it(m_dir);
     while(it.hasNext()) {
-        m_entryList << it.next();
+        m_entryList.append(it.next());
     }
     if (m_sort == SORT_EXIF) {
         emit statusChanged(STATUS_SORTING);
