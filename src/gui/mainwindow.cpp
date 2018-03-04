@@ -179,8 +179,18 @@ void MainWindow::onDone() {
 void MainWindow::actionHelp() {
     QDesktopServices::openUrl(QUrl("https://github.com/gramanas/rrwc/wiki"));
 }
+
 void MainWindow::actionAbout() {
-    QMessageBox::information(this, "About rrwc...", "Version 1.0\nΆντε και καλά ξεσκάρτ!");
+  QMessageBox msgBox(this);
+  msgBox.setWindowTitle("About rrwc...");
+  msgBox.setTextFormat(Qt::RichText);   //this is what makes the links clickable
+  msgBox.setText("Version 1.0<br>Άντε και καλά ξεσκάρτ!<br><br>\
+rrwc  Copyright (C) 2018  Anastasis Grammenos<br>\
+This program comes with ABSOLUTELY NO WARRANTY.<br>\
+This is free software, and you are welcome to redistribute it<br>\
+under certain conditions.<br>\
+See <a href='https://www.gnu.org/licenses/gpl-3.0.en.html'>GPLv3</a> for details.");
+  msgBox.exec();
 }
 
 void MainWindow::actionSaveProfile() {
