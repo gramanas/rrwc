@@ -12,7 +12,7 @@ It's currently under developement.
   - Cross Platform (linux + windows)
   - Fast
   - Multithreading
-  - cli
+  - gui + cli
 
 * Dependencies
   - [[https://www.qt.io/][Qt5]] for the Gui
@@ -22,26 +22,71 @@ It's currently under developement.
 
 You also need the [[https://www.hdfgroup.org/solutions/hdf5/][Hdf5]] library.
 
-On ubuntu:
-#+BEGIN_SRC
+** Get the toolchain
+ - ~cmake~
+ - ~ninja~ (or ~Gnu make~)
+ - ~clang~ (or ~gcc~)
+
+Make sure to use CMake >= 3.9.4 (if you don't change the minimum 
+required version in the ~CMakeLists.txt~ file.
+
+The qt stuff is taken care by the ~qt5-base~ package
+
+** Packages
+Arch Linux:
+#+BEGIN_SRC bash
+sudo pacman -S qt5-base hdf5 opencv exiv2
+#+END_SRC
+
+Ubuntu:
+#+BEGIN_SRC bash
 sudo apt-get install libopencv2-dev qt5base-dev libhdf5-dev libexiv2-dev qtcreator
 #+END_SRC
 
 
-* Test - contribute - notes
-
-Anyone is welcome to contribute whatever they want.
-I don't yet know how to create a full scale cross platform application
-so this currently only works on linux. The libraries are cross platform though,
-so when I have a working prototype I'll look on the windows side of things.
-
-Apple users... don't know!
-
-I've only tested it on Arch linux, but the process is as follows:
+* Build it
 - clone the repo
 - ~cd /path/to/repo~
 - ~cmake .~
 - ~make~
 - ~./rrwc~
 
-Make sure to use CMake >= 3.9.4
+** Ninja
+You can use ninja if you run cmake like so:
+#+BEGIN_SRC bash
+cmake -GNinja .
+# and then instead of make
+ninja -j4     # -j 4 enables concurrency with 4 cores
+#+END_SRC
+
+** Clang
+When using clang I noticed a speedup in the performance
+so it is the recomended compiler on linux.
+
+Either 
+#+BEGIN_SRC bash
+export CXX=/path/to/clang++
+#+END_SRC
+before running cmake,
+
+or run cmake like so:
+#+BEGIN_SRC bash
+cmake -DCMAKE_CXX_COMPILER=clang++ .
+#+END_SRC
+The later will store your preference in the CMakeCache.txt file so you won't
+have to specify it again.
+
+** Cross compile
+#+BEGIN_SRC C++
+// TODO
+#+END_SRC
+
+
+
+
+* Test - contribute - notes
+
+Anyone is welcome to contribute whatever they want.
+
+Should work for macOS but I've never tested it, and I don't plan to.
+
