@@ -6,7 +6,7 @@
 #include <QDir>
 
 #include "output/output.hpp"
-#include "output/engine/outputengine.hpp"
+#include "engine/outputengine.hpp"
 
 class OutputThread : public QThread {
     Q_OBJECT

@@ -7,9 +7,9 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "globals.hpp"
-#include "output/engine/resizer.hpp"
-#include "output/engine/marker.hpp"
-#include "output/engine/renamer.hpp"
+#include "engine/resizer.hpp"
+#include "engine/marker.hpp"
+#include "engine/renamer.hpp"
 #include "output/output.hpp"
 
 class OutputEngine : public QObject {

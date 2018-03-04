@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QObject>
 
-#include "output/engine/outputthread.hpp"
+#include "engine/outputthread.hpp"
 
 void OutputThread::init(Output const * output,
                         QStringList &inputFiles,

@@ -6,7 +6,7 @@
 #include <QTime>
 
 #include "output/output.hpp"
-#include "output/engine/outputthread.hpp"
+#include "engine/outputthread.hpp"
 //#include "outputmanager.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
