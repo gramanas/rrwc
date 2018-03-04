@@ -19,7 +19,8 @@ class EngineManager : public QObject {
   public:
     explicit EngineManager(Output const *output,
                            const QStringList &inputFiles,
-                           const int &index);
+                           const int &index,
+                           const int &threads);
     ~EngineManager();
 
     // Start threads corresponding to output i
@@ -38,9 +39,9 @@ class EngineManager : public QObject {
   private:
     QTime m_time;
     const int m_index;
+    const int m_threads;
     Output const *p_output;
-    int m_threadsRemaining;
-    QVector<OutputThread *> m_engineThreads;
+    OutputThread *p_engineThread;
     QVector<int> m_threadProgress;
     int m_progress = 0;
     const QStringList &m_inputFiles;

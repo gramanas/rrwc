@@ -5,9 +5,10 @@
 #include <QString>
 
 #include "gui/outputtab.hpp"
-#include "engine/enginemanager.hpp"
 #include "output/entrylist.hpp"
-#include "output.hpp"
+#include "output/output.hpp"
+#include "engine/threadmanager.hpp"
+
 
 class OutputManager : public QObject {
     Q_OBJECT
@@ -19,7 +20,7 @@ class OutputManager : public QObject {
     bool loadProfile(const QString &filename);
     void print() const;
 
-    void startOutput(int output);
+    void startOutputs(const int &threads);
     void clean();
     void fillEntryList(const QString &inputPath, const QString &sort);
 
@@ -45,9 +46,7 @@ class OutputManager : public QObject {
   private:
     EntryList m_entryList;
     QVector<Output *> m_outputs;
-    QVector<int> m_outputProgress;
-    QVector<EngineManager *> m_engines;
-    int m_outputsRemaining;
+    ThreadManager *p_threadManager;
 };
 
 #endif // OUTPUTMANAGER_HPP

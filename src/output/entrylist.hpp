@@ -2,11 +2,15 @@
 #define ENTRYLIST_HPP
 
 #include <QTime>
+#include <memory>
+#include <memory>
+#include <QVector>
 #include <QDir>
 #include <QDirIterator>
 #include <QThread>
 
 #include "globals.hpp"
+
 
 class EntryList : public QThread {
     Q_OBJECT
@@ -17,7 +21,7 @@ class EntryList : public QThread {
     void setDir(const QString &path,
                 const QString &sort);
     void clear();
-    const QStringList* get() {
+    const QVector<QString> *get() const {
         return &m_entryList;
     }
 
@@ -32,7 +36,7 @@ class EntryList : public QThread {
     void fillEntryList();
     void applyFilters();
 
-    QStringList m_entryList;
+    QVector<QString> m_entryList;
     QDir m_dir;
     QString m_sort;
     QTime m_time;

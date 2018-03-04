@@ -3,23 +3,18 @@
 Marker::Marker() {
 }
 
-void Marker::loadData(cv::Mat *watermark,
-                      int opacity) {
-    p_watermark = watermark;
+void Marker::loadData(QString watermarkPath, int opacity) {
+    m_watermark = cv::imread(watermarkPath.toStdString(), cv::IMREAD_UNCHANGED);
     m_opacity = float(opacity) / 100;
 }
 
 bool Marker::exec(cv::Mat &destination) {
-    if (p_source->cols > p_watermark->cols ||
-        p_source->rows > p_watermark->rows ||
-        p_source->cols > p_watermark->cols ||
-        p_source->rows > p_watermark->rows) {
-        return false;
+    if (m_finalWatermark.cols != p_source->cols) {
+        cv::Rect watermarkArea(0,0,p_source->cols, p_source->rows);
+        m_finalWatermark = cv::Mat(m_watermark, watermarkArea);
     }
-    cv::Rect watermarkArea(0,0,p_source->cols, p_source->rows);
-    cv::Mat finalWatermark(*p_watermark, watermarkArea);
 
-    overlayImage(*p_source, finalWatermark, destination, cv::Point(0,0));
+    overlayImage(*p_source, m_finalWatermark, destination, cv::Point(0,0));
     return true;
 }
 
@@ -72,5 +67,6 @@ void Marker::overlayImage(const cv::Mat &background, const cv::Mat &foreground,
     }
   }
 }
+
 Marker::~Marker() {
 }

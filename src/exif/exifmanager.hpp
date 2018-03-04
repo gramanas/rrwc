@@ -1,7 +1,7 @@
 #ifndef EXIFMANAGER_HPP
 #define EXIFMANAGER_HPP
 
-#include <QStringList>
+#include <QVector>
 #include <QDate>
 #include <QTime>
 
@@ -16,7 +16,7 @@ class ExifManager {
   public:
     ExifManager();
     ~ExifManager();
-    void sortByDateTime(QStringList &list);
+    void sortByDateTime(QVector<QString> &list);
     bool copyMetadata(const QString &from, const QString &to);
 
   private:

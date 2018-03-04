@@ -20,7 +20,6 @@ struct Output {
     int length;
     int height;
     int opacity;
-    int threads;
     Counter counter;
     int index;
 };

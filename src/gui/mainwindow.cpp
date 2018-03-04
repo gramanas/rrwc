@@ -140,7 +140,7 @@ void MainWindow::slotStatusChanged(QString status) {
 
 void MainWindow::slotGo() {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
-    p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText());
+    p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText(), ui->inputThreads->value());
 }
 
 void MainWindow::enableLayout(bool t) {
@@ -156,6 +156,7 @@ void MainWindow::enableLayout(bool t) {
         ui->butAddOutput->setEnabled(t);
     ui->inputInputFolder->setEnabled(t);
     ui->inputSortMode->setEnabled(t);
+    ui->inputThreads->setEnabled(t);
     ui->butBrowse->setEnabled(t);
 }
 
@@ -178,6 +179,7 @@ void MainWindow::onDone() {
 void MainWindow::actionHelp() {
     QDesktopServices::openUrl(QUrl("https://github.com/gramanas/rrwc/wiki"));
 }
+
 void MainWindow::actionAbout() {
   QMessageBox msgBox(this);
   msgBox.setWindowTitle("About rrwc...");
@@ -189,12 +191,6 @@ This is free software, and you are welcome to redistribute it<br>\
 under certain conditions.<br>\
 See <a href='https://www.gnu.org/licenses/gpl-3.0.en.html'>GPLv3</a> for details.");
   msgBox.exec();
-//   QMessageBox::information(this, "About rrwc...", "Version 1.0\nΆντε και καλά ξεσκάρτ!\n\n\
-// rrwc  Copyright (C) 2018  Anastasis Grammenos\n\
-// This program comes with ABSOLUTELY NO WARRANTY.\n\
-// This is free software, and you are welcome to redistribute it\n\
-// under certain conditions;\
-// see <a href='https://www.gnu.org/licenses/gpl-3.0.en.html'>GPLv3</a> for details.");
 }
 
 void MainWindow::actionSaveProfile() {
@@ -243,7 +239,6 @@ void MainWindow::actionLoadProfile() {
             m_outputTabs[i]->getUi()->inputWatermark->setText(output->watermarkText);
             m_outputTabs[i]->getUi()->inputOpacity->setValue(output->opacity);
             m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
-            m_outputTabs[i]->getUi()->inputThreads->setValue(output->threads);
         }
         slotWriteLog(LOG_PROGRESS, "Profile " + filename + " loaded");
     }
