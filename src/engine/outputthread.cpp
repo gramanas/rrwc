@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QObject>
 
-#include "output/engine/outputthread.hpp"
+#include "engine/outputthread.hpp"
 
 OutputThread::OutputThread(const QVector<Output *> &outputs,
                            QVector<QString> &inputFiles,

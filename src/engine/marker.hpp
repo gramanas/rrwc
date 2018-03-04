@@ -4,7 +4,7 @@
 #include <QString>
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-#include "output/engine/worker.hpp"
+#include "engine/worker.hpp"
 
 class Marker : public Worker {
   public:

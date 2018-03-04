@@ -1,4 +1,4 @@
-#include "output/engine/resizer.hpp"
+#include "engine/resizer.hpp"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 

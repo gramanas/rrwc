@@ -1,7 +1,7 @@
 #include <QDir>
 #include <QTime>
 #include <QFile>
-#include "output/engine/outputengine.hpp"
+#include "engine/outputengine.hpp"
 #include <QDebug>
 
 OutputEngine::OutputEngine(const QVector<Output *> &outputs,

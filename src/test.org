@@ -1,8 +1,0 @@
-| photo1 && photo2               | oldest |
-|--------------------------------+--------|
-| date1 > date2 && time1 > time2 |      2 |
-| date1 > date2 && time1 < time2 |      2 |
-| date1 < date2 && time1 > time2 |      1 |
-| date1 < date2 && time1 < time2 |      1 |
-| date1 = date2 && time1 > time2 |        |
-| date1 = date2 && time1 < time2 |        |

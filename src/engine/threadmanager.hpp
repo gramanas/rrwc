@@ -3,7 +3,7 @@
 
 #include "output/entrylist.hpp"
 #include "output/output.hpp"
-#include "output/engine/outputthread.hpp"
+#include "engine/outputthread.hpp"
 
 class ThreadManager : public QObject {
     Q_OBJECT

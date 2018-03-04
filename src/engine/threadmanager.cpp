@@ -1,5 +1,5 @@
 #include <QDebug>
-#include "output/engine/threadmanager.hpp"
+#include "engine/threadmanager.hpp"
 
 ThreadManager::ThreadManager(const EntryList &entryList,
                              const QVector<Output *> &outputs,

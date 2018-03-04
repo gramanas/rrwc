@@ -22,12 +22,12 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/gui/outputtab.cpp
   ${PROJECT_SOURCE_DIR}/output/outputmanager.cpp
   ${PROJECT_SOURCE_DIR}/rrwc.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/outputthread.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/outputengine.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/threadmanager.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/resizer.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/marker.cpp
-  ${PROJECT_SOURCE_DIR}/output/engine/renamer.cpp
+  ${PROJECT_SOURCE_DIR}/engine/outputthread.cpp
+  ${PROJECT_SOURCE_DIR}/engine/outputengine.cpp
+  ${PROJECT_SOURCE_DIR}/engine/threadmanager.cpp
+  ${PROJECT_SOURCE_DIR}/engine/resizer.cpp
+  ${PROJECT_SOURCE_DIR}/engine/marker.cpp
+  ${PROJECT_SOURCE_DIR}/engine/renamer.cpp
   ${PROJECT_SOURCE_DIR}/profile/profileparser.cpp
   ${PROJECT_SOURCE_DIR}/exif/exifmanager.cpp
   ${PROJECT_SOURCE_DIR}/error/errormanager.cpp
@@ -37,18 +37,18 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/gui/mainwindow.hpp
   ${PROJECT_SOURCE_DIR}/gui/outputtab.hpp
   ${PROJECT_SOURCE_DIR}/output/output.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/outputthread.hpp
+  ${PROJECT_SOURCE_DIR}/engine/outputthread.hpp
   ${PROJECT_SOURCE_DIR}/rrwc.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/outputengine.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/threadmanager.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/resizer.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/marker.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/renamer.hpp
+  ${PROJECT_SOURCE_DIR}/engine/outputengine.hpp
+  ${PROJECT_SOURCE_DIR}/engine/threadmanager.hpp
+  ${PROJECT_SOURCE_DIR}/engine/resizer.hpp
+  ${PROJECT_SOURCE_DIR}/engine/marker.hpp
+  ${PROJECT_SOURCE_DIR}/engine/renamer.hpp
   ${PROJECT_SOURCE_DIR}/profile/profileparser.hpp
   ${PROJECT_SOURCE_DIR}/exif/exifmanager.hpp
   ${PROJECT_SOURCE_DIR}/error/errormanager.hpp
   ${PROJECT_SOURCE_DIR}/globals.hpp
-  ${PROJECT_SOURCE_DIR}/output/engine/worker.hpp
+  ${PROJECT_SOURCE_DIR}/engine/worker.hpp
   ${PROJECT_SOURCE_DIR}/output/entrylist.hpp
 )
 

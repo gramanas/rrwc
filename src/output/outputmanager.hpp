@@ -7,7 +7,7 @@
 #include "gui/outputtab.hpp"
 #include "output/entrylist.hpp"
 #include "output/output.hpp"
-#include "output/engine/threadmanager.hpp"
+#include "engine/threadmanager.hpp"
 
 
 class OutputManager : public QObject {
