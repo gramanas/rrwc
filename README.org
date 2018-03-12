@@ -3,7 +3,7 @@
 resize-rename-watermark-comment
 is a utility for photographers that does exactly what it says on the package.
 
-It takes a (possibly huge) amount of photographs, and it spits them on different
+It takes a (possibly huge) amount of photographs (jpg), and spits it on different
 locations, each with it's own rrwc options.
 
 It's currently under developement.
