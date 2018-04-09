@@ -11,36 +11,8 @@
 OutputManager::OutputManager() {
     connect(&m_entryList, SIGNAL(statusChanged(QString)),
             this, SLOT(onStatusChanged(QString)));
-    connect(&m_entryList, SIGNAL(progressChanged(int)),
-            this, SLOT(onProgressChanged(int)));
-    connect(&m_entryList, SIGNAL(writeLog(QString, QString)),
-            this, SLOT(onWriteLog(QString, QString)));
     connect(&m_entryList, SIGNAL(finished()),
             this, SLOT(slotEntryListFull()));
-}
-
-void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
-    m_outputs.clear();
-    Output *p_output;
-    int i = 0;
-    for (const auto& tab : outputTabs) {
-        p_output = new Output;
-        p_output->folder = tab->getUi()->inputOutputFolder->text();
-        p_output->resize = tab->getUi()->resize->isChecked();
-        p_output->rename = tab->getUi()->rename->isChecked();
-        p_output->watermark = tab->getUi()->watermark->isChecked();
-        p_output->length = tab->getUi()->inputLength->value();
-        p_output->height = tab->getUi()->inputHeight->value();
-        p_output->renameText = tab->getUi()->inputRename->text();
-        p_output->watermarkText = tab->getUi()->inputWatermark->text();
-        p_output->opacity = tab->getUi()->inputOpacity->value();
-        p_output->counter.start = tab->getUi()->inputCounterStart->value();
-        p_output->counter.step = tab->getUi()->inputCounterStep->value();
-        p_output->counter.digits = tab->getUi()->inputCounterDigits->value();
-        p_output->stripMetadata = tab->getUi()->stripExifData->isChecked();
-        p_output->index = i++;
-        m_outputs.append(p_output);
-    }
 }
 
 void OutputManager::saveProfile(const QString &filename) {
@@ -87,25 +59,6 @@ void OutputManager::startOutputs(const int &threadNumber) {
     p_threadManager->startThreads();
 }
 
-void OutputManager::onWriteLog(QString log, QString str) {
-    emit writeLog(log, str);
-}
-
-void OutputManager::onProgressChanged(int output, int progress) {
-    // m_outputProgress[output] = progress;
-
-    // int sum = 0;
-    // for (int i = 0; i < m_outputProgress.size(); i++) {
-    //     sum += m_outputProgress[i];
-    // }
-    // // emit the average
-    // emit progressChanged(int(float(sum)/float(m_outputProgress.size())));
-}
-
-void OutputManager::onProgressChanged(int progress) {
-    emit progressChanged(progress);
-}
-
 void OutputManager::onStatusChanged(QString status) {
     emit statusChanged(status);
 }
@@ -124,6 +77,31 @@ void OutputManager::clean() {
     }
     m_outputs.clear();
     m_entryList.clear();
+    delete p_threadManager;
+}
+
+void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
+    m_outputs.clear();
+    Output *p_output;
+    int i = 0;
+    for (const auto& tab : outputTabs) {
+        p_output = new Output;
+        p_output->folder = tab->getUi()->inputOutputFolder->text();
+        p_output->resize = tab->getUi()->resize->isChecked();
+        p_output->rename = tab->getUi()->rename->isChecked();
+        p_output->watermark = tab->getUi()->watermark->isChecked();
+        p_output->length = tab->getUi()->inputLength->value();
+        p_output->height = tab->getUi()->inputHeight->value();
+        p_output->renameText = tab->getUi()->inputRename->text();
+        p_output->watermarkText = tab->getUi()->inputWatermark->text();
+        p_output->opacity = tab->getUi()->inputOpacity->value();
+        p_output->counter.start = tab->getUi()->inputCounterStart->value();
+        p_output->counter.step = tab->getUi()->inputCounterStep->value();
+        p_output->counter.digits = tab->getUi()->inputCounterDigits->value();
+        p_output->stripMetadata = tab->getUi()->stripExifData->isChecked();
+        p_output->index = i++;
+        m_outputs.append(p_output);
+    }
 }
 
 OutputManager::~OutputManager() {

@@ -26,8 +26,7 @@ class OutputThread : public QThread {
     void onWriteLog(QString log, QString str);
 
   signals:
-    void progressChanged(int thread, int progress);
-    void writeLog(QString log, QString str);
+    void progressChanged();
     void done();
 
   private:

@@ -13,7 +13,7 @@ bool ErrorManager::checkInputErrors(const QString &inputPath) {
     if (!inputInfo.isDir()
         || !inputInfo.exists()
         || !inputInfo.isReadable()) {
-        emit writeLog(LOG_ERROR, ERR_WRONG_INPUT);
+      //emit writeLog(LOG_ERROR, ERR_WRONG_INPUT);
         m_flag = false;
     }
     // check the outputs
@@ -23,13 +23,13 @@ bool ErrorManager::checkInputErrors(const QString &inputPath) {
         // check output folder
         QFileInfo fi(p->folder);
         if (!fi.isDir() || !fi.isWritable()) {
-            emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_WRONG_OUTPUT);
+          //emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_WRONG_OUTPUT);
             m_flag = false;
         }
         // check watermark
         if (p->watermark) {
             if (!QFile::exists(p->watermarkText)) {
-                emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_WATERMARK_TEXT.arg(p->watermarkText));
+              //emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_WATERMARK_TEXT.arg(p->watermarkText));
                 m_flag = false;
             }
         }
@@ -40,7 +40,7 @@ bool ErrorManager::checkInputErrors(const QString &inputPath) {
                 p->height > p->length ? max = p->height : max = p->length;
                 cv::Mat watermark = cv::imread(p->watermarkText.toStdString());
                 if (watermark.cols < max || watermark.rows < max) {
-                    emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_SMALL_WATERMARK.arg(watermark.cols).arg(watermark.rows));
+                  //emit writeLog(LOG_ERROR, ERR_OTP.arg(i+1) + ERR_SMALL_WATERMARK.arg(watermark.cols).arg(watermark.rows));
                     m_flag = false;
                 }
             }

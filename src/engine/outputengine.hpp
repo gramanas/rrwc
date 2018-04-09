@@ -37,9 +37,6 @@ class OutputEngine : public QObject {
     bool exec();
     bool write();
 
-  signals:
-    void writeLog(QString log, QString str);
-
   private:
     int m_current;
     QString m_newName;

@@ -13,36 +13,35 @@
 // but without the GUI compartments
 
 class Rrwc : public QObject {
-    Q_OBJECT
-  public:
-    Rrwc();
-    ~Rrwc();
+  Q_OBJECT
+public:
+  Rrwc();
+  ~Rrwc();
 
-    OutputManager * outputManager() {
-        return &m_outputManager;
-    }
+  OutputManager * outputManager() {
+    return &m_outputManager;
+  }
 
-    void go(const QString &inputPath, const QString &sort, const int &threadNumber);
-  public slots:
-    void onProgressChanged(int progress);
-    void onStatusChanged(QString status);
-    void slotEntryListFull();
-    void onDone();
-    void onWriteLog(QString log, QString str);
+  void go(const QString &inputPath,
+          const QString &sort,
+          const int &threadNumber);
 
-  signals:
-    void progressChanged(int progress);
-    void statusChanged(QString status);
-    void started();
-    void writeLog(QString log, QString str);
-    void done(int);
+public slots:
+  void onStatusChanged(QString status);
+  void slotEntryListFull();
+  void onDone();
 
-  private:
-    void clearLogs();
+signals:
+  void statusChanged(QString status);
+  void started();
+  void done();
 
-    int m_threadNumber;
-    OutputManager m_outputManager;
-    QTime m_totalTime;
+private:
+  void clearLogs();
+
+  int m_threadNumber;
+  OutputManager m_outputManager;
+  QTime m_totalTime;
 };
 
 #endif // RRWC_HPP

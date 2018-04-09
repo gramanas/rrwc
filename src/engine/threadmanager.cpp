@@ -42,6 +42,8 @@ void ThreadManager::startThreads() {
         //        connect(m_threads[i], &QThread::finished, m_threads[i], &QObject::deleteLater);
         connect(m_threads[i], SIGNAL(done()),
                 this, SLOT(onDone()));
+        connect(m_threads[i], SIGNAL(progressChanged()),
+                this, SLOT(onProgressChanged()));
         m_threads[i]->start();
     }
 }
@@ -52,16 +54,6 @@ void ThreadManager::onDone() {
     }
 }
 
-// void EngineManager::onProgressChanged(int thread, int progress) {
-//     m_threadProgress[thread] = progress;
-//     int sum = 0;
-//     for (int i = 0; i < p_output->threads; i++) {
-//         sum += m_threadProgress[i];
-//     }
-
-//     int tmp = int(float(sum) / float(p_output->threads));
-//     if (tmp != m_progress) {
-//         m_progress = tmp;
-//         emit progressChanged(m_index, m_progress);
-//     }
-// }
+void ThreadManager::onProgressChanged() {
+  m_itemsDone.fetchAndAddOrdered(1);
+}

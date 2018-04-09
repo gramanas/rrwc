@@ -28,9 +28,7 @@ class EntryList : public QThread {
     void run() override;
 
   signals:
-    void progressChanged(int progress);
     void statusChanged(QString status);
-    void writeLog(QString log, QString str);
 
   private:
     void fillEntryList();

@@ -11,9 +11,6 @@ class ErrorManager : public QObject {
 
     bool checkInputErrors(const QString &inputPath);
 
-  signals:
-    void writeLog(QString log, QString str);
-
   private:
     const OutputManager &m_outputManager;
     bool m_flag = true;

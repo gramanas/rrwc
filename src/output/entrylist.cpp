@@ -25,7 +25,7 @@ void EntryList::applyFilters() {
 void EntryList::run() {
     m_time.start();
     fillEntryList();
-    emit writeLog(LOG_PROGRESS, TIME_ENTRYLIST.arg(m_time.elapsed()));
+    //emit writeLog(LOG_PROGRESS, TIME_ENTRYLIST.arg(m_time.elapsed()));
 }
 
 void EntryList::fillEntryList() {

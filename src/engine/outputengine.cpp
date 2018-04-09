@@ -79,11 +79,11 @@ bool OutputEngine::exec() {
         a.start();
         m_gear->marker.loadSource(&m_out);
         if (!m_gear->marker.exec(m_out)) {
-            emit writeLog(LOG_ERROR,
-                          ERR_OTP.arg(m_gear->p_output->index + 1)
-                          + " "
-                          + ERR_IMAGE.arg(m_sourceInfo.baseName())
-                          + ERR_WATERMARK_FIT);
+            // emit writeLog(LOG_ERROR,
+            //               ERR_OTP.arg(m_gear->p_output->index + 1)
+            //               + " "
+            //               + ERR_IMAGE.arg(m_sourceInfo.baseName())
+            //               + ERR_WATERMARK_FIT);
         }
         qDebug() << "Time to watermark" << m_newName << a.elapsed();
     }
@@ -102,7 +102,7 @@ bool OutputEngine::write() {
     }
     else {
         if (!cv::imwrite(fullName.toStdString(), m_out)) {
-            emit writeLog(LOG_ERROR, ERR_FAIL.arg(m_gear->p_output->index + 1).arg(m_sourceInfo.baseName()));
+          //emit writeLog(LOG_ERROR, ERR_FAIL.arg(m_gear->p_output->index + 1).arg(m_sourceInfo.baseName()));
             return false;
         }
     }
