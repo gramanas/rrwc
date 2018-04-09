@@ -12,43 +12,47 @@
 #include "engine/marker.hpp"
 #include "engine/renamer.hpp"
 #include "output/output.hpp"
+#include "logger.hpp"
 
 // the engine's gears
 struct Gears {
-    Resizer resizer;
-    Marker marker;
-    Renamer renamer;
+  Resizer resizer;
+  Marker marker;
+  Renamer renamer;
 
-    // the data
-    Output const *p_output = nullptr;
-    bool copyFlag = false;
+  // the data
+  Output const *p_output = nullptr;
+  bool copyFlag = false;
 };
 
 class OutputEngine : public QObject {
-    Q_OBJECT
-  public:
-    OutputEngine(const QVector<Output *> &outputs,
-                 const int &current);
-    ~OutputEngine();
+  Q_OBJECT
+public:
+  OutputEngine(const QVector<Output *> &outputs,
+               const int &current,
+               Logger *logger);
+  ~OutputEngine();
 
-    void init(Output const * output, int current);
-    void setCurrentOutput(int index);
-    bool loadImage(const QString &path);
-    bool exec();
-    bool write();
+  void init(Output const * output, int current);
+  void setCurrentOutput(int index);
+  bool loadImage(const QString &path);
+  bool exec();
+  bool write();
 
-  private:
-    int m_current;
-    QString m_newName;
-    QFileInfo m_sourceInfo;
+private:
+  Logger *p_logger;
 
-    QVector<Gears *> m_gears;
+  int m_current;
+  QString m_newName;
+  QFileInfo m_sourceInfo;
 
-    // current gear
-    Gears * m_gear = nullptr;
+  QVector<Gears *> m_gears;
 
-    cv::Mat m_source;
-    cv::Mat m_out;
+  // current gear
+  Gears * m_gear = nullptr;
+
+  cv::Mat m_source;
+  cv::Mat m_out;
 };
 
 #endif // OUTPUTENGINE_HPP

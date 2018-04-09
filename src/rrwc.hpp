@@ -7,6 +7,7 @@
 
 #include "output/outputmanager.hpp"
 #include "error/errormanager.hpp"
+#include "logger.hpp"
 
 
 // TODO: Add cli support, initializing the same stuff
@@ -22,23 +23,24 @@ public:
     return &m_outputManager;
   }
 
+  Logger * logger() {
+    return &m_logger;
+  }
+
   void go(const QString &inputPath,
           const QString &sort,
           const int &threadNumber);
 
 public slots:
-  void onStatusChanged(QString status);
   void slotEntryListFull();
   void onDone();
 
 signals:
-  void statusChanged(QString status);
   void started();
   void done();
 
 private:
-  void clearLogs();
-
+  Logger m_logger;
   int m_threadNumber;
   OutputManager m_outputManager;
   QTime m_totalTime;

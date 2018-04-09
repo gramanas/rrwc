@@ -8,12 +8,14 @@
 
 OutputThread::OutputThread(const QVector<Output *> &outputs,
                            QVector<QString> &inputFiles,
+                           Logger *logger,
                            const int current,
                            const int index)
     : m_outputs(outputs),
       m_current(current),
+      p_logger(logger),
       m_index(index),
-      m_engine(outputs, current) {
+      m_engine(outputs, current, logger) {
     m_index = index;
     m_inputFiles.swap(inputFiles);
     m_total = m_inputFiles.count();
@@ -21,19 +23,14 @@ OutputThread::OutputThread(const QVector<Output *> &outputs,
 }
 
 OutputThread::~OutputThread() {
-
 }
 
 void OutputThread::run() {
     auto it = m_inputFiles.begin();
 
-    QTime a;
-    a.start();
     while(it != m_inputFiles.cend()) {
         const QString path = *it;
-        // emit writeLog(LOG_PROGRESS,
-        //               FILE_PROGRESS.arg(m_index + 1).arg(
-        //                 m_index + 1).arg(path.split(QDir::separator()).back()));
+        p_logger->log(FILE_PROGRESS.arg(m_index + 1).arg(m_index + 1).arg(path.split(QDir::separator()).back()));
 
         m_engine.loadImage(path);
 
@@ -42,9 +39,7 @@ void OutputThread::run() {
             m_engine.exec();
             m_engine.write();
         }
-        qDebug() << "Time till next" << a.elapsed();
-        emit progressChanged();
-        a.start();
+        p_logger->incrementItemsDone();
         it++;
     }
     emit done();

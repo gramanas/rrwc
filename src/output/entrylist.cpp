@@ -1,7 +1,8 @@
 #include "entrylist.hpp"
 #include "exif/exifmanager.hpp"
 
-EntryList::EntryList() {
+EntryList::EntryList(Logger *logger) :
+  p_logger(logger) {
 }
 
 void EntryList::setDir(const QString &path,
@@ -25,11 +26,11 @@ void EntryList::applyFilters() {
 void EntryList::run() {
     m_time.start();
     fillEntryList();
-    //emit writeLog(LOG_PROGRESS, TIME_ENTRYLIST.arg(m_time.elapsed()));
+    p_logger->log(TIME_ENTRYLIST.arg(m_time.elapsed()));
 }
 
 void EntryList::fillEntryList() {
-    emit statusChanged(STATUS_ENTRY_LIST);
+    p_logger->status(STATUS_ENTRY_LIST);
 
     applyFilters();
     m_entryList.reserve(m_dir.count());
@@ -39,11 +40,11 @@ void EntryList::fillEntryList() {
         m_entryList.append(it.next());
     }
     if (m_sort == SORT_EXIF) {
-        emit statusChanged(STATUS_SORTING);
-        ExifManager().sortByDateTime(m_entryList);
+        p_logger->status(STATUS_SORTING);
+        ExifManager(p_logger).sortByDateTime(m_entryList);
     }
 
-    emit statusChanged(STATUS_TOTAL);
+    p_logger->status(STATUS_TOTAL);
 }
 
 void EntryList::clear() {

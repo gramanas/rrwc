@@ -10,34 +10,33 @@
 #include <QThread>
 
 #include "globals.hpp"
+#include "logger.hpp"
 
 
 class EntryList : public QThread {
-    Q_OBJECT
-  public:
-    EntryList();
-    ~EntryList();
+  Q_OBJECT
+public:
+  EntryList(Logger *logger);
+  ~EntryList();
 
-    void setDir(const QString &path,
-                const QString &sort);
-    void clear();
-    const QVector<QString> *get() const {
-        return &m_entryList;
-    }
+  void setDir(const QString &path,
+              const QString &sort);
+  void clear();
+  const QVector<QString> *get() const {
+    return &m_entryList;
+  }
 
-    void run() override;
+  void run() override;
 
-  signals:
-    void statusChanged(QString status);
+private:
+  void fillEntryList();
+  void applyFilters();
 
-  private:
-    void fillEntryList();
-    void applyFilters();
-
-    QVector<QString> m_entryList;
-    QDir m_dir;
-    QString m_sort;
-    QTime m_time;
+  Logger *p_logger;
+  QVector<QString> m_entryList;
+  QDir m_dir;
+  QString m_sort;
+  QTime m_time;
 };
 
 #endif // ENTRYLIST_HPP

@@ -6,21 +6,23 @@
 #include <QTime>
 
 #include "exiv2/exiv2.hpp"
+#include "logger.hpp"
 
 struct DateTime {
-    QDate date;
-    QTime time;
+  QDate date;
+  QTime time;
 };
 
 class ExifManager {
-  public:
-    ExifManager();
-    ~ExifManager();
-    void sortByDateTime(QVector<QString> &list);
-    bool copyMetadata(const QString &from, const QString &to);
+public:
+  ExifManager(Logger *logger);
+  ~ExifManager();
+  void sortByDateTime(QVector<QString> &list);
+  bool copyMetadata(const QString &from, const QString &to);
 
-  private:
-    DateTime getDateTime(const QString &fullPath);
+private:
+  Logger *p_logger;
+  DateTime getDateTime(const QString &fullPath);
 };
 
 #endif // EXIFMANAGER_HPP

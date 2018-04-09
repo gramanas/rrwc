@@ -16,22 +16,47 @@
 MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
-    p_rrwc(rrwc) {
+    p_rrwc(rrwc)
+{
   ui->setupUi(this);
   setWindowTitle("Rrwc");
   connectButtons();
+  connectActions();
   slotAddOutput();
 
-  connect(rrwc, SIGNAL(statusChanged(QString)), this, SLOT(slotStatusChanged(QString)));
   connect(rrwc, SIGNAL(done()), this, SLOT(onDone()));
   connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
 
-  connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
-  connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));
-  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-  connect(ui->actionSaveProfile, SIGNAL(triggered()), this, SLOT(actionSaveProfile()));
-  connect(ui->actionLoadProfile, SIGNAL(triggered()), this, SLOT(actionLoadProfile()));
-    }
+  initializeLogging();
+}
+
+void MainWindow::initializeLogging() {
+  QFont f("unexistend");
+  f.setStyleHint(QFont::Monospace);
+  ui->outputErrorLog->setFont(f);
+  ui->outputProgressLog->setFont(f);
+  p_logTimer = new QTimer(this);
+  p_logTimer->setInterval(200);
+  connect(p_logTimer, &QTimer::timeout, this, [=]{
+      QString log = p_rrwc->logger()->flushLog();
+      if (!log.isEmpty()) {
+        ui->outputProgressLog->append(log);
+      }
+      QString err = p_rrwc->logger()->flushErr();
+      if (!err.isEmpty()) {
+        ui->outputErrorLog->append(err);
+      }
+      QString status = p_rrwc->logger()->flushStatus();
+      if (!status.isEmpty() && status != ui->progressBar->format()) {
+        ui->progressBar->setFormat(status);
+      }
+      uint prog = p_rrwc->logger()->getProgress();
+      if (prog != ui->progressBar->value()) {
+        ui->progressBar->setValue(prog);
+      }
+    });
+  p_logTimer->start();
+}
 
 void MainWindow::connectButtons() {
   connect(ui->butBrowse, &QPushButton::clicked, [=](){ slotBrowse(ui->inputInputFolder); });
@@ -39,6 +64,14 @@ void MainWindow::connectButtons() {
   connect(ui->tabWidget, SIGNAL (tabCloseRequested(int)), this, SLOT (slotRemoveOutput(int)));
   connect(ui->butGo, SIGNAL (clicked()), this, SLOT (slotGo()));
   connect(ui->butToggleLogOutputs, SIGNAL (clicked()), this, SLOT (slotToggleLogOutputs()));
+}
+
+void MainWindow::connectActions() {
+  connect(ui->actionHelp, SIGNAL(triggered()), this, SLOT(actionHelp()));
+  connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));
+  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+  connect(ui->actionSaveProfile, SIGNAL(triggered()), this, SLOT(actionSaveProfile()));
+  connect(ui->actionLoadProfile, SIGNAL(triggered()), this, SLOT(actionLoadProfile()));
 }
 
 void MainWindow::finalizeTabs() {
@@ -72,22 +105,6 @@ void MainWindow::slotRemoveOutput(int index) {
   m_outputTabs.remove(index);
   finalizeTabs();
 }
-
-// void MainWindow::slotWriteLog(QString log, QString str) {
-//     if (log == LOG_ERROR) {
-//         if (str == LOG_CLEAR) {
-//             ui->outputErrorLog->setText("");
-//             return;
-//         }
-//         ui->outputErrorLog->append(str);
-//     } else if (log == LOG_PROGRESS) {
-//         if (str == LOG_CLEAR) {
-//             ui->outputProgressLog->setText("");
-//             return;
-//         }
-//         ui->outputProgressLog->append(str);
-//     }
-// }
 
 void MainWindow::slotToggleLogOutputs() {
   int index = ui->stackedWidget->currentIndex();
@@ -130,10 +147,6 @@ void MainWindow::slotBrowse(QLineEdit *line) {
     line->setText(dir);
 }
 
-void MainWindow::slotStatusChanged(QString status) {
-  ui->progressBar->setFormat(status);
-}
-
 void MainWindow::slotGo() {
   p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
   p_rrwc->go(ui->inputInputFolder->text(), ui->inputSortMode->currentText(), ui->inputThreads->value());
@@ -159,28 +172,18 @@ void MainWindow::enableLayout(bool t) {
 void MainWindow::onStarted() {
   enableLayout(false);
   m_isRunning = true;
-  p_timer = new QTimer(this);
-  p_timer->setInterval(500);
-  connect(p_timer, &QTimer::timeout, this, [=]{
-      int p = p_rrwc->outputManager()->progress();
-      qDebug() << "prog:" << p;
-      ui->progressBar->setValue(p);
-    });
-  p_timer->start();
 }
 
 void MainWindow::onDone() {
   enableLayout(true);
+  p_rrwc->logger()->done();
   if (ui->outputErrorLog->toPlainText() != "") {
-    ui->outputProgressLog->append("Job's done, but something didn't go as planed...");
-    ui->outputProgressLog->append("Check the error log below for details.");
+    p_rrwc->logger()->log("Job's done, but something didn't go as planed...");
+    p_rrwc->logger()->log("Check the error log below for details.");
     return;
   }
-  ui->outputProgressLog->append("Job's done!");
+  p_rrwc->logger()->log("Job's done!");
   m_isRunning = false;
-  ui->progressBar->setValue(100);
-  p_timer->stop();
-  delete p_timer;
 }
 
 void MainWindow::actionHelp() {
@@ -211,7 +214,7 @@ void MainWindow::actionSaveProfile() {
   if (!filename.isEmpty()) {
     p_rrwc->outputManager()->generateOutputsFromTabs(m_outputTabs);
     p_rrwc->outputManager()->saveProfile(filename);
-    ui->outputProgressLog->append("Profile saved to " + filename);
+    p_rrwc->logger()->log("Profile saved to " + filename);
   }
 }
 
@@ -247,11 +250,12 @@ void MainWindow::actionLoadProfile() {
       m_outputTabs[i]->getUi()->inputOpacity->setValue(output->opacity);
       m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
     }
-    //slotWriteLog(LOG_PROGRESS, "Profile " + filename + " loaded");
+    p_rrwc->logger()->log("Profile " + filename + " loaded");
   }
   finalizeTabs();
 }
 
 MainWindow::~MainWindow() {
+  delete p_logTimer;
   delete ui;
 }

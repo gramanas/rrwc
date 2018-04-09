@@ -3,10 +3,12 @@
 
 ThreadManager::ThreadManager(const EntryList &entryList,
                              const QVector<Output *> &outputs,
-                             const int &threadNumber)
+                             const int &threadNumber,
+                             Logger *logger)
     : m_entryList(entryList),
       m_outputs(outputs),
-      m_threadNumber(threadNumber) {
+      m_threadNumber(threadNumber),
+      p_logger(logger) {
     m_threadsRemaining = threadNumber;
     m_threads.reserve(threadNumber);
 }
@@ -37,13 +39,10 @@ void ThreadManager::startThreads() {
                 it++;
             }
         }
-        m_threads[i] = new OutputThread(m_outputs, threadFiles,
+        m_threads[i] = new OutputThread(m_outputs, threadFiles, p_logger,
                                         i * filesPerThread, i);
-        //        connect(m_threads[i], &QThread::finished, m_threads[i], &QObject::deleteLater);
-        connect(m_threads[i], SIGNAL(done()),
-                this, SLOT(onDone()));
-        connect(m_threads[i], SIGNAL(progressChanged()),
-                this, SLOT(onProgressChanged()));
+        connect(m_threads[i], &QThread::finished, m_threads[i], &QObject::deleteLater);
+        connect(m_threads[i], SIGNAL(done()), this, SLOT(onDone()));
         m_threads[i]->start();
     }
 }
@@ -52,8 +51,4 @@ void ThreadManager::onDone() {
     if (--m_threadsRemaining == 0) {
         emit done();
     }
-}
-
-void ThreadManager::onProgressChanged() {
-  m_itemsDone.fetchAndAddOrdered(1);
 }
