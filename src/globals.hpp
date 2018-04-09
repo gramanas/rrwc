@@ -13,7 +13,7 @@ static const QStringList VALID_IMAGE_TYPES = {"*.jpg", "*.JPG"};
 
 // status bar
 static const QString STATUS_TOTAL = "Total: %p%";
-static const QString STATUS_SORTING = "Sorting with Exif information...";
+static const QString STATUS_SORTING = "Sorting with Exif information: %p%";
 static const QString STATUS_ENTRY_LIST = "Generating image lists: %p%";
 
 // sort modes
@@ -35,25 +35,23 @@ static const QString OTP_WATERMARK_TEXT = "watermarkText";
 static const QString OTP_OPACITY = "opacity";
 static const QString OTP_STRIP_METADATA = "stripMetadata";
 
-// logs
-static const QString LOG_PROGRESS = "__progress__";
-static const QString LOG_ERROR = "__error__";
-static const QString LOG_CLEAR = "__clear__";
-
 // errors
-static const QString ERR_OTP = "Error in output [%1]: ";
+static const QString ERR_OTP = "Error in Output [%1]: ";
 static const QString ERR_IMAGE = "In image \"%1\": ";
+
 static const QString ERR_NO_INPUT_FILES = "Error: The input folder does not contain any JPEG files.";
 static const QString ERR_WATERMARK_TEXT = "Watermark file \"%1\" does not exist.";
-static const QString ERR_SMALL_WATERMARK = "Watermark is too small to fit this resize setting. Rows: %1 Columns: %2";
+static const QString ERR_SMALL_WATERMARK = "Watermark is too small to fit this resize setting. \
+ \n-- Watermark dimentions are: Rows: %1 Columns: %2";
 static const QString ERR_WATERMARK_FIT = "Watermark is too small to fit this image.";
+static const QString ERR_WATERMARK_NO_RESIZE = "Watermark option can't be used without resize turned on.";
 static const QString ERR_NO_EXIF = "No exif information found.";
 static const QString ERR_FAIL = "Output: [%1]\t File: \"%2\" failed.";
 static const QString ERR_WRONG_OUTPUT = "Output folder is not a directory, or you don't have the right permissions.";
 static const QString ERR_WRONG_INPUT = "Input folder is not a directory, or you don't have the right permissions.";
 
 // progress
-static const QString FILE_PROGRESS = "Output: [%1]\t Thread: [%2]\t File: \"%3\"";
+static const QString FILE_PROGRESS = "O:[%1] T:[%2] F:\"%3\"";
 static const QString TIME_ENTRYLIST = "Filling the entry list took %1 ms";
 static const QString TIME_TOTAL = "Total time elapsed: %1 ms";
 

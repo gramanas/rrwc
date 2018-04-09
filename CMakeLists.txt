@@ -32,6 +32,7 @@ set(rrwcLib_src
   ${PROJECT_SOURCE_DIR}/exif/exifmanager.cpp
   ${PROJECT_SOURCE_DIR}/error/errormanager.cpp
   ${PROJECT_SOURCE_DIR}/output/entrylist.cpp
+  ${PROJECT_SOURCE_DIR}/logger.cpp
 )
 set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/gui/mainwindow.hpp
@@ -50,6 +51,7 @@ set(rrwcLib_hdr
   ${PROJECT_SOURCE_DIR}/globals.hpp
   ${PROJECT_SOURCE_DIR}/engine/worker.hpp
   ${PROJECT_SOURCE_DIR}/output/entrylist.hpp
+  ${PROJECT_SOURCE_DIR}/logger.hpp
 )
 
 # Include directories

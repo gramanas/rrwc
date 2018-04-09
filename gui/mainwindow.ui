@@ -199,6 +199,9 @@
           <property name="acceptRichText">
            <bool>false</bool>
           </property>
+          <property name="placeholderText">
+           <string>O: Output  T: Thread F: File</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -244,6 +247,13 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="butClearProgress">
+             <property name="text">
+              <string>Clear</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="butExportProgressLog">
@@ -317,6 +327,13 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="butClearError">
+             <property name="text">
+              <string>Clear</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="butExportErrorLog">
@@ -550,5 +567,38 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>butClearProgress</sender>
+   <signal>clicked()</signal>
+   <receiver>outputProgressLog</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butClearError</sender>
+   <signal>clicked()</signal>
+   <receiver>outputErrorLog</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>443</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>494</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

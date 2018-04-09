@@ -22,7 +22,6 @@ public:
   ~MainWindow();
 
 private slots:
-  void slotStatusChanged(QString status);
   void slotAddOutput();
   void slotToggleLogOutputs();
   void slotGo();
@@ -38,9 +37,11 @@ private slots:
 
 private:
   void connectButtons();
+  void connectActions();
+  void initializeLogging();
   void enableLayout(bool t);
 
-  QTimer * p_timer;
+  QTimer * p_logTimer;
   QVector<OutputTab *> m_outputTabs;
   bool m_isRunning = false;
   Rrwc *p_rrwc;
