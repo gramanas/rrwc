@@ -1,5 +1,6 @@
 #include <QDir>
 #include <QFile>
+#include "exif/exifmanager.hpp"
 #include "engine/outputengine.hpp"
 #include <QDebug>
 
@@ -23,6 +24,7 @@ OutputEngine::OutputEngine(const QVector<Output *> &outputs,
       m_gears[i]->marker.loadData(it->watermarkText, it->opacity);
     }
     m_gears[i]->copyFlag = !it->resize && !it->watermark ? true : false;
+    m_gears[i]->stripMetadata = it->stripMetadata;
     m_gears[i]->p_output = it;
   }
     }
@@ -79,8 +81,26 @@ bool OutputEngine::exec() {
     }
   }
 
-  // strip metadata
   return true;
+}
+
+void OutputEngine::handleExif(const QString &path) {
+  if (m_gear->stripMetadata) {
+    if (m_gear->copyFlag) {
+      ExifManager(p_logger).stripMetadata(path);
+      return;
+    }
+    // if copyFlag is not set the image gets saved by
+    // cv::imwrite() which does not preserve exif info
+  }
+  else {
+    // if we want to keep metadata, but don't have copyFlag
+    // enabled, we have to copy the metadata from source to
+    // file
+    if (!m_gear->copyFlag) {
+      ExifManager(p_logger).copyMetadata(m_sourceInfo.absoluteFilePath(), path);
+    }
+  }
 }
 
 bool OutputEngine::write() {
@@ -94,5 +114,6 @@ bool OutputEngine::write() {
       return false;
     }
   }
+  handleExif(fullName);
   return true;
 }

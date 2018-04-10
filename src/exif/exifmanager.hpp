@@ -18,11 +18,13 @@ public:
   ExifManager(Logger *logger);
   ~ExifManager();
   void sortByDateTime(QVector<QString> &list);
-  bool copyMetadata(const QString &from, const QString &to);
+  void copyMetadata(const QString &from, const QString &to);
+  void stripMetadata(const QString &path);
 
 private:
-  Logger *p_logger;
   DateTime getDateTime(const QString &fullPath);
+
+  Logger *p_logger;
 };
 
 #endif // EXIFMANAGER_HPP

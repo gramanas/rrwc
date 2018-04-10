@@ -50,6 +50,10 @@ static const QString ERR_FAIL = "Output: [%1]\t File: \"%2\" failed.";
 static const QString ERR_WRONG_OUTPUT = "Output folder is not a directory, or you don't have the right permissions.";
 static const QString ERR_WRONG_INPUT = "Input folder is not a directory, or you don't have the right permissions.";
 
+// warnings
+static const QString WAR_IMAGE = "Warning in image \"%1\": ";
+static const QString WAR_EXIF_NOT_FOUD = "exif information not found.";
+
 // progress
 static const QString FILE_PROGRESS = "O:[%1] T:[%2] F:\"%3\"";
 static const QString TIME_ENTRYLIST = "Filling the entry list took %1 ms";

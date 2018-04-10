@@ -23,6 +23,7 @@ struct Gears {
   // the data
   Output const *p_output = nullptr;
   bool copyFlag = false;
+  bool stripMetadata = false;
 };
 
 class OutputEngine : public QObject {
@@ -40,6 +41,7 @@ public:
   bool write();
 
 private:
+  void handleExif(const QString &path);
   Logger *p_logger;
 
   int m_current;

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "exif/exifmanager.hpp"
+#include "globals.hpp"
 
 ExifManager::ExifManager(Logger *logger)
   : p_logger(logger) {
@@ -73,17 +74,25 @@ void ExifManager::sortByDateTime(QVector<QString> &list) {
   p_logger->setItemsDone(0);
 }
 
-bool ExifManager::copyMetadata(const QString &from, const QString &to) {
+void ExifManager::copyMetadata(const QString &from, const QString &to) {
   std::unique_ptr<Exiv2::Image> imageFrom = Exiv2::ImageFactory::open(from.toStdString());
   imageFrom->readMetadata();
   Exiv2::ExifData &exifData = imageFrom->exifData();
   if (exifData.empty()) {
-    return false;
+    p_logger->err(WAR_IMAGE.arg(from.split(QDir::separator()).back()) + WAR_EXIF_NOT_FOUD);
+    return;
   }
   std::unique_ptr<Exiv2::Image> imageTo = Exiv2::ImageFactory::open(to.toStdString());
+  imageTo->readMetadata();
+  exifData["Exif.Image.Orientation"] = imageTo->exifData()["Exif.Image.Orientation"];
   imageTo->setExifData(exifData);
   imageTo->writeMetadata();
-  return true;
+}
+
+void ExifManager::stripMetadata(const QString &path) {
+  std::unique_ptr<Exiv2::Image> image = Exiv2::ImageFactory::open(path.toStdString());
+  image->setExifData(Exiv2::ExifData());
+  image->writeMetadata();
 }
 
 ExifManager::~ExifManager() {
