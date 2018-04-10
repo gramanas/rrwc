@@ -454,39 +454,55 @@
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="stripExifData">
-           <property name="text">
-            <string>Strip Exif data</string>
-           </property>
+          <widget class="QWidget" name="wComment" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QCheckBox" name="comment">
+              <property name="text">
+               <string>Comment</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="inputComment">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          <widget class="QWidget" name="wStripMetadata" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QCheckBox" name="stripMetadata">
+              <property name="toolTip">
+               <string>Preserves the above comment, in case you set it.</string>
+              </property>
+              <property name="text">
+               <string>Strip Exif data</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -505,12 +521,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>442</x>
-     <y>423</y>
+     <x>593</x>
+     <y>391</y>
     </hint>
     <hint type="destinationlabel">
-     <x>381</x>
-     <y>418</y>
+     <x>466</x>
+     <y>387</y>
     </hint>
    </hints>
   </connection>
@@ -521,12 +537,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>418</y>
+     <x>466</x>
+     <y>387</y>
     </hint>
     <hint type="destinationlabel">
-     <x>442</x>
-     <y>423</y>
+     <x>593</x>
+     <y>391</y>
     </hint>
    </hints>
   </connection>
@@ -537,12 +553,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>336</y>
+     <x>112</x>
+     <y>319</y>
     </hint>
     <hint type="destinationlabel">
-     <x>150</x>
-     <y>336</y>
+     <x>277</x>
+     <y>320</y>
     </hint>
    </hints>
   </connection>
@@ -601,12 +617,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>179</y>
+     <x>102</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
-     <x>255</x>
-     <y>250</y>
+     <x>292</x>
+     <y>241</y>
     </hint>
    </hints>
   </connection>
@@ -617,12 +633,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>58</x>
-     <y>176</y>
+     <x>86</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
-     <x>396</x>
-     <y>252</y>
+     <x>414</x>
+     <y>241</y>
     </hint>
    </hints>
   </connection>
@@ -637,8 +653,8 @@
      <y>168</y>
     </hint>
     <hint type="destinationlabel">
-     <x>467</x>
-     <y>248</y>
+     <x>504</x>
+     <y>241</y>
     </hint>
    </hints>
   </connection>
@@ -649,12 +665,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>340</y>
+     <x>120</x>
+     <y>319</y>
     </hint>
     <hint type="destinationlabel">
-     <x>275</x>
-     <y>407</y>
+     <x>360</x>
+     <y>387</y>
     </hint>
    </hints>
   </connection>
@@ -665,12 +681,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>326</y>
+     <x>90</x>
+     <y>319</y>
     </hint>
     <hint type="destinationlabel">
-     <x>427</x>
-     <y>403</y>
+     <x>593</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comment</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>inputComment</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>455</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>454</y>
     </hint>
    </hints>
   </connection>

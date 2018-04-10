@@ -16,12 +16,12 @@ OutputManager::OutputManager(Logger *logger)
 }
 
 void OutputManager::saveProfile(const QString &filename) {
-  ProfileParser profileParser(m_outputs);
+  ProfileParser profileParser(m_outputs, p_logger);
   profileParser.writeToFile(filename);
 }
 
 bool OutputManager::loadProfile(const QString &filename) {
-  ProfileParser profileParser;
+  ProfileParser profileParser(p_logger);
   m_outputs.clear();
   return profileParser.readFromFile(filename, m_outputs);
 }
@@ -96,7 +96,9 @@ void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {
     p_output->counter.start = tab->getUi()->inputCounterStart->value();
     p_output->counter.step = tab->getUi()->inputCounterStep->value();
     p_output->counter.digits = tab->getUi()->inputCounterDigits->value();
-    p_output->stripMetadata = tab->getUi()->stripExifData->isChecked();
+    p_output->stripMetadata = tab->getUi()->stripMetadata->isChecked();
+    p_output->comment = tab->getUi()->comment->isChecked();
+    p_output->commentText = tab->getUi()->inputComment->text();
     p_output->index = i++;
     m_outputs.append(p_output);
   }

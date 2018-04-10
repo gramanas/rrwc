@@ -177,11 +177,6 @@ void MainWindow::onStarted() {
 void MainWindow::onDone() {
   enableLayout(true);
   p_rrwc->logger()->done();
-  if (ui->outputErrorLog->toPlainText() != "") {
-    p_rrwc->logger()->log("Job's done, but something didn't go as planed...");
-    p_rrwc->logger()->log("Check the error log below for details.");
-    return;
-  }
   p_rrwc->logger()->log("Job's done!");
   m_isRunning = false;
 }
@@ -248,7 +243,9 @@ void MainWindow::actionLoadProfile() {
       m_outputTabs[i]->getUi()->watermark->setChecked(output->watermark);
       m_outputTabs[i]->getUi()->inputWatermark->setText(output->watermarkText);
       m_outputTabs[i]->getUi()->inputOpacity->setValue(output->opacity);
-      m_outputTabs[i]->getUi()->stripExifData->setChecked(output->stripMetadata);
+      m_outputTabs[i]->getUi()->stripMetadata->setChecked(output->stripMetadata);
+      m_outputTabs[i]->getUi()->comment->setChecked(output->comment);
+      m_outputTabs[i]->getUi()->inputComment->setText(output->commentText);
     }
     p_rrwc->logger()->log("Profile " + filename + " loaded");
   }

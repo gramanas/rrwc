@@ -16,14 +16,15 @@ class OutputManager : public QObject {
 public:
   OutputManager(Logger *logger);
   ~OutputManager();
-  void generateOutputsFromTabs(QVector<OutputTab *> outputTabs);
-  void saveProfile(const QString &filename);
-  bool loadProfile(const QString &filename);
   void print() const;
 
+  void saveProfile(const QString &filename);
+  bool loadProfile(const QString &filename);
+
+  void generateOutputsFromTabs(QVector<OutputTab *> outputTabs);
+  void fillEntryList(const QString &inputPath, const QString &sort);
   void startOutputs(const int &threads);
   void clean();
-  void fillEntryList(const QString &inputPath, const QString &sort);
 
   QVector<Output *> outputs() const {
     return m_outputs;

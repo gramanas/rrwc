@@ -74,24 +74,45 @@ void ExifManager::sortByDateTime(QVector<QString> &list) {
   p_logger->setItemsDone(0);
 }
 
+void ExifManager::updateComment(const QString &path, const QString &str) {
+  std::unique_ptr<Exiv2::Image> image = Exiv2::ImageFactory::open(path.toStdString());
+  image->readMetadata();
+  Exiv2::ExifData data = image->exifData();
+  //if comment is on, it's already in the exif of `imageTo`. We need to keep it there
+  data["Exif.Photo.UserComment"] = str.toStdString();
+  image->setExifData(data);
+  image->writeMetadata();
+}
+
 void ExifManager::copyMetadata(const QString &from, const QString &to) {
+  // open file
   std::unique_ptr<Exiv2::Image> imageFrom = Exiv2::ImageFactory::open(from.toStdString());
   imageFrom->readMetadata();
-  Exiv2::ExifData &exifData = imageFrom->exifData();
-  if (exifData.empty()) {
+
+  Exiv2::ExifData &dataToCopy = imageFrom->exifData();
+  if (dataToCopy.empty()) {
     p_logger->err(WAR_IMAGE.arg(from.split(QDir::separator()).back()) + WAR_EXIF_NOT_FOUD);
     return;
   }
+
   std::unique_ptr<Exiv2::Image> imageTo = Exiv2::ImageFactory::open(to.toStdString());
   imageTo->readMetadata();
-  exifData["Exif.Image.Orientation"] = imageTo->exifData()["Exif.Image.Orientation"];
-  imageTo->setExifData(exifData);
+
+  // imwrite saves the image rotated, with the orientation to 0
+  // if we copy the old orientation, the new image will turn out to be
+  // rotated, so we set it to the new one.
+  // if the image was copied without OpenCV libraries, we don't change anything
+  dataToCopy["Exif.Image.Orientation"] = imageTo->exifData()["Exif.Image.Orientation"];
+
+  imageTo->setExifData(dataToCopy);
   imageTo->writeMetadata();
 }
 
 void ExifManager::stripMetadata(const QString &path) {
   std::unique_ptr<Exiv2::Image> image = Exiv2::ImageFactory::open(path.toStdString());
-  image->setExifData(Exiv2::ExifData());
+  Exiv2::ExifData emptyData;
+
+  image->setExifData(emptyData);
   image->writeMetadata();
 }
 

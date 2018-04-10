@@ -85,10 +85,10 @@ bool OutputEngine::exec() {
 }
 
 void OutputEngine::handleExif(const QString &path) {
+  ExifManager exifs = ExifManager(p_logger);
   if (m_gear->stripMetadata) {
     if (m_gear->copyFlag) {
-      ExifManager(p_logger).stripMetadata(path);
-      return;
+      exifs.stripMetadata(path);
     }
     // if copyFlag is not set the image gets saved by
     // cv::imwrite() which does not preserve exif info
@@ -98,13 +98,17 @@ void OutputEngine::handleExif(const QString &path) {
     // enabled, we have to copy the metadata from source to
     // file
     if (!m_gear->copyFlag) {
-      ExifManager(p_logger).copyMetadata(m_sourceInfo.absoluteFilePath(), path);
+      exifs.copyMetadata(m_sourceInfo.absoluteFilePath(), path);
     }
   }
+  exifs.updateComment(path, m_gear->p_output->commentText);
 }
 
 bool OutputEngine::write() {
-  QString fullName = m_gear->p_output->folder + QDir::separator() + m_newName + "." + m_sourceInfo.suffix();
+  QString fullName = m_gear->p_output->folder
+    + QDir::separator()
+    + m_newName
+    + "." + m_sourceInfo.suffix();
   if (m_gear->copyFlag) {
     QFile::copy(m_sourceInfo.absoluteFilePath(), fullName);
   }
