@@ -101,7 +101,9 @@ void OutputEngine::handleExif(const QString &path) {
       exifs.copyMetadata(m_sourceInfo.absoluteFilePath(), path);
     }
   }
-  exifs.updateComment(path, m_gear->p_output->commentText);
+  if (m_gear->p_output->comment) {
+    exifs.updateComment(path, m_gear->p_output->commentText);
+  }
 }
 
 bool OutputEngine::write() {

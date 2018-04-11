@@ -78,7 +78,6 @@ void ExifManager::updateComment(const QString &path, const QString &str) {
   std::unique_ptr<Exiv2::Image> image = Exiv2::ImageFactory::open(path.toStdString());
   image->readMetadata();
   Exiv2::ExifData data = image->exifData();
-  //if comment is on, it's already in the exif of `imageTo`. We need to keep it there
   data["Exif.Photo.UserComment"] = str.toStdString();
   image->setExifData(data);
   image->writeMetadata();
