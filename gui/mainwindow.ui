@@ -200,7 +200,7 @@
            <bool>false</bool>
           </property>
           <property name="placeholderText">
-           <string>O: Output  T: Thread F: File</string>
+           <string>T: Thread F: File</string>
           </property>
          </widget>
         </item>
@@ -447,7 +447,7 @@
           <number>1</number>
          </property>
          <property name="maximum">
-          <number>16</number>
+          <number>42</number>
          </property>
         </widget>
        </item>

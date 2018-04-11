@@ -18,14 +18,82 @@
 
 #include <QString>
 #include <QApplication>
+#include <iostream>
+#include <thread>
 
 #include "gui/mainwindow.hpp"
 #include "rrwc.hpp"
+#include "tui.hpp"
+#include "cliparser.hpp"
+
+QCoreApplication *initialize(int &argc, char *argv[], bool gui) {
+  if (gui) {
+    return new QApplication(argc, argv);
+  }
+  return new QCoreApplication(argc, argv);
+}
+
+void handleErrorOrHelp(CliParseResult res, const QString &errArg) {
+  if (res == cliHelp) {
+    std::cout << "Printing help:...\n";
+    return;
+  }
+  std::cout << "Command line error:\n";
+  switch(res) {
+  case cliRedefinition:
+    std::cout << "Redefinition of " << errArg.toStdString() << std::endl;
+    break;
+  case cliMissingValue:
+    std::cout << "A valid value must follow " << errArg.toStdString() << std::endl;
+    break;
+  case cliValueError:
+    std::cout << errArg.toStdString() << " is not a valid value." << std::endl;
+    break;
+  case cliUnknownOption:
+    std::cout << "Option " << errArg.toStdString() << " not recognized.\nUse -h or --help for help." << std::endl;
+    break;
+  default:
+    return;
+  }
+}
+
+void setThreads(CliOptions opt) {
+  // set number of threads
+  if (opt.threads > 0 && opt.threads < 42) {
+    return;
+  }
+  else {
+    uint t = std::thread::hardware_concurrency();
+    if (t == 0) {
+      opt.threads = 1;
+    }
+    else
+      opt.threads = t;
+  }
+}
 
 int main(int argc, char *argv[]) {
-    Rrwc rrwc;
-    QApplication a(argc, argv);
-    MainWindow w(0, &rrwc);
+  CliParser p(argc, argv);
+  CliOptions opt;
+  auto result = p.parse(opt);
+  if (result != cliOK) {
+    handleErrorOrHelp(result, p.getCulpritArgument());
+    return 1;
+  }
+
+  QScopedPointer<QCoreApplication> app(initialize(argc, argv, opt.gui));
+  Rrwc rrwc;
+
+  if (qobject_cast<QApplication *>(app.data())) {
+    MainWindow w(0, &rrwc, opt);
     w.show();
-    return a.exec();
+    return app->exec();
+  }
+  else {
+    Tui tui(&rrwc, opt);
+    tui.exec();
+    std::cout << "cli\n";
+    return app->exec();
+  }
+
 }

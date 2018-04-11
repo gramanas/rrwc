@@ -17,7 +17,7 @@ void Rrwc::go(const QString &inputPath, const QString &sort, const int &threadNu
   m_totalTime.start();
   m_logger.setItemsDone(0);
 
-  ErrorManager errorManager(m_outputManager, &m_logger);
+  ErrorManager errorManager(&m_outputManager, &m_logger);
 
   if (errorManager.checkInputErrors(inputPath)) {
     emit started();

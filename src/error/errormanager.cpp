@@ -3,9 +3,9 @@
 #include "error/errormanager.hpp"
 #include "globals.hpp"
 
-ErrorManager::ErrorManager(const OutputManager &outputManager,
+ErrorManager::ErrorManager(OutputManager *outputManager,
                            Logger *logger)
-  : m_outputManager(outputManager),
+  : p_outputManager(outputManager),
     p_logger(logger) {
     }
 
@@ -20,8 +20,9 @@ bool ErrorManager::checkInputErrors(const QString &inputPath) {
   }
   // check the outputs
   Output *p;
-  for (int i = 0; i < m_outputManager.outputs().size(); i++) {
-    p = m_outputManager.outputs()[i];
+  int i;
+  for (i = 0; i < p_outputManager->outputs().size(); i++) {
+    p = p_outputManager->outputs()[i];
     // check output folder
     QFileInfo fi(p->folder);
     if (!fi.isDir() || !fi.isWritable()) {
@@ -50,6 +51,13 @@ bool ErrorManager::checkInputErrors(const QString &inputPath) {
         m_flag = false;
       }
     }
+  }
+  // there are no outputs!
+  if (i == 0) {
+    p_logger->err(ERR_NO_OUTPUT);
+  }
+  if (!m_flag) {
+    p_logger->killTui();
   }
   return m_flag;
 }

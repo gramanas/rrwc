@@ -28,6 +28,16 @@ QString Logger::flush(QMutex &m, QString &s) {
   return ret;
 }
 
+void Logger::killTui() {
+  QMutexLocker locker(&m_killMutex);
+  m_killTui = true;
+}
+
+bool Logger::tuiDead() {
+  QMutexLocker locker(&m_killMutex);
+  return m_killTui;
+}
+
 void Logger::err(QString str) {
   append(m_errMutex, m_errors, str);
 }

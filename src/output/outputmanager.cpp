@@ -21,6 +21,9 @@ void OutputManager::saveProfile(const QString &filename) {
 }
 
 bool OutputManager::loadProfile(const QString &filename) {
+  if (filename.isEmpty()) {
+    return false;
+  }
   ProfileParser profileParser(p_logger);
   m_outputs.clear();
   return profileParser.readFromFile(filename, m_outputs);
@@ -66,6 +69,7 @@ void OutputManager::slotEntryListFull() {
 }
 
 void OutputManager::onDone() {
+  delete p_threadManager;
   emit done();
 }
 
@@ -75,7 +79,6 @@ void OutputManager::clean() {
   }
   m_outputs.clear();
   m_entryList.clear();
-  delete p_threadManager;
 }
 
 void OutputManager::generateOutputsFromTabs(QVector<OutputTab *> outputTabs) {

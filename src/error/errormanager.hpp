@@ -7,7 +7,7 @@
 class ErrorManager : public QObject {
   Q_OBJECT
 public:
-  ErrorManager(const OutputManager &outputManager,
+  ErrorManager(OutputManager *outputManager,
                Logger *logger);
   ~ErrorManager();
 
@@ -15,7 +15,7 @@ public:
 
 private:
   Logger *p_logger;
-  const OutputManager &m_outputManager;
+  OutputManager *p_outputManager;
   bool m_flag = true;
 };
 

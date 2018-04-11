@@ -16,13 +16,16 @@ public:
   void incrementItemsDone();
   void setItemsDone(uint n);
   void setTotal(uint n);
+  void killTui();
   void done() { setItemsDone(1); setTotal(1); }
 
   QString flushLog();
   QString flushErr();
   QString flushStatus();
 
+  bool tuiDead();
   uint getProgress();
+
 private:
   void append(QMutex &m, QString &s, const QString &n);
   void replace(QMutex &m, QString &s, const QString &n);
@@ -37,6 +40,9 @@ private:
 
   QAtomicInteger<uint> m_itemsDone = 0;
   QAtomicInteger<uint> m_total = 0;
+
+  QMutex m_killMutex;
+  bool m_killTui = false;
 };
 
 #endif // LOGGER_HPP

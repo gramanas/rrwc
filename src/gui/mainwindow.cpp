@@ -4,30 +4,46 @@
 #include <QStandardPaths>
 #include <QLineEdit>
 #include <QDebug>
+
 #include "gui/mainwindow.hpp"
 #include "output/outputmanager.hpp"
 #include "globals.hpp"
 #include "ui_mainwindow.h"
 #include "ui_outputtab.h"
 
-#include "exiv2/exif.hpp"
-#include "exiv2/exiv2.hpp"
-
-MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc)
+MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc,
+                       const CliOptions &opt)
   : QMainWindow(parent),
     ui(new Ui::MainWindow),
     p_rrwc(rrwc)
 {
   ui->setupUi(this);
+  initializeLogging();
+
+  // set input folder
+  ui->inputInputFolder->setText(opt.input);
+
+  // set sort mode
+  (opt.sortExif) ?
+    ui->inputSortMode->setCurrentText(SORT_EXIF) :
+    ui->inputSortMode->setCurrentText(SORT_FILENAME);
+
+  // set threads
+  ui->inputThreads->setValue(opt.threads);
+
   setWindowTitle("Rrwc");
+
+
   connectButtons();
   connectActions();
-  slotAddOutput();
+
+  if (!loadProfile(opt.profile)) {
+    slotAddOutput();
+  }
 
   connect(rrwc, SIGNAL(done()), this, SLOT(onDone()));
   connect(rrwc, SIGNAL(started()), this, SLOT(onStarted()));
 
-  initializeLogging();
 }
 
 void MainWindow::initializeLogging() {
@@ -84,6 +100,8 @@ void MainWindow::finalizeTabs() {
       name += "Rn";
     if (m_outputTabs[i]->getUi()->watermark->isChecked())
       name += "W";
+    if (m_outputTabs[i]->getUi()->comment->isChecked())
+      name += "C";
     if (name == "") {
       ui->tabWidget->setTabText(i, QString::number(i + 1) + " - " + "Empty");
     } else {
@@ -131,6 +149,7 @@ void MainWindow::slotAddOutput() {
   connect(outputTab->getUi()->resize, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
   connect(outputTab->getUi()->rename, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
   connect(outputTab->getUi()->watermark, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
+  connect(outputTab->getUi()->comment, SIGNAL(clicked()), this, SLOT(finalizeTabs()));
 
   m_outputTabs.append(outputTab);
   finalizeTabs();
@@ -213,15 +232,8 @@ void MainWindow::actionSaveProfile() {
   }
 }
 
-void MainWindow::actionLoadProfile() {
-  QString filename = QFileDialog
-    ::getOpenFileName(this, "Load profile from",
-                      QStandardPaths::locate(QStandardPaths::HomeLocation,
-                                             "",
-                                             QStandardPaths::LocateDirectory) + QString("untitled.rrwcp"),
-                      "Rrwc profile (*.rrwcp);;All files (*)");
-
-  if (p_rrwc->outputManager()->loadProfile(filename)) {
+bool MainWindow::loadProfile(const QString &path) {
+  if (p_rrwc->outputManager()->loadProfile(path)) {
     int oldSize = m_outputTabs.size();
     for (int i = oldSize - 1; i >= 0; i--) {
       slotRemoveOutput(i);
@@ -247,9 +259,22 @@ void MainWindow::actionLoadProfile() {
       m_outputTabs[i]->getUi()->comment->setChecked(output->comment);
       m_outputTabs[i]->getUi()->inputComment->setText(output->commentText);
     }
-    p_rrwc->logger()->log("Profile " + filename + " loaded");
+    p_rrwc->logger()->log("Profile " + path + " loaded");
+    finalizeTabs();
+    return true;
   }
-  finalizeTabs();
+  return false;
+}
+
+void MainWindow::actionLoadProfile() {
+  QString filename = QFileDialog
+    ::getOpenFileName(this, "Load profile from",
+                      QStandardPaths::locate(QStandardPaths::HomeLocation,
+                                             "",
+                                             QStandardPaths::LocateDirectory) + QString("untitled.rrwcp"),
+                      "Rrwc profile (*.rrwcp);;All files (*)");
+
+  loadProfile(filename);
 }
 
 MainWindow::~MainWindow() {

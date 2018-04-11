@@ -51,17 +51,19 @@ static const QString ERR_NO_EXIF = "No exif information found.";
 static const QString ERR_FAIL = "Output: [%1]\t File: \"%2\" failed.";
 static const QString ERR_WRONG_OUTPUT = "Output folder is not a directory, or you don't have the right permissions.";
 static const QString ERR_WRONG_INPUT = "Input folder is not a directory, or you don't have the right permissions.";
+static const QString ERR_NO_OUTPUT = "There are not outputs.";
 
 static const QString ERR_PROFILE = "Error in profile [%1]: ";
 static const QString ERR_PROFILE_MISSING_BRKT = "Outputs must be enclosed in \"{}\"";
 static const QString ERR_PROFILE_SAVE = "Could not save profile under \"%1\". Check the permissions.";
+static const QString ERR_WRONG_PROFILE = "Error: There is no such profile.";
 
 // warnings
 static const QString WAR_IMAGE = "Warning in image \"%1\": ";
 static const QString WAR_EXIF_NOT_FOUD = "exif information not found.";
 
 // progress
-static const QString FILE_PROGRESS = "O:[%1] T:[%2] F:\"%3\"";
+static const QString FILE_PROGRESS = "T:[%2] F:\"%3\"";
 static const QString TIME_ENTRYLIST = "Filling the entry list took %1 ms";
 static const QString TIME_TOTAL = "Total time elapsed: %1 ms";
 

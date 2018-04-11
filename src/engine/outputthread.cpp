@@ -30,7 +30,7 @@ void OutputThread::run() {
 
     while(it != m_inputFiles.cend()) {
         const QString path = *it;
-        p_logger->log(FILE_PROGRESS.arg(m_index + 1).arg(m_index + 1).arg(path.split(QDir::separator()).back()));
+        p_logger->log(FILE_PROGRESS.arg(m_index + 1).arg(path.split(QDir::separator()).back()));
 
         m_engine.loadImage(path);
 

@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QTimer>
 #include "gui/outputtab.hpp"
+#include "cliparser.hpp"
 #include "rrwc.hpp"
 
 namespace Ui {
@@ -18,7 +19,8 @@ class MainWindow : public QMainWindow
 
 public:
   MainWindow(QWidget *parent = 0,
-             Rrwc *rrwc = nullptr);
+             Rrwc *rrwc = nullptr,
+             const CliOptions &opt = CliOptions());
   ~MainWindow();
 
 private slots:
@@ -39,9 +41,11 @@ private:
   void connectButtons();
   void connectActions();
   void initializeLogging();
+  bool loadProfile(const QString &path);
   void enableLayout(bool t);
 
-  QTimer * p_logTimer;
+
+  QTimer *p_logTimer;
   QVector<OutputTab *> m_outputTabs;
   bool m_isRunning = false;
   Rrwc *p_rrwc;
