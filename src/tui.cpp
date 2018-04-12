@@ -2,7 +2,7 @@
 
 Tui::Tui(Rrwc* rrwc, const CliOptions &opt)
   : p_rrwc(rrwc),
-    m_opt(opt){
+    m_opt(opt) {
   initializeLogging();
 
   connect(p_rrwc, SIGNAL(done()), this, SLOT(onDone()));
@@ -15,11 +15,11 @@ void Tui::initializeLogging() {
   QObject::connect(p_logTimer, &QTimer::timeout, this, [=] {
       QString log = p_rrwc->logger()->flushLog();
       if (!log.isEmpty()) {
-        std::cout << log.toStdString() << std::endl;
+        console() << log << endl;
       }
       QString err = p_rrwc->logger()->flushErr();
       if (!err.isEmpty()) {
-        std::cout << err.toStdString() << std::endl;
+        console() << err << endl;
       }
       if (p_rrwc->logger()->tuiDead()) {
         exit(1);
@@ -43,6 +43,6 @@ void Tui::exec() {
     p_rrwc->logger()->killTui();
   }
   else {
-    p_rrwc->go(m_opt.input, m_opt.sortExif ? SORT_EXIF :SORT_FILENAME, m_opt.threads);
+    p_rrwc->go(m_opt.input, m_opt.sortExif ? SORT_EXIF : SORT_FILENAME, m_opt.threads);
   }
 }

@@ -7,13 +7,26 @@ Logger::Logger() {
 Logger::~Logger() {
 }
 
+QString Logger::makeProgress(const QString &n) {
+  return QString("["+QString::number(getProgress())+"%]\t" + n);
+}
+
 void Logger::append(QMutex &m, QString &s, const QString &n) {
   QMutexLocker locker(&m);
+  QString str;
+
+  if (m_isTui) {
+    str = makeProgress(n);
+  }
+  else {
+    str = n;
+  }
+
   if (!s.isEmpty()) {
-    s.append("\n" + n);
+    s.append("\n" + str);
     return;
   }
-  s.append(n);
+  s.append(str);
 }
 
 void Logger::replace(QMutex &m, QString &s, const QString &n) {

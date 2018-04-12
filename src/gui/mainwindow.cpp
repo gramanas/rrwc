@@ -18,6 +18,12 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc,
     p_rrwc(rrwc)
 {
   ui->setupUi(this);
+
+  // set logs font
+  QFont f("unexistend");
+  f.setStyleHint(QFont::Monospace);
+  ui->outputErrorLog->setFont(f);
+  ui->outputProgressLog->setFont(f);
   initializeLogging();
 
   // set input folder
@@ -37,7 +43,13 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc,
   connectButtons();
   connectActions();
 
-  if (!loadProfile(opt.profile)) {
+  if (!opt.profile.isEmpty()) {
+    if (!loadProfile(opt.profile)) {
+      p_rrwc->logger()->err(ERR_WRONG_PROFILE + "\n" + opt.profile);
+      slotAddOutput();
+    }
+  }
+  else {
     slotAddOutput();
   }
 
@@ -47,10 +59,6 @@ MainWindow::MainWindow(QWidget *parent, Rrwc *rrwc,
 }
 
 void MainWindow::initializeLogging() {
-  QFont f("unexistend");
-  f.setStyleHint(QFont::Monospace);
-  ui->outputErrorLog->setFont(f);
-  ui->outputProgressLog->setFont(f);
   p_logTimer = new QTimer(this);
   p_logTimer->setInterval(200);
   connect(p_logTimer, &QTimer::timeout, this, [=]{

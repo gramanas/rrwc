@@ -24,7 +24,12 @@ void Rrwc::go(const QString &inputPath, const QString &sort, const int &threadNu
     m_outputManager.fillEntryList(inputPath, sort);
   }
   else {
-    QMessageBox::warning(0, "Configuration Error", "Check the error log for details.");
+    if (m_logger.tuiMode()) {
+      m_logger.err("Configuration Error");
+    }
+    else {
+      QMessageBox::warning(0, "Configuration Error", "Check the error log for details.");
+    }
   }
 }
 

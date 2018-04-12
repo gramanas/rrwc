@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QTextStream>
 
 #include "rrwc.hpp"
 #include "cliparser.hpp"
@@ -12,6 +13,11 @@ class Tui : public QObject {
 public:
   Tui(Rrwc *rrwc, const CliOptions &opt);
   void exec();
+
+  inline QTextStream &console() {
+    static QTextStream S{stdout};
+    return S;
+  }
 
 private slots:
   void onStarted();

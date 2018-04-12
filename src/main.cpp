@@ -18,13 +18,17 @@
 
 #include <QString>
 #include <QApplication>
-#include <iostream>
 #include <thread>
 
 #include "gui/mainwindow.hpp"
 #include "rrwc.hpp"
 #include "tui.hpp"
 #include "cliparser.hpp"
+
+inline QTextStream &console() {
+  static QTextStream S{stdout};
+  return S;
+}
 
 QCoreApplication *initialize(int &argc, char *argv[], bool gui) {
   if (gui) {
@@ -35,30 +39,30 @@ QCoreApplication *initialize(int &argc, char *argv[], bool gui) {
 
 void handleErrorOrHelp(CliParseResult res, const QString &errArg) {
   if (res == cliHelp) {
-    std::cout << "Printing help:...\n";
+    console() << "Printing help:...\n";
     return;
   }
-  std::cout << "Command line error:\n";
+  console() << "Command line error:\n";
   switch(res) {
   case cliRedefinition:
-    std::cout << "Redefinition of " << errArg.toStdString() << std::endl;
+    console() << "Redefinition of " << errArg << endl;
     break;
   case cliMissingValue:
-    std::cout << "A valid value must follow " << errArg.toStdString() << std::endl;
+    console() << "A valid value must follow " << errArg << endl;
     break;
   case cliValueError:
-    std::cout << errArg.toStdString() << " is not a valid value." << std::endl;
+    console() << errArg << " is not a valid value." << endl;
     break;
   case cliUnknownOption:
-    std::cout << "Option " << errArg.toStdString() << " not recognized.\nUse -h or --help for help." << std::endl;
+    console() << "Option " << errArg << " not recognized.\nUse -h or --help for help." << endl;
     break;
   default:
     return;
   }
 }
 
-void setThreads(CliOptions opt) {
-  // set number of threads
+// set number of threads
+void setThreads(CliOptions &opt) {
   if (opt.threads > 0 && opt.threads < 42) {
     return;
   }
@@ -80,6 +84,7 @@ int main(int argc, char *argv[]) {
     handleErrorOrHelp(result, p.getCulpritArgument());
     return 1;
   }
+  setThreads(opt);
 
   QScopedPointer<QCoreApplication> app(initialize(argc, argv, opt.gui));
   Rrwc rrwc;
@@ -90,10 +95,9 @@ int main(int argc, char *argv[]) {
     return app->exec();
   }
   else {
+    rrwc.logger()->setTuiMode();
     Tui tui(&rrwc, opt);
     tui.exec();
-    std::cout << "cli\n";
     return app->exec();
   }
-
 }
