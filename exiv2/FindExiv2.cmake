@@ -29,7 +29,7 @@ endif(NOT Exiv2_FIND_VERSION)
 
 # the minimum version of exiv2 we require
 if(NOT Exiv2_FIND_VERSION)
-  set(Exiv2_FIND_VERSION "0.12")
+  set(Exiv2_FIND_VERSION "..")
 endif(NOT Exiv2_FIND_VERSION)
 
 
