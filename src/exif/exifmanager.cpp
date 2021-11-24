@@ -10,7 +10,14 @@ ExifManager::ExifManager(Logger *logger)
 }
 
 DateTime ExifManager::getDateTime(const QString &fullPath) {
+  DateTime dateTime;
   std::unique_ptr<Exiv2::Image> image = Exiv2::ImageFactory::open(fullPath.toStdString());
+  if (image == 0) {
+    p_logger->err("Exif can't be determined for image: " + fullPath + " it might be corrupted.");
+    dateTime.date = QDate(0, 0, 0);
+    dateTime.time = QTime(-1, -1, -1);
+    return dateTime;
+  }
   image->readMetadata();
     QString str = "";
   Exiv2::ExifData &exifData = image->exifData();
@@ -22,7 +29,6 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
       break;
     }
   }
-  DateTime dateTime;
   if (str == "") {
     // set invalid date and time
     dateTime.date = QDate(-1, -1, -1);
@@ -48,7 +54,10 @@ void ExifManager::sortByDateTime(QVector<QString> &list) {
     // The actual sorting will never take a lot of time
     // compared to this, so it's redundant
     p_logger->incrementItemsDone();
-    hash.insert(key, getDateTime(key));
+    DateTime dt = getDateTime(key);
+    if (dt.date == QDate(0, 0, 0))
+      continue;
+    hash.insert(key, dt);
   }
 
   std::sort(list.begin(), list.end(), [=](QString a, QString b) {
