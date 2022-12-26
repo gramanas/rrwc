@@ -110,7 +110,7 @@ bool OutputEngine::write() {
   QString fullName = m_gear->p_output->folder
     + QDir::separator()
     + m_newName
-    + "." + m_sourceInfo.suffix();
+    + "." + m_sourceInfo.suffix().toLower();
   if (m_gear->copyFlag) {
     QFile::copy(m_sourceInfo.absoluteFilePath(), fullName);
   }
