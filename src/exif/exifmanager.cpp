@@ -24,12 +24,13 @@ DateTime ExifManager::getDateTime(const QString &fullPath) {
   Exiv2::ExifData::const_iterator end = exifData.end();
   for (Exiv2::ExifData::const_iterator i = exifData.begin(); i != end; ++i) {
     const QString key = QString::fromStdString(i->key());
-    if (key.compare(QString("Exif.Image.DateTime")) == 0) {
+    if (key.compare(QString("Exif.Photo.DateTimeOriginal")) == 0) {
       str =  QString::fromStdString(i->value().toString());
       break;
     }
   }
   if (str == "") {
+    p_logger->err("Exif date not found for: " + fullPath + " it might be corrupted.");
     // set invalid date and time
     dateTime.date = QDate(-1, -1, -1);
     dateTime.time = QTime(-1, -1, -1);
