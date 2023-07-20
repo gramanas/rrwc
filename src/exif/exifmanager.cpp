@@ -12,14 +12,14 @@ ExifManager::ExifManager(Logger *logger)
 DateTime ExifManager::getDateTime(const QString &fullPath) {
   DateTime dateTime;
   std::unique_ptr<Exiv2::Image> image = Exiv2::ImageFactory::open(fullPath.toStdString());
-  if (image == 0) {
+  if (image.get() == 0) {
     p_logger->err("Exif can't be determined for image: " + fullPath + " it might be corrupted.");
     dateTime.date = QDate(0, 0, 0);
     dateTime.time = QTime(-1, -1, -1);
     return dateTime;
   }
   image->readMetadata();
-    QString str = "";
+  QString str = "";
   Exiv2::ExifData &exifData = image->exifData();
   Exiv2::ExifData::const_iterator end = exifData.end();
   for (Exiv2::ExifData::const_iterator i = exifData.begin(); i != end; ++i) {
